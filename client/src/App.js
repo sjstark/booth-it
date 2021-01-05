@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 
-function App() {
+import { useDispatch, connect } from 'react-redux'
+
+import { restoreUser } from './store/session';
+
+export default function App() {
+  const dispatch = useDispatch()
+
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    dispatch(restoreUser())
+      .then(() => setIsLoaded(true))
+  }, [dispatch])
+
   return (
-    <h1>Hello world!</h1>
-  );
-}
+    <>
 
-export default App;
+    </>
+  )
+}
