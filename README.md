@@ -1,5 +1,9 @@
 # Booth It
 <img src="./documentation/images/LogoMockup.png" />
 Top Left #31E89F99
+
 Bottom Left #31E8E899
+
 Right #31C6E899
+
+clip-path: polygon(0% 25%, 50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%);
