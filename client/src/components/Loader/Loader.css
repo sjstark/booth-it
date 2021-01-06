@@ -1,0 +1,47 @@
+.logo-path__logo-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.logo-path__hexagon{
+  position: absolute;
+  height: 66.6666%;
+  width: 66.6666%;
+
+  clip-path: var(--hexagon);
+}
+
+.logo-path__hexagon-color {
+  position:absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 60%;
+}
+
+.logo-path__hexagon--TL > .logo-path__hexagon-color  {
+  background-color: var(--logo1);
+}
+
+.logo-path__hexagon--BL > .logo-path__hexagon-color  {
+  background-color: var(--logo2);
+}
+
+.logo-path__hexagon--R > .logo-path__hexagon-color  {
+  background-color: var(--logo3);
+}
+
+.logo-path__hexagon--TL {
+  top: 0;
+  left: 0;
+}
+
+.logo-path__hexagon--BL {
+  bottom:0;
+  left: 0;
+}
+
+.logo-path__hexagon--R {
+  top:16.6666%;
+  right: 0;
+}
