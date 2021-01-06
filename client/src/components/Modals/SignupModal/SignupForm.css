@@ -1,26 +1,43 @@
 .signup-form {
-  margin: auto;
-  padding: 20px;
 
-  width: 800px;
+  width: 100%;
   min-height: 300px;
+  /* max-height: 90vh; */
 
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  margin: 10px;
 }
 
 .signup-form h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 30px;
+  margin: 0;
+}
+
+.signup-form__inputs-container {
+  display: flex;
+  flex-wrap: none;
+  flex-direction: row;
+  gap: 40px;
+  margin: 10px 40px;
 }
 
 .signup-form__input-fields {
   display: flex;
   flex-direction: column;
-
+  margin: 10px;
   min-width: 300px;
+}
+
+.signup-form__profile-pic {
+  /* margin-top: 20px; */
+}
+
+.signup-form__profile-pic span {
+  font-size: 12px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .signup-form__errors {
@@ -32,4 +49,18 @@
   justify-content: center;
 
   color: var(--red)
+}
+
+@media screen and (max-width: 950px) {
+  .signup-form__inputs-container {
+    flex-direction: column;
+  }
+
+  .signup-form__input-fields {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    min-width: 200px;
+    font-size: 12px;
+  }
 }

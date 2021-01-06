@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ImageCropper from './ImageCropper'
 
+import Button from '../../Button'
+
 import './cropper.css'
 
 const ImageInput = ({ aspect, value, onChange, width, height }) => {
@@ -16,7 +18,7 @@ const ImageInput = ({ aspect, value, onChange, width, height }) => {
   }
 
   useEffect(() => {
-    if(value) {
+    if (value) {
       if (value.startsWith('http')) {
         setBlobURL(value)
         setFileName('Previous Upload')
@@ -47,13 +49,13 @@ const ImageInput = ({ aspect, value, onChange, width, height }) => {
   return (
     <div className="image-input__container">
       <label className="image-input__selector-container">
-        <div className="button">Select File</div>
+        <Button color="primary">Select File</Button>
         <div className="image-input__filename">{fileName}</div>
         <input
           type="file"
           accept='image/*'
           onChange={onInputChange}
-          style={{display:'none'}}
+          style={{ display: 'none' }}
         />
       </label>
       <div className="image-cropper__container">
@@ -69,8 +71,8 @@ const ImageInput = ({ aspect, value, onChange, width, height }) => {
           )
         }
         {!inputImg && blobURL && (
-        <img className="image-cropper__previous-upload" alt="Preview Unavailable" src={blobURL} />
-      )}
+          <img className="image-cropper__previous-upload" alt="Preview Unavailable" src={blobURL} />
+        )}
       </div>
     </div>
   )

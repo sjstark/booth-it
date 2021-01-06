@@ -26,6 +26,7 @@ function SignupModal({ handleClose }) {
     <Dialog
       open={open}
       onClose={handleClose}
+      maxWidth={"md"}
     >
       <DialogContent>
         <SignupForm />

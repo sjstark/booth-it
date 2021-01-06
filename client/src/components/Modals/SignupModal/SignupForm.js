@@ -64,56 +64,65 @@ const SignupForm = ({ openLogin, closeSignup }) => {
           "Invalid signup credentials. Please try again"
         )}
       </div>
-
-      <div className="signup-form__input-fields">
-        <FormInput
-          name='First Name'
-          required={true}
-          type="text"
-          value={firstName}
-          error={Boolean(errors.length)}
-          onChange={({ target }) => setFirstName(target.value)}
-        />
-        <FormInput
-          name='Last Name'
-          required={true}
-          type="text"
-          value={lastName}
-          error={Boolean(errors.length)}
-          onChange={({ target }) => setLastName(target.value)}
-        />
-        <FormInput
-          name='Company'
-          required={true}
-          type="text"
-          value={company}
-          error={Boolean(errors.length)}
-          onChange={({ target }) => setCompany(target.value)}
-        />
-        <FormInput
-          name='Job Title'
-          required={true}
-          type="text"
-          value={jobTitle}
-          error={Boolean(errors.length)}
-          onChange={({ target }) => setJobTitle(target.value)}
-        />
-        <FormInput
-          name='Email'
-          required={true}
-          type="text"
-          value={email}
-          error={Boolean(errors.length)}
-          onChange={({ target }) => setEmail(target.value)}
-        />
-        <FormInput
-          name='Password'
-          required={true}
-          type="password"
-          value={password}
-          error={Boolean(errors.length)}
-          onChange={({ target }) => setPassword(target.value)}
-        />
+      <div className="signup-form__inputs-container">
+        <div className="signup-form__input-fields">
+          <FormInput
+            name='First Name'
+            required={true}
+            type="text"
+            value={firstName}
+            error={Boolean(errors.length)}
+            onChange={({ target }) => setFirstName(target.value)}
+          />
+          <FormInput
+            name='Last Name'
+            required={true}
+            type="text"
+            value={lastName}
+            error={Boolean(errors.length)}
+            onChange={({ target }) => setLastName(target.value)}
+          />
+          <FormInput
+            name='Company'
+            required={true}
+            type="text"
+            value={company}
+            error={Boolean(errors.length)}
+            onChange={({ target }) => setCompany(target.value)}
+          />
+          <FormInput
+            name='Job Title'
+            required={true}
+            type="text"
+            value={jobTitle}
+            error={Boolean(errors.length)}
+            onChange={({ target }) => setJobTitle(target.value)}
+          />
+          <FormInput
+            name='Email'
+            required={true}
+            type="text"
+            value={email}
+            error={Boolean(errors.length)}
+            onChange={({ target }) => setEmail(target.value)}
+          />
+          <FormInput
+            name='Password'
+            required={true}
+            type="password"
+            value={password}
+            error={Boolean(errors.length)}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+          <FormInput
+            name='Confirm Password'
+            required={true}
+            type="password"
+            value={confirmPassword}
+            error={Boolean(errors.length)}
+            onChange={({ target }) => setConfirmPassword(target.value)}
+          />
+        </div>
         <div className="signup-form__profile-pic">
           <h2>Select a Profile Picture</h2>
           <span>After selection image, drag to position and scroll to zoom.</span>
