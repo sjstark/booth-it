@@ -6,7 +6,7 @@ import LogoPath from "../Logo"
 
 import './LogoBackground.css'
 
-export default function LogoBackground() {
+export default function LogoBackground({ animation = true }) {
   const props = useSpring({
     transform: "scale(1)",
     from: {
@@ -18,11 +18,18 @@ export default function LogoBackground() {
   return (
     <>
       <div className="logo-background__background-wrapper">
-        <animated.div style={props}>
+        {animation && (
+          <animated.div style={props}>
+            <div className="logo-background__logo-container">
+              <LogoPath style={props} />
+            </div>
+          </animated.div>
+        )}
+        {!animated && (
           <div className="logo-background__logo-container">
             <LogoPath style={props} />
           </div>
-        </animated.div>
+        )}
       </div>
     </>
   )

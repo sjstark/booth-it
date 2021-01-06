@@ -1,0 +1,58 @@
+.button {
+  height: 0%;
+  max-width: 200px;
+  padding: 1rem 1rem;
+  margin: 1rem;
+  border-radius: .6rem;
+
+  box-sizing: content-box;
+
+  cursor: pointer;
+
+  background-color: lightgray;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  font-weight: 400;
+
+  user-select: none;
+
+  transition: all .1s
+}
+
+.button.default.primary {
+  background-color: var(--logo1);
+
+}
+
+.button.default.secondary {
+  background-color: var(--logo2);
+}
+
+.button.default.warning {
+  background-color: var(--red);
+}
+
+.button.default.caution {
+  background-color: var(--orange);
+}
+
+.button:hover:not(.disabled) {
+  filter: brightness(85%);
+  box-shadow: 0 0 10px var(--shadow-color);
+}
+
+.button:active:not(.disabled) {
+  transform: scale(1.025);
+  filter: brightness(110%) saturate(140%);
+}
+
+.button.disabled {
+  cursor: default;
+  filter: brightness(115%) saturate(115%) grayscale(60%);
+
+}

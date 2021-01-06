@@ -4,15 +4,23 @@
 :root {
   /* Clip Paths */
   --hexagon: polygon(0% 25%, 50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%);
+
   /* Colors */
   --logo1: #31E89F;
   --logo2: #31E8E8;
   --logo3: #31C6E8;
+  --orange: #FFCB77;
+  --red: #FE6D73;
+  --shadow-color: rgba(.2, .2, .2, .3);
+
+  /* Font Family */
+  font-family: "Roboto", sans-serif;
 }
 
 .full-page {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 .flex-centered {
