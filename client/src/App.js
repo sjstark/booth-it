@@ -6,11 +6,16 @@ import { restoreUser } from './store/session';
 
 import SplashPage from "./components/SplashPage"
 import Loader from "./components/Loader"
+import Modals from "./components/Modals"
 
-function App({ user }) {
+function App({ user, modals }) {
   const dispatch = useDispatch()
 
   const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    console.log(modals)
+  }, [modals])
 
   useEffect(() => {
     dispatch(restoreUser())
@@ -19,21 +24,19 @@ function App({ user }) {
 
   console.log(user)
 
-  const height = 100
-
   return (
     <>
-      {/* <Loader duration={2500} style={{ width: `${height * 0.86602543}px`, height: `${height}px`, margin: "200px auto" }} /> */}
       {!user && (
         <SplashPage />
       )}
       {user && (
         <div>You passed!</div>
       )}
+      <Modals />
     </>
   )
 }
 
-const mapStateToProps = state => ({ user: state.user })
+const mapStateToProps = state => ({ user: state.user, modals: state.modals })
 
 export default connect(mapStateToProps)(App)
