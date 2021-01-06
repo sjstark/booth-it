@@ -1,0 +1,35 @@
+.signup-form {
+  margin: auto;
+  padding: 20px;
+
+  width: 400px;
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.signup-form h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.signup-form__input-fields {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 300px;
+}
+
+.signup-form__errors {
+  height: 20px;
+  margin: 10px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--red)
+}

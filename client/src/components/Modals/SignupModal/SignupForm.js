@@ -7,9 +7,9 @@ import * as sessionActions from '../../../store/session'
 import Button from '../../Button'
 import FormInput from '../../FormFields/FormInput'
 
-import './LoginForm.css'
+import './SignupForm.css'
 
-const LoginForm = ({ closeLogin, openSignup }) => {
+const SignupForm = ({ openLogin, closeSignup }) => {
   const dispatch = useDispatch()
 
 
@@ -20,7 +20,7 @@ const LoginForm = ({ closeLogin, openSignup }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-    return dispatch(sessionActions.login({ email, password }))
+    return dispatch(sessionActions.signup({ email, password }))
       .then((res) => {
         console.log({ res })
         if (res && res.errors) {
@@ -34,21 +34,21 @@ const LoginForm = ({ closeLogin, openSignup }) => {
 
   const switchToSignup = (e) => {
     e.preventDefault()
-    closeLogin()
-    openSignup()
+    closeSignup()
+    openLogin()
   }
 
   return (
-    <form className="login-form">
-      <h2>Login to <span style={{ fontFamily: "'Bungee', sans-serif" }}>Booth It</span></h2>
+    <form className="signup-form">
+      <h2>Signup for <span style={{ fontFamily: "'Bungee', sans-serif" }}>Booth It</span></h2>
 
-      <div className="login-form__errors">
+      <div className="signup-form__errors">
         {errors.length > 0 && (
-          "Invalid login credentials. Please try again"
+          "Invalid signup credentials. Please try again"
         )}
       </div>
 
-      <div className="login-form__input-fields">
+      <div className="signup-form__input-fields">
         <FormInput
           name='Email'
           required={true}
@@ -66,12 +66,12 @@ const LoginForm = ({ closeLogin, openSignup }) => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <Button disabled={!email || !password} color="primary" onClick={handleSubmit}>Login</Button>
-      <span onClick={switchToSignup}>No account?</span>
+      <Button disabled={!email || !password} color="primary" onClick={handleSubmit}>Signup</Button>
+      <span onClick={switchToSignup}>Already have an account?</span>
     </form >
   );
 };
 
-const mapStateToProps = state => ({ closeLogin: state.modals.login.handleClose, openSignup: state.modals.signup.handleOpen })
+const mapStateToProps = state => ({ openLogin: state.modals.login.handleOpen, closeSignup: state.modals.signup.handleClose })
 
-export default connect(mapStateToProps)(LoginForm);
+export default connect(mapStateToProps)(SignupForm);

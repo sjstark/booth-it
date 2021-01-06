@@ -2,6 +2,7 @@ import React from 'react'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 
 import LoginModal from './LoginModal'
+import SignupModal from './SignupModal'
 
 export default function Modals() {
 
@@ -14,6 +15,7 @@ export default function Modals() {
   return (
     <MuiThemeProvider theme={theme}>
       <LoginModal />
+      <SignupModal />
     </MuiThemeProvider>
   )
 }
