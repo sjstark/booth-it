@@ -3,14 +3,14 @@ import { useSpring, animated, config, useChain } from 'react-spring'
 
 import "./Loader.css"
 
-const ANIMATION_DURATION = 3000
 
 function interpRadian(r, max) {
   let num = (max * Math.sin(r + (2 * Math.PI) / 1.6))
   return num > 0 ? num : 0
 }
 
-function TopLeft() {
+
+function TopLeft({ duration }) {
   const bounceInterp = r => {
     return `translate(${-1 * interpRadian(r, 16)}%, ${-1 * interpRadian(r, 25)}%)`
   }
@@ -28,10 +28,9 @@ function TopLeft() {
     },
     reset: true,
     config: {
-      duration: ANIMATION_DURATION
+      duration: duration
     }
   })
-
 
   return (
     <animated.div style={{ transform: radians.interpolate(bounceInterp) }} className="loader__hexagon loader__hexagon--TL" >
@@ -40,7 +39,8 @@ function TopLeft() {
   )
 }
 
-function BottomLeft() {
+
+function BottomLeft({ duration }) {
   const bounceInterp = r => {
     return `translate(${-1 * interpRadian(r, 16)}%, ${interpRadian(r, 25)}%)`
   }
@@ -58,10 +58,9 @@ function BottomLeft() {
     },
     reset: true,
     config: {
-      duration: ANIMATION_DURATION
+      duration: duration
     }
   })
-
 
   return (
     <animated.div style={{ transform: radians.interpolate(bounceInterp) }} className="loader__hexagon loader__hexagon--BL">
@@ -70,7 +69,8 @@ function BottomLeft() {
   )
 }
 
-function Right() {
+
+function Right({ duration }) {
   const bounceInterp = r => {
     return `translate(${interpRadian(r, 33)}%, 0%)`
   }
@@ -88,10 +88,9 @@ function Right() {
     },
     reset: true,
     config: {
-      duration: ANIMATION_DURATION
+      duration: duration
     }
   })
-
 
   return (
     <animated.div style={{ transform: radians.interpolate(bounceInterp) }} className="loader__hexagon loader__hexagon--R">
@@ -100,37 +99,32 @@ function Right() {
   )
 }
 
-export default function Loader() {
 
-
+export default function Loader({ style: { ...styles }, duration }) {
   const props = useSpring({
     from: {
       transform: "rotate(0deg)",
-      width: "100%",
-      height: "100%",
+      ...styles
     },
     to: async next => {
       while (true) {
         await next({
           transform: "rotate(360deg)",
-          width: "100%",
-          height: "100%",
+          ...styles
         })
       }
     },
     reset: true,
     config: {
-      duration: ANIMATION_DURATION
+      duration: duration
     }
   })
 
-
-
   return (
     <animated.div style={props} className="loader__logo-container">
-      <TopLeft />
-      <BottomLeft />
-      <Right />
+      <TopLeft duration={duration} />
+      <BottomLeft duration={duration} />
+      <Right duration={duration} />
     </animated.div>
   )
 }

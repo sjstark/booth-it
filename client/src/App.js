@@ -19,10 +19,12 @@ function App({ user }) {
 
   console.log(user)
 
+  const height = 100
+
   return (
     <>
-      <div style={{ width: "346.410173px", height: "400px", margin: "200px auto" }}>
-        <Loader />
+      <div >
+        <Loader duration={2500} style={{ width: `${height * 0.86602543}px`, height: `${height}px`, margin: "200px auto" }} />
       </div>
       {/* {!user && (
         <SplashPage />
