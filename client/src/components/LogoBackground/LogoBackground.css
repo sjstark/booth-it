@@ -17,3 +17,27 @@
   height: 90vh;
   max-height: 103.923045vw;
 }
+
+.logo-background__github-link {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+
+  text-decoration: none;
+
+  color: #555;
+
+  cursor: pointer;
+
+  font-size: 30px;
+  padding: 5px;
+
+}
+
+.logo-background__github-link:visited {
+  color: #555;
+}
+
+.logo-background__github-link:hover {
+  filter: brightness(10%)
+}

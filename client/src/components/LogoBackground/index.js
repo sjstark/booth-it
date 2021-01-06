@@ -19,16 +19,20 @@ export default function LogoBackground({ animation = true }) {
     <>
       <div className="logo-background__background-wrapper">
         {animation && (
-          <animated.div style={props}>
+          <>
+            <animated.div style={props}>
+              <div className="logo-background__logo-container">
+                <LogoPath style={props} />
+              </div>
+            </animated.div>
+          </>
+        )}
+        {!animated && (
+          <>
             <div className="logo-background__logo-container">
               <LogoPath style={props} />
             </div>
-          </animated.div>
-        )}
-        {!animated && (
-          <div className="logo-background__logo-container">
-            <LogoPath style={props} />
-          </div>
+          </>
         )}
       </div>
     </>
