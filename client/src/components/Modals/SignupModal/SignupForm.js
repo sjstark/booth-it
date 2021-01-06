@@ -6,6 +6,7 @@ import * as sessionActions from '../../../store/session'
 
 import Button from '../../Button'
 import FormInput from '../../FormFields/FormInput'
+import ImageInput from '../../FormFields/ImageCropper/ImageInput'
 
 import './SignupForm.css'
 
@@ -13,29 +14,45 @@ const SignupForm = ({ openLogin, closeSignup }) => {
   const dispatch = useDispatch()
 
 
-  const [errors, setErrors] = useState([]);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('')
+  const [jobTitle, setJobTitle] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [profilePic, setProfilePic] = useState(null)
+  const [errors, setErrors] = useState([])
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     setErrors([]);
-    return dispatch(sessionActions.signup({ email, password }))
+    let newErrors = [];
+
+    if (confirmPassword !== password) {
+      newErrors.push('Please make sure passwords match!')
+      return setErrors(newErrors)
+    }
+    const user = { email, firstName, lastName, company, jobTitle, profilePic, password }
+    return dispatch(sessionActions.signup(user))
       .then((res) => {
-        console.log({ res })
-        if (res && res.errors) {
-          setErrors(res.errors)
-        }
-        else if (res) {
-          console.log("CLOSE")
+        if (res.statusText !== 'OK') throw res
+        return res
+      })
+      .catch((res) => {
+        if (res.data && res.data.errors) {
+          setErrors(res.data.errors)
         }
       })
   }
 
+
+
   const switchToSignup = (e) => {
     e.preventDefault()
-    closeSignup()
     openLogin()
+    closeSignup()
   }
 
   return (
@@ -49,6 +66,38 @@ const SignupForm = ({ openLogin, closeSignup }) => {
       </div>
 
       <div className="signup-form__input-fields">
+        <FormInput
+          name='First Name'
+          required={true}
+          type="text"
+          value={firstName}
+          error={Boolean(errors.length)}
+          onChange={({ target }) => setFirstName(target.value)}
+        />
+        <FormInput
+          name='Last Name'
+          required={true}
+          type="text"
+          value={lastName}
+          error={Boolean(errors.length)}
+          onChange={({ target }) => setLastName(target.value)}
+        />
+        <FormInput
+          name='Company'
+          required={true}
+          type="text"
+          value={company}
+          error={Boolean(errors.length)}
+          onChange={({ target }) => setCompany(target.value)}
+        />
+        <FormInput
+          name='Job Title'
+          required={true}
+          type="text"
+          value={jobTitle}
+          error={Boolean(errors.length)}
+          onChange={({ target }) => setJobTitle(target.value)}
+        />
         <FormInput
           name='Email'
           required={true}
@@ -65,6 +114,11 @@ const SignupForm = ({ openLogin, closeSignup }) => {
           error={Boolean(errors.length)}
           onChange={({ target }) => setPassword(target.value)}
         />
+        <div className="signup-form__profile-pic">
+          <h2>Select a Profile Picture</h2>
+          <span>After selection image, drag to position and scroll to zoom.</span>
+          <ImageInput aspect={1} onChange={setProfilePic} />
+        </div>
       </div>
       <Button disabled={!email || !password} color="primary" onClick={handleSubmit}>Signup</Button>
       <span onClick={switchToSignup}>Already have an account?</span>

@@ -2,7 +2,8 @@
   margin: auto;
   padding: 20px;
 
-  width: 400px;
+  width: 80vw;
+  max-width: 400px;
   min-height: 300px;
 
   display: flex;

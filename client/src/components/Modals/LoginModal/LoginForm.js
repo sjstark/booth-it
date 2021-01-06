@@ -34,8 +34,8 @@ const LoginForm = ({ closeLogin, openSignup }) => {
 
   const switchToSignup = (e) => {
     e.preventDefault()
-    closeLogin()
     openSignup()
+    closeLogin()
   }
 
   return (
