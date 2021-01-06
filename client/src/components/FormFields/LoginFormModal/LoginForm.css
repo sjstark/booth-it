@@ -1,0 +1,39 @@
+.login-form {
+  margin: auto;
+  padding: 20px;
+
+  width: 500px;
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.login-form__input-fields {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 300px;
+}
+
+.login-form li {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: red;
+}
+
+.login-form ul {
+  max-height: 80px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  padding-left: 25px;
+  margin: 10px;
+  overflow-y: scroll;
+  border: 1px solid darkred;
+  background-color: pink;
+  border-radius: 10px;
+
+  list-style-type: circle;
+}

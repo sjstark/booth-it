@@ -1,0 +1,50 @@
+.image-input__container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.image-input__container > input {
+  margin-bottom: 20px;
+}
+
+.image-input__selector-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  width: 100%;
+
+  margin-bottom: 5px;
+}
+
+.image-input__filename {
+  margin: 20px;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cropper {
+  position: relative;
+  height: 400px;
+  width: 400px;
+  overflow: hidden;
+}
+
+.image-cropper__container {
+  height: 400px;
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: grey;
+
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.image-cropper__previous-upload {
+  width: 400px;
+  height: 200px;
+}
