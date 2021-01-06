@@ -42,7 +42,7 @@
 }
 
 .button:hover:not(.disabled) {
-  filter: brightness(85%);
+  filter: brightness(90%);
   box-shadow: 0 0 10px var(--shadow);
 }
 
