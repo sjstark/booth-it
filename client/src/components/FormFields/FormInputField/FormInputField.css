@@ -51,7 +51,7 @@
 }
 
 .form-input-field__container--focused {
-  border: 2px solid rgb(42, 103, 208);
+  border: 2px solid var(--logo1);
 }
 
 .form-input-field__container--filled .form-input-field__name {

@@ -4,7 +4,7 @@ import { connect, useDispatch } from 'react-redux';
 import * as modalsActions from '../../../store/modals'
 
 
-import { Dialog } from '@material-ui/core'
+import { Dialog, DialogContent } from '@material-ui/core'
 
 import LoginForm from './LoginForm'
 
@@ -17,9 +17,7 @@ function LoginModal({ handleClose }) {
 
   useEffect(() => {
     (async () => {
-      console.log('hit here!')
       let res = await dispatch(modalsActions.setLoginModal(open, setOpen))
-      console.log({ res })
     })()
     return async () => {
       await dispatch(modalsActions.removeLoginModal())
@@ -31,7 +29,9 @@ function LoginModal({ handleClose }) {
       open={open}
       onClose={handleClose}
     >
-      <LoginForm />
+      <DialogContent>
+        <LoginForm />
+      </DialogContent>
     </Dialog>
   )
 }

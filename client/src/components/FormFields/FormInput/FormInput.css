@@ -43,7 +43,11 @@
 }
 
 .form-input__container--focused {
-  border: 2px solid rgb(42, 103, 208);
+  border: 2px solid var(--logo1);
+}
+
+.form-input__container--error {
+  border: 2px solid var(--red);
 }
 
 .form-input__container--filled .form-input__name {

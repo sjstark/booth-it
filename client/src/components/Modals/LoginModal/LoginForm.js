@@ -5,6 +5,8 @@ import * as sessionActions from '../../../store/session'
 import Button from '../../Button'
 import FormInput from '../../FormFields/FormInput'
 
+import './LoginForm.css'
+
 const LoginForm = () => {
   const dispatch = useDispatch()
 
@@ -24,17 +26,19 @@ const LoginForm = () => {
       })
   }
 
+  console.log(errors)
+
   return (
-    <form>
-      <h2>Login to <span style={{ fontFamily: "'Pacifico', cursive" }}>'SupDog</span></h2>
-      {errors.length > 0 && (
-        <ul>
-          {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-        </ul>
-      )}
+    <form className="login-form">
+      <h2>Login to <span style={{ fontFamily: "'Bungee', sans-serif" }}>Booth It</span></h2>
+      <div className="login-form__errors">
+        {errors.length > 0 && (
+          "Invalid login credentials. Please try again"
+        )}
+      </div>
       <div className="login-form__input-fields">
         <FormInput
-          name='Email or Username'
+          name='Email'
           required={true}
           type="text"
           value={email}
@@ -48,7 +52,7 @@ const LoginForm = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <Button onClick={handleSubmit}>Login</Button>
+      <Button disabled={!email || !password} color="primary" onClick={handleSubmit}>Login</Button>
     </form >
   );
 };

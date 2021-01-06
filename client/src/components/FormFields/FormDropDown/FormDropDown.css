@@ -60,7 +60,7 @@
 }
 
 .form-select__container--focused .form-select__input {
-  border: 2px solid rgb(42, 103, 208);
+  border: 2px solid var(--logo1);
 }
 
 .form-select__container--filled .form-select__name {

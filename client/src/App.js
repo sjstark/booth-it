@@ -14,15 +14,9 @@ function App({ user, modals }) {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    console.log(modals)
-  }, [modals])
-
-  useEffect(() => {
     dispatch(restoreUser())
       .then(() => setIsLoaded(true))
   }, [dispatch])
-
-  console.log(user)
 
   return (
     <>

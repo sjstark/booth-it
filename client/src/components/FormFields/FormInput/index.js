@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import './FormInput.css'
 
-export default function FormInput({ name, type, value, onChange, required, maxLength, min, step }) {
+export default function FormInput({ name, type, value, onChange, required, maxLength, min, step, error }) {
   const [focused, setFocused] = useState(false)
 
 
@@ -37,7 +37,7 @@ export default function FormInput({ name, type, value, onChange, required, maxLe
   }
 
   return (
-    <div onClick={focusChildInput} className={`form-input__container${value && ' form-input__container--filled'}`}>
+    <div onClick={focusChildInput} className={`form-input__container${value && ' form-input__container--filled'} ${error && ' form-input__container--error'}`}>
       <div onClick={focusSiblingInput} className="form-input__name">{name}</div>
       <input
         onClick={(e) => e.stopPropagation()}
