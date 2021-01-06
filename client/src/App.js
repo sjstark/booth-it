@@ -4,7 +4,9 @@ import { useDispatch, connect } from 'react-redux'
 
 import { restoreUser } from './store/session';
 
-export default function App() {
+import SplashPage from "./components/SplashPage"
+
+function App({ user }) {
   const dispatch = useDispatch()
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -14,9 +16,20 @@ export default function App() {
       .then(() => setIsLoaded(true))
   }, [dispatch])
 
+  console.log(user)
+
   return (
     <>
-
+      {!user && (
+        <SplashPage />
+      )}
+      {user && (
+        <div>You passed!</div>
+      )}
     </>
   )
 }
+
+const mapStateToProps = state => ({ user: state.user })
+
+export default connect(mapStateToProps)(App)

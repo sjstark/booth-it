@@ -1,0 +1,15 @@
+.logo-background__background-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:white;
+}
+
+.logo-background__logo-container {
+  width: 77.9422889vh;
+  max-width: 90vw;
+  height: 90vh;
+  max-height: 103.923045vw;
+}

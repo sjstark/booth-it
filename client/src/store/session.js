@@ -23,8 +23,9 @@ export const login = (user) => {
     }
 
     const res = await fetch('/api/auth/login/', { method, body: JSON.stringify(body) })
+    const user = await res.json()
 
-    dispatch(setUser(res.data.user))
+    dispatch(setUser(user))
 
     return res
   }
@@ -33,10 +34,15 @@ export const login = (user) => {
 export const restoreUser = () => {
   return async dispatch => {
     const res = await fetch('/api/auth/')
+    const user = await res.json()
+    if (!user.errors) {
+      dispatch(setUser(user))
+    }
+    else {
+      dispatch(endSession())
+    }
 
-    dispatch(setUser(res))
-
-    return res
+    return user
   }
 }
 
@@ -61,7 +67,9 @@ export const signup = (user) => {
 
     return axios.post('/api/users/', formData, config)
       .then(res => {
-        const user = res.data;
+        return res.json()
+      })
+      .then(body => {
         return dispatch(setUser(user))
       })
       .catch((err) => {
@@ -82,21 +90,21 @@ export const logout = () => {
 }
 
 
-let initialState = { user: null }
+let initialState = null // null for Unauthenticated, User object for authenticated
 
 function sessionReducer(state = initialState, action) {
-  let newState;
+  let newUserState;
   switch (action.type) {
 
     case SET_USER:
-      newState = Object.assign({}, state)
-      newState.user = action.payload
-      return newState
+      newUserState = Object.assign({}, state)
+      newUserState = action.payload
+      return newUserState
 
     case REMOVE_USER:
-      newState = Object.assign({}, state)
-      newState.user = null
-      return newState
+      newUserState = Object.assign({}, state)
+      newUserState = null
+      return newUserState
 
     default:
       return state
