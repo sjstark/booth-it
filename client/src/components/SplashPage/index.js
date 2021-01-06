@@ -19,16 +19,10 @@ function SplashForm() {
   return (
     <>
       <animated.div style={props} className="splash-form__container">
-        <Button disabled color="primary" onClick={(e) => console.log("CLICK!!")}>Button1</Button>
-        <Button color="primary" onClick={(e) => console.log("CLICK!!")}>Button1</Button>
-        <Button disabled color="secondary" onClick={(e) => console.log("CLICK!!")}>Button2</Button>
-        <Button color="secondary" onClick={(e) => console.log("CLICK!!")}>Button2</Button>
-        <Button disabled color="warning" onClick={(e) => console.log("CLICK!!")}>Go Back</Button>
-        <Button color="warning" onClick={(e) => console.log("CLICK!!")}>Go Back</Button>
-        <Button disabled color="caution" onClick={(e) => console.log("CLICK!!")}>Delete everything</Button>
-        <Button color="caution" onClick={(e) => console.log("CLICK!!")}>Delete everything</Button>
-        <Button disabled onClick={(e) => console.log("CLICK!!")}>Button3</Button>
-        <Button onClick={(e) => console.log("CLICK!!")}>Button3</Button>
+        <h1>Welcome to <span style={{ fontFamily: '"Bungee", sans-serif' }}>Booth It</span></h1>
+        <Button color="primary" onClick={() => { console.log("Sign Up!") }}>Sign Up</Button>
+        <Button color="secondary" onClick={() => { console.log("Log In!") }}>Log In</Button>
+        <Button color="secondary" onClick={() => { console.log("Log In! Dmemo!") }}>Log In as Demo User</Button>
       </animated.div>
     </>
   )

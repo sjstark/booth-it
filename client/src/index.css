@@ -11,7 +11,7 @@
   --logo3: #31C6E8;
   --orange: #FFCB77;
   --red: #FE6D73;
-  --shadow-color: rgba(.2, .2, .2, .3);
+  --shadow: rgba(.2, .2, .2, .3);
 
   /* Font Family */
   font-family: "Roboto", sans-serif;
