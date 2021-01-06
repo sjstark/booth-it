@@ -1,0 +1,14 @@
+.splash-form__container {
+  max-width: 600px;
+  width: 90vw;
+
+  height: 60vh;
+  max-height: 600px;
+
+
+  /* margin: 20vh auto; */
+
+  background-color: rgba(255, 255, 255, .7);
+  border: 1px solid black;
+  border-radius: 15px;
+}

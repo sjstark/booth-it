@@ -23,15 +23,13 @@ function App({ user }) {
 
   return (
     <>
-      <div >
-        <Loader duration={2500} style={{ width: `${height * 0.86602543}px`, height: `${height}px`, margin: "200px auto" }} />
-      </div>
-      {/* {!user && (
+      {/* <Loader duration={2500} style={{ width: `${height * 0.86602543}px`, height: `${height}px`, margin: "200px auto" }} /> */}
+      {!user && (
         <SplashPage />
       )}
       {user && (
         <div>You passed!</div>
-      )} */}
+      )}
     </>
   )
 }

@@ -1,21 +1,27 @@
 import React from 'react'
 
 import LogoBackground from '../LogoBackground'
+import Button from '../Button'
+
+import "./SplashPage.css"
 
 function SplashForm() {
   return (
     <div className="splash-form__container">
-
+      <Button onClick={(e) => console.log("CLICK!!")}>Button</Button>
     </div>
   )
 }
 
 
 export default function SplashPage() {
+
   return (
-    <div className="background-container">
+    <>
       <LogoBackground />
-      <SplashForm />
-    </div>
+      <div className="full-page flex-centered">
+        <SplashForm />
+      </div>
+    </>
   )
 }

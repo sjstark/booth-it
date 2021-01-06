@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { useSpring, animated, config, useChain } from 'react-spring'
+import { useSpring, animated } from 'react-spring'
 
 import "./Loader.css"
 
