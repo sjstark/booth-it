@@ -12,22 +12,26 @@ const endSession = () => ({
   type: REMOVE_USER
 })
 
-export const login = (user) => {
+export const login = ({ email, password }) => {
   return async dispatch => {
-    const { credential, password } = user;
 
     const method = 'POST'
     const body = {
-      credential,
-      password
+      email: email,
+      password: password
+    }
+    const headers = {
+      'Content-Type': 'application/json'
     }
 
-    const res = await fetch('/api/auth/login/', { method, body: JSON.stringify(body) })
-    const user = await res.json()
+    const res = await fetch('/api/auth/login', { method, body: JSON.stringify(body), headers })
+    const resJSON = await res.json()
 
-    dispatch(setUser(user))
+    if (!resJSON.errors) {
+      dispatch(setUser(resJSON))
+    }
 
-    return res
+    return resJSON
   }
 }
 
@@ -65,7 +69,7 @@ export const signup = (user) => {
       }
     }
 
-    return axios.post('/api/users/', formData, config)
+    return axios.post('/api/auth/signup', formData, config)
       .then(res => {
         return res.json()
       })
@@ -81,9 +85,7 @@ export const signup = (user) => {
 
 export const logout = () => {
   return async dispatch => {
-    const res = await fetch('/api/session', {
-      method: 'DELETE'
-    })
+    const res = await fetch('/api/auth/logout')
 
     dispatch(endSession())
   }

@@ -1,13 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import { useSpring, animated, config } from 'react-spring'
 
 import LogoBackground from '../LogoBackground'
 import Button from '../Button'
 
+import { login } from '../../store/session'
+
 import "./SplashPage.css"
 
 function SplashForm({ modals }) {
+  const dispatch = useDispatch()
   const props = useSpring({
     transform: "translate(0, 0vh)",
     from: {
@@ -17,13 +20,21 @@ function SplashForm({ modals }) {
     config: config.gentle
   })
 
+  const loginDemo = (e) => {
+    e.stopPropagation()
+    dispatch(login({
+      email: 'demo@user.io',
+      password: "password"
+    }))
+  }
+
   return (
     <>
       <animated.div style={props} className="splash-form__container">
         <h1>Welcome to <span style={{ fontFamily: '"Bungee", sans-serif' }}>Booth It</span></h1>
         <Button color="primary" onClick={modals.signup.handleOpen}>Sign Up</Button>
         <Button color="secondary" onClick={modals.login.handleOpen}>Log In</Button>
-        <Button color="secondary" onClick={() => { console.log("Log In! Dmemo!") }}>Log In as Demo User</Button>
+        <Button color="tertiary" onClick={loginDemo}>Log In as Demo User</Button>
       </animated.div>
     </>
   )

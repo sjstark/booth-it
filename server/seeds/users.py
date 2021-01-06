@@ -6,8 +6,13 @@ from server.models import db, User
 
 def seed_users():
 
-    demo = User(username='Demo', email='demo@aa.io',
-                password='password')
+    demo = User(email='demo@user.io',
+                password='password',
+                last_name='User',
+                first_name='Demo',
+                company='Example Corporation',
+                job_title='Product Showman'
+                )
 
     db.session.add(demo)
 

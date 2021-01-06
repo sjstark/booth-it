@@ -19,13 +19,10 @@ function TopLeft({ duration }) {
     from: {
       radians: 0
     },
-    to: async next => {
-      while (true) {
-        await next({
-          radians: 2 * Math.PI
-        })
-      }
+    to: {
+      radians: 2 * Math.PI
     },
+    loop: true,
     reset: true,
     config: {
       duration: duration
@@ -49,13 +46,10 @@ function BottomLeft({ duration }) {
     from: {
       radians: 0
     },
-    to: async next => {
-      while (true) {
-        await next({
-          radians: 2 * Math.PI
-        })
-      }
+    to: {
+      radians: 2 * Math.PI
     },
+    loop: true,
     reset: true,
     config: {
       duration: duration
@@ -79,13 +73,10 @@ function Right({ duration }) {
     from: {
       radians: 0
     },
-    to: async next => {
-      while (true) {
-        await next({
-          radians: 2 * Math.PI
-        })
-      }
+    to: {
+      radians: 2 * Math.PI
     },
+    loop: true,
     reset: true,
     config: {
       duration: duration
@@ -106,25 +97,22 @@ export default function Loader({ style: { ...styles }, duration }) {
       transform: "rotate(0deg)",
       ...styles
     },
-    to: async next => {
-      while (true) {
-        await next({
-          transform: "rotate(360deg)",
-          ...styles
-        })
-      }
+    to: {
+      transform: "rotate(360deg)"
     },
-    reset: true,
+    loop: true,
     config: {
       duration: duration
     }
   })
 
   return (
-    <animated.div style={props} className="loader__logo-container">
-      <TopLeft duration={duration} />
-      <BottomLeft duration={duration} />
-      <Right duration={duration} />
-    </animated.div>
+    <>
+      <animated.div style={props} className="loader__logo-container">
+        <TopLeft duration={duration} />
+        <BottomLeft duration={duration} />
+        <Right duration={duration} />
+      </animated.div>
+    </>
   )
 }

@@ -13,6 +13,7 @@
 
 .login-form h2 {
   font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .login-form__input-fields {
@@ -22,22 +23,13 @@
   min-width: 300px;
 }
 
-.login-form li {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: red;
-}
-
-.login-form ul {
-  max-height: 80px;
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  padding-left: 25px;
+.login-form__errors {
+  height: 20px;
   margin: 10px;
-  overflow-y: scroll;
-  border: 1px solid darkred;
-  background-color: pink;
-  border-radius: 10px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  list-style-type: circle;
+  color: var(--red)
 }

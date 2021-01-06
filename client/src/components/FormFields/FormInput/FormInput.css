@@ -42,12 +42,14 @@
   text-overflow: ellipsis;
 }
 
+.form-input__container--focused.form-input__container--error,
 .form-input__container--focused {
   border: 2px solid var(--logo1);
 }
 
 .form-input__container--error {
   border: 2px solid var(--red);
+  transition: border .4s;
 }
 
 .form-input__container--filled .form-input__name {

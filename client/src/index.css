@@ -36,3 +36,9 @@
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
 }
+
+.loader-wrapper {
+  position:absolute;
+  z-index: 100;
+  background-color: whitesmoke;
+}

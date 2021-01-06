@@ -7,6 +7,7 @@ import { restoreUser } from './store/session';
 import SplashPage from "./components/SplashPage"
 import Loader from "./components/Loader"
 import Modals from "./components/Modals"
+import LogoutButton from "./components/auth/LogoutButton"
 
 function App({ user, modals }) {
   const dispatch = useDispatch()
@@ -18,15 +19,28 @@ function App({ user, modals }) {
       .then(() => setIsLoaded(true))
   }, [dispatch])
 
+  const loaderHeight = 100;
+
   return (
     <>
-      {!user && (
-        <SplashPage />
+      {!isLoaded && (
+        <div className="full-page flex-centered loader-wrapper logo-background__background-wrapper">
+          <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
+        </div>
       )}
-      {user && (
-        <div>You passed!</div>
-      )}
-      <Modals />
+      <>
+        {!user && (
+          <SplashPage />
+        )}
+        {user && (
+          <>
+            <div>You passed!</div>
+            <LogoutButton />
+          </>
+        )}
+        <Modals />
+      </>
+
     </>
   )
 }

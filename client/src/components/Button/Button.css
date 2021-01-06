@@ -33,6 +33,10 @@
   background-color: var(--logo2);
 }
 
+.button.default.tertiary {
+  background-color: var(--logo3);
+}
+
 .button.default.warning {
   background-color: var(--red);
 }
