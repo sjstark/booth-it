@@ -32,10 +32,6 @@ class Show(db.Model):
 
     dates = db.relationship('Show_Date', backref="show")
 
-    partners = db.relationship('User',
-                                secondary=Show_Partners,
-                                backref="partnered_shows")
-
     guests = db.relationship('User',
                             secondary=Show_Guests,
                             backref="visited_shows")
@@ -93,12 +89,20 @@ class Show_Partner_Invite(db.Model):
     creator = db.relationship("User", backref="created_invites")
     accepted = db.relationship("User", backref="accepted_invites")
 
+    booth = db.relationship("Booth", backref="invites")
+    show = db.relationship("Show", backref="invites")
+
 
     def is_open(self):
         return not bool(self.accepted_by)
 
 
     def is_valid_invite(self, IID, BID):
+        """
+        Instance method to check if supplied query parameters are valid for the selected invite.
+        invite id (IID) should already be correct by the query to get the invite, this method checks that
+        booth id (BID) is correct as well as that the invite has not already been accepted.
+        """
         if ((decodeInviteId(IID) == self.id) and (decodeBoothId(BID) == self.booth_id)):
             return self.is_open()
         return False

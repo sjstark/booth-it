@@ -1,7 +1,5 @@
 from .db import db
 
-from .show import Show_Partners
-
 from server.utils.awsS3 import get_file_url
 from server.utils.cipher_suite import *
 
@@ -51,6 +49,10 @@ class Booth(db.Model):
     guests = db.relationship('User',
                             secondary=Booth_Guests,
                             backref="visited_shows")
+
+    employees = db.relationship('User',
+                                secondary=Booth_Employees,
+                                backref="assigned_booths")
 
     def to_dict(self):
         return {
