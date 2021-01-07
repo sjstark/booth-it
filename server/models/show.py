@@ -1,25 +1,8 @@
 from .db import db
 
 from server.utils.awsS3 import get_file_url
-from server.utils.cipher_suite import encodeShowId, decodeShowId
+from server.utils.cipher_suite import *
 
-
-Show_Partners = db.Table(
-    'show_partners', # tablename
-    db.Model.metadata, # metadata
-    db.Column('show_id',
-                db.Integer,
-                db.ForeignKey('shows.id'),
-                primary_key=True),
-    db.Column('booth_id',
-                db.Integer,
-                db.ForeignKey('booths.id'),
-                primary_key=True),
-    db.Column('user_id',
-                db.Integer,
-                primary_key=True,
-                nullable=True)
-)
 
 
 Show_Guests = db.Table(
@@ -48,10 +31,6 @@ class Show(db.Model):
     is_private = db.Column(db.Boolean, default=False)
 
     dates = db.relationship('Show_Date', backref="show")
-
-    partners = db.relationship('User',
-                                secondary=Show_Partners,
-                                backref="partnered_shows")
 
     guests = db.relationship('User',
                             secondary=Show_Guests,
@@ -83,6 +62,7 @@ class Show(db.Model):
 
 class Show_Date(db.Model):
     __tablename__ = "show_dates"
+
     id = db.Column(db.Integer, primary_key=True)
     show_id = db.Column(db.Integer, db.ForeignKey('shows.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
@@ -94,4 +74,51 @@ class Show_Date(db.Model):
             "date": self.date,
             "startTime": self.start_time,
             "endTime": self.end_time
+        }
+
+
+class Show_Partner_Invite(db.Model):
+    __tablename__ = "show_partner_invites"
+
+    id = db.Column(db.Integer, primary_key=True)
+    show_id = db.Column(db.Integer, db.ForeignKey('shows.id'), nullable=False)
+    booth_id = db.Column(db.Integer, db.ForeignKey('booths.id'), nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    accepted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+
+    creator = db.relationship("User", backref="created_invites")
+    accepted = db.relationship("User", backref="accepted_invites")
+
+    booth = db.relationship("Booth", backref="invites")
+    show = db.relationship("Show", backref="invites")
+
+
+    def is_open(self):
+        return not bool(self.accepted_by)
+
+
+    def is_valid_invite(self, IID, BID):
+        """
+        Instance method to check if supplied query parameters are valid for the selected invite.
+        invite id (IID) should already be correct by the query to get the invite, this method checks that
+        booth id (BID) is correct as well as that the invite has not already been accepted.
+        """
+        if ((decodeInviteId(IID) == self.id) and (decodeBoothId(BID) == self.booth_id)):
+            return self.is_open()
+        return False
+
+
+    @classmethod
+    def get_invite(cls, IID):
+        invite_id = decodeInviteId(IID)
+        return db.query.get(invite_id)
+
+
+    def to_dict(self):
+        return {
+            "id": encodePartnerId(self.id),
+            "showId": encodeShowId(self.show_id),
+            "boothId": encodeBoothId(self.booth_id),
+            "creator_id": self.created_by,
+            "isAccepted": bool(self.accepted_by)
         }
