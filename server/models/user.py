@@ -16,6 +16,8 @@ class User(db.Model, UserMixin):
     card = db.Column(db.JSON)
     hashed_password = db.Column(db.String(255), nullable=False)
 
+    shows = db.relationship('Show', backref="owner")
+
     @property
     def password(self):
         return self.hashed_password
