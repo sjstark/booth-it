@@ -3,7 +3,22 @@ from .db import db
 from .show import Show_Partners
 
 from server.utils.awsS3 import get_file_url
-from server.utils.cipher_suite import encodeBoothId, decodeBoothId
+from server.utils.cipher_suite import *
+
+
+Booth_Employees = db.Table(
+    'booth_employees', # tablename
+    db.Model.metadata, # metadata
+    db.Column('booth_id',
+                db.Integer,
+                db.ForeignKey('booths.id'),
+                primary_key=True),
+    db.Column('employee_id',
+                db.Integer,
+                db.ForeignKey('users.id'),
+                primary_key=True)
+)
+
 
 Booth_Guests = db.Table(
     'booth_guests', # tablename
@@ -32,10 +47,6 @@ class Booth(db.Model):
     profile = db.Column(db.JSON)
 
     show = db.relationship("Show", backref="booths")
-
-    partners = db.relationship('User',
-                                secondary=Show_Partners,
-                                backref="partnered_shows")
 
     guests = db.relationship('User',
                             secondary=Booth_Guests,
