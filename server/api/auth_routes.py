@@ -4,6 +4,8 @@ from server.forms import LoginForm
 from server.forms import SignUpForm
 from flask_login import current_user, login_user, logout_user, login_required
 
+from server.utils.awsS3 import upload_file_to_s3
+
 auth_routes = Blueprint('auth', __name__)
 
 
@@ -73,6 +75,13 @@ def sign_up():
         )
         db.session.add(user)
         db.session.commit()
+
+        # AWS S3 Profile Pic Upload
+
+        filename = f"users/{user.id}/profilePic.jpg"
+
+        upload_file_to_s3(request.files['profilePic'], filename)
+
         login_user(user)
         return user.to_dict()
     return {'errors': validation_errors_to_error_messages(form.errors)}

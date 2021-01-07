@@ -15,7 +15,7 @@ BUCKET_REGION = s3.get_bucket_location(Bucket=BUCKET_NAME)[
 
 
 def get_file_url(filename):
-    url = f"https://{BUCKET_NAME}.s3.{BUCKET_REGION}.amazonaws.com/{filename}"
+    url = f"https://{BUCKET_NAME}.s3.amazonaws.com/{filename}"
     return url
 
 

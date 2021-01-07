@@ -1,6 +1,7 @@
 from .db import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from server.utils.awsS3 import get_file_url
 
 
 class User(db.Model, UserMixin):
@@ -34,4 +35,5 @@ class User(db.Model, UserMixin):
             "lastName": self.last_name,
             "company": self.company,
             "jobTitle": self.job_title,
+            "profilePicUrl": get_file_url(f"users/{self.id}/profilePic.jpg")
         }
