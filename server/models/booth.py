@@ -1,7 +1,7 @@
 from .db import db
 
 from server.utils.awsS3 import get_file_url
-from server.utils.cipher_suite import encryptBoothId, decryptBoothId
+from server.utils.cipher_suite import encodeBoothId, decodeBoothId
 
 Booth_Guests = db.Table(
     'booth_guests', # tablename

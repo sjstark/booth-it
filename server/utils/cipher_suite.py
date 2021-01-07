@@ -1,35 +1,45 @@
 import os
-from cryptography.fernet import Fernet
+# from cryptography.fernet import Fernet]
+from hashids import Hashids
+
+ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+SHOW_CIPHER_SUITE = Hashids(alphabet=ALPHABET, min_length=6, salt=os.environ.get("SHOW_KEY"))
+BOOTH_CIPHER_SUITE = Hashids(alphabet=ALPHABET, min_length=6, salt=os.environ.get("BOOTH_KEY"))
+PARTNER_CIPHER_SUITE = Hashids(alphabet=ALPHABET, min_length=12, salt=os.environ.get("PARTNER_KEY"))
 
 
-SHOW_CIPHER_SUITE = Fernet(os.environ.get("SHOW_KEY"))
-BOOTH_CIPHER_SUITE = Fernet(os.environ.get("BOOTH_KEY"))
-PARTNER_CIPHER_SUITE = Fernet(os.environ.get("PARTNER_KEY"))
+def URLify(code):
+    i = 4
+    while (i < len(code)):
+        code = code[0:i] + "-" + code[i:]
+        i+=5
+    return code
 
 
-def intToByte(num):
-    return b"%x" % num
+def deURLify(code):
+    return code.replace("-", "")
 
 
-def encryptShowId(id):
-    return SHOW_CIPHER_SUITE.encrypt(intToByte(id))
+def encodeShowId(id):
+    return URLify(SHOW_CIPHER_SUITE.encode(id))
 
 
-def decryptShowId(id):
-    return SHOW_CIPHER_SUITE.decrypt(intToByte(id))
+def decodeShowId(id):
+    return deURLify(SHOW_CIPHER_SUITE.decode(id))
 
 
-def encryptBoothId(id):
-    return BOOTH_CIPHER_SUITE.encrypt(intToByte(id))
+def encodeBoothId(id):
+    return URLify(BOOTH_CIPHER_SUITE.encode(id))
 
 
-def decryptBoothId(id):
-    return BOOTH_CIPHER_SUITE.decrypt(intToByte(id))
+def decodeBoothId(id):
+    return deURLify(BOOTH_CIPHER_SUITE.decode(id))
 
 
-def encryptPartnerId(id):
-    return PARTNER_CIPHER_SUITE.encrypt(intToByte(id))
+def encodePartnerId(id):
+    return URLify(PARTNER_CIPHER_SUITE.encode(id))
 
 
-def decryptPartnerId(id):
-    return PARTNER_CIPHER_SUITE.decrypt(intToByte(id))
+def decodePartnerId(id):
+    return deURLify(PARTNER_CIPHER_SUITE.decode(id))

@@ -1,7 +1,7 @@
 from .db import db
 
 from server.utils.awsS3 import get_file_url
-from server.utils.cipher_suite import encryptShowId, decryptShowId
+from server.utils.cipher_suite import encodeShowId, decodeShowId
 
 
 # Show_Partners = db.Table(
@@ -59,7 +59,7 @@ class Show(db.Model):
 
     def to_dict(self):
         return {
-            "id": encryptShowId(self.id),
+            "id": encodeShowId(self.id),
             "ownerId": self.owner_id,
             "title": self.title,
             "description": self.description,
@@ -70,7 +70,7 @@ class Show(db.Model):
 
     def to_dict_full(self):
         return {
-            "id": encryptShowId(self.id),
+            "id": encodeShowId(self.id),
             "owner": self.owner.to_dict(),
             "title": self.title,
             "description": self.description,
