@@ -1,5 +1,7 @@
 from .db import db
 
+from .show import Show_Partners
+
 from server.utils.awsS3 import get_file_url
 from server.utils.cipher_suite import encodeBoothId, decodeBoothId
 
@@ -31,13 +33,25 @@ class Booth(db.Model):
 
     show = db.relationship("Show", backref="booths")
 
-    # partners = db.relationship('User',
-    #                             secondary=Booth_Partners,
-    #                             backref="partnered_shows")
+    partners = db.relationship('User',
+                                secondary=Show_Partners,
+                                backref="partnered_shows")
 
     guests = db.relationship('User',
                             secondary=Booth_Guests,
                             backref="visited_shows")
+
+    def to_dict(self):
+        return {
+            "id": encodeBoothId(self.id),
+            "showId": encodeShowId(self.show_id),
+            "company": self.company,
+            "description": self.description,
+            "primaryColor": self.primary_color,
+            "secondaryColor": self.secondary_color,
+            "size": self.size.to_string(),
+            "profile": self.profile,
+        }
 
 
 
@@ -48,3 +62,6 @@ class Booth_Size(db.Model):
     size = db.Column(db.String(25), nullable=False)
 
     booths = db.relationship('Booth', backref="size")
+
+    def to_string(self):
+        return self.size

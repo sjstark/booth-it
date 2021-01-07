@@ -22,19 +22,19 @@ def deURLify(code):
 
 
 def encodeShowId(id):
-    return URLify(SHOW_CIPHER_SUITE.encode(id))
+    return SHOW_CIPHER_SUITE.encode(id)
 
 
 def decodeShowId(id):
-    return deURLify(SHOW_CIPHER_SUITE.decode(id))
+    return SHOW_CIPHER_SUITE.decode(id)
 
 
 def encodeBoothId(id):
-    return URLify(BOOTH_CIPHER_SUITE.encode(id))
+    return BOOTH_CIPHER_SUITE.encode(id)
 
 
 def decodeBoothId(id):
-    return deURLify(BOOTH_CIPHER_SUITE.decode(id))
+    return BOOTH_CIPHER_SUITE.decode(id)
 
 
 def encodePartnerId(id):

@@ -4,21 +4,22 @@ from server.utils.awsS3 import get_file_url
 from server.utils.cipher_suite import encodeShowId, decodeShowId
 
 
-# Show_Partners = db.Table(
-#     'show_partners', # tablename
-#     db.Model.metadata, # metadata
-#     db.Column('show_id',
-#                 db.Integer,
-#                 db.ForeignKey('shows.id'),
-#                 primary_key=True),
-#     db.Column('booth_id'
-#                 db.Integer,
-#                 db.ForeignKey('booths.id'),
-#                 primary_key=True),
-#     db.Column('user_id',
-#                 db.Integer,
-#                 nullable=True)
-# )
+Show_Partners = db.Table(
+    'show_partners', # tablename
+    db.Model.metadata, # metadata
+    db.Column('show_id',
+                db.Integer,
+                db.ForeignKey('shows.id'),
+                primary_key=True),
+    db.Column('booth_id',
+                db.Integer,
+                db.ForeignKey('booths.id'),
+                primary_key=True),
+    db.Column('user_id',
+                db.Integer,
+                primary_key=True,
+                nullable=True)
+)
 
 
 Show_Guests = db.Table(
@@ -48,9 +49,9 @@ class Show(db.Model):
 
     dates = db.relationship('Show_Date', backref="show")
 
-    # partners = db.relationship('User',
-    #                             secondary=Show_Partners,
-    #                             backref="partnered_shows")
+    partners = db.relationship('User',
+                                secondary=Show_Partners,
+                                backref="partnered_shows")
 
     guests = db.relationship('User',
                             secondary=Show_Guests,
