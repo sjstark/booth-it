@@ -22,8 +22,10 @@ const SignupForm = ({ openLogin, closeSignup }) => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [profilePic, setProfilePic] = useState(null)
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState({})
   const [ready, setReady] = useState(false)
+
+  let hasError = false
 
   const params = [
     firstName,
@@ -43,22 +45,39 @@ const SignupForm = ({ openLogin, closeSignup }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setErrors([]);
-    let newErrors = [];
+    setErrors({});
+    let newErrors = {}
 
-    if (confirmPassword !== password) {
-      newErrors.push('Please make sure passwords match!')
-      return setErrors(newErrors)
+    hasError = false
+
+    if (! /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+      newErrors["email"] = ('Please enter a valid email address!')
+      hasError = true
     }
+    if (confirmPassword !== password) {
+      newErrors["password"] = ('Please make sure passwords match!')
+      hasError = true
+
+    }
+    if (hasError) {
+      setErrors(newErrors)
+      console.log(newErrors)
+      return
+    }
+
     const user = { email, firstName, lastName, company, jobTitle, profilePic, password }
     return dispatch(sessionActions.signup(user))
       .then((res) => {
-        if (res.statusText !== 'OK') throw res
+        console.log('then:')
+        console.log({ res })
+        if (res.errors) throw res
+        closeSignup()
         return res
       })
       .catch((res) => {
-        if (res.data && res.data.errors) {
-          setErrors(res.data.errors)
+        if (res && res.errors) {
+          console.log(res.errors)
+          setErrors(res.errors)
         }
       })
   }
@@ -76,9 +95,10 @@ const SignupForm = ({ openLogin, closeSignup }) => {
       <h2>Signup for <span style={{ fontFamily: "'Bungee', sans-serif" }}>Booth It</span></h2>
 
       <div className="signup-form__errors">
-        {errors.length > 0 && (
-          "Invalid signup credentials. Please try again"
-        )}
+        <span >
+          {Object.values(errors).map(msg => msg + " ")}
+        </span>
+
       </div>
       <div className="signup-form__inputs-container">
         <div className="signup-form__input-fields">
@@ -87,7 +107,7 @@ const SignupForm = ({ openLogin, closeSignup }) => {
             required={true}
             type="text"
             value={firstName}
-            error={Boolean(errors.length)}
+            error={false}
             onChange={({ target }) => setFirstName(target.value)}
           />
           <FormInput
@@ -95,7 +115,7 @@ const SignupForm = ({ openLogin, closeSignup }) => {
             required={true}
             type="text"
             value={lastName}
-            error={Boolean(errors.length)}
+            error={false}
             onChange={({ target }) => setLastName(target.value)}
           />
           <FormInput
@@ -103,7 +123,7 @@ const SignupForm = ({ openLogin, closeSignup }) => {
             required={true}
             type="text"
             value={company}
-            error={Boolean(errors.length)}
+            error={false}
             onChange={({ target }) => setCompany(target.value)}
           />
           <FormInput
@@ -111,7 +131,7 @@ const SignupForm = ({ openLogin, closeSignup }) => {
             required={true}
             type="text"
             value={jobTitle}
-            error={Boolean(errors.length)}
+            error={false}
             onChange={({ target }) => setJobTitle(target.value)}
           />
           <FormInput
@@ -119,7 +139,7 @@ const SignupForm = ({ openLogin, closeSignup }) => {
             required={true}
             type="text"
             value={email}
-            error={Boolean(errors.length)}
+            error={"email" in errors}
             onChange={({ target }) => setEmail(target.value)}
           />
           <FormInput
@@ -127,7 +147,7 @@ const SignupForm = ({ openLogin, closeSignup }) => {
             required={true}
             type="password"
             value={password}
-            error={Boolean(errors.length)}
+            error={"password" in errors}
             onChange={({ target }) => setPassword(target.value)}
           />
           <FormInput
@@ -135,13 +155,13 @@ const SignupForm = ({ openLogin, closeSignup }) => {
             required={true}
             type="password"
             value={confirmPassword}
-            error={Boolean(errors.length)}
+            error={"password" in errors}
             onChange={({ target }) => setConfirmPassword(target.value)}
           />
         </div>
         <div className="signup-form__profile-pic">
           <h2>Select a Profile Picture</h2>
-          <span>After selection image, drag to position and scroll to zoom.</span>
+          <span>After selecting an image, drag to position and scroll to zoom.</span>
           <ImageInput aspect={1} onChange={setProfilePic} />
         </div>
       </div>

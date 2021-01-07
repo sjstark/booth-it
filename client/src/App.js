@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { useDispatch, connect } from 'react-redux'
+import { useDispatch, connect, useSelector } from 'react-redux'
 
 import { restoreUser } from './store/session';
 
@@ -35,6 +35,8 @@ function App({ user, modals }) {
         {user && (
           <>
             <div>You passed!</div>
+            {user.firstName}
+            {user.lastName}
             <LogoutButton />
           </>
         )}

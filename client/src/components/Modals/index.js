@@ -9,6 +9,13 @@ export default function Modals() {
   const theme = createMuiTheme({
     shape: {
       borderRadius: "20px"
+    },
+    overrides: {
+      MuiDialogContent: {
+        root: {
+          margin: "10px"
+        }
+      }
     }
   })
 

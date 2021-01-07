@@ -27,7 +27,7 @@ const LoginForm = ({ closeLogin, openSignup }) => {
           setErrors(res.errors)
         }
         else if (res) {
-          console.log("CLOSE")
+          closeLogin()
         }
       })
   }
