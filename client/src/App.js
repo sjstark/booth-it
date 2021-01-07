@@ -37,6 +37,7 @@ function App({ user, modals }) {
             <div>You passed!</div>
             {user.firstName}
             {user.lastName}
+            <img src={user.profilePicUrl} alt="profilePic" />
             <LogoutButton />
           </>
         )}
