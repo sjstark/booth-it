@@ -1,24 +1,25 @@
 from .db import db
 
 from server.utils.awsS3 import get_file_url
-from server.utils.id_hashing import hashShowId, hashPartnerId
+from server.utils.cipher_suite import encryptShowId, decryptShowId
 
 
-Show_Partners = db.Table(
-    'show_partners', # tablename
-    db.Model.metadata, # metadata
-    db.Column('show_id',
-                db.Integer,
-                db.ForeignKey('shows.id'),
-                primary_key=True),
-    db.Column('booth_id'
-                db.Integer,
-                db.ForeignKey('booths.id'),
-                primary_key=True),
-    db.Column('user_id',
-                db.Integer,
-                nullable=True)
-)
+# Show_Partners = db.Table(
+#     'show_partners', # tablename
+#     db.Model.metadata, # metadata
+#     db.Column('show_id',
+#                 db.Integer,
+#                 db.ForeignKey('shows.id'),
+#                 primary_key=True),
+#     db.Column('booth_id'
+#                 db.Integer,
+#                 db.ForeignKey('booths.id'),
+#                 primary_key=True),
+#     db.Column('user_id',
+#                 db.Integer,
+#                 nullable=True)
+# )
+
 
 Show_Guests = db.Table(
     'show_guests', # tablename
@@ -30,15 +31,14 @@ Show_Guests = db.Table(
     db.Column('user_id',
                 db.Integer,
                 db.ForeignKey('users.id'),
-                primary_key=True,
-                nullable=True)
+                primary_key=True)
 )
+
 
 class Show(db.Model):
     __tablename__ = "shows"
 
     id = db.Column(db.Integer, primary_key=True)
-    hashed_id = db.Column(db.String(24), nullable=False, unique=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500), nullable=False)
@@ -48,28 +48,29 @@ class Show(db.Model):
 
     dates = db.relationship('Show_Date', backref="show")
 
+    # partners = db.relationship('User',
+    #                             secondary=Show_Partners,
+    #                             backref="partnered_shows")
+
     guests = db.relationship('User',
                             secondary=Show_Guests,
                             backref="visited_shows")
 
-    @id.setter
-    def id(self, id):
-        self.hashed_id = hashShowId(id)
-        self.id = id
 
     def to_dict(self):
         return {
-            "hashedId": self.hashed_id,
+            "id": encryptShowId(self.id),
             "ownerId": self.owner_id,
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
+            "showLogoURL": get_file_url(f"shows/{self.hashedId}/logo.png")
         }
 
     def to_dict_full(self):
         return {
-            "hashedId": self.hashed_id,
+            "id": encryptShowId(self.id),
             "owner": self.owner.to_dict(),
             "title": self.title,
             "description": self.description,
@@ -77,6 +78,7 @@ class Show(db.Model):
             "secondaryColor": self.secondary_color,
             "isPrivate": self.is_private
         }
+
 
 class Show_Date(db.Model):
     __tablename__ = "show_dates"
