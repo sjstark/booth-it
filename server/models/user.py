@@ -7,6 +7,7 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    hashed_id = db.Column(db.String(12), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     last_name = db.Column(db.String(50), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
@@ -14,6 +15,11 @@ class User(db.Model, UserMixin):
     job_title = db.Column(db.String(150))
     card = db.Column(db.JSON)
     hashed_password = db.Column(db.String(255), nullable=False)
+
+    @id.setter
+    def id(self, id):
+        self.hashed_password = generate_password_hash(password)
+        self.id = id
 
     @property
     def password(self):

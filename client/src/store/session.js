@@ -52,16 +52,17 @@ export const restoreUser = () => {
 
 export const signup = (user) => {
   return async dispatch => {
-    const { profilePic, firstName, lastName, username, password, email } = user;
+    const { profilePic, firstName, lastName, company, jobTitle, password, email } = user;
     const formData = new FormData();
-    // formData.append('firstName', firstName)
-    // formData.append('lastName', lastName)
-    formData.append('username', username)
+    formData.append('firstName', firstName)
+    formData.append('lastName', lastName)
+    formData.append('company', company)
+    formData.append('jobTitle', jobTitle)
     formData.append('password', password)
     formData.append('email', email)
-    // if (profilePic) {
-    //   formData.append('profilePic', profilePic)
-    // }
+    if (profilePic) {
+      formData.append('profilePic', profilePic)
+    }
 
     const config = {
       headers: {

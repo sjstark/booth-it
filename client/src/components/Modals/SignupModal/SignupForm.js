@@ -23,6 +23,22 @@ const SignupForm = ({ openLogin, closeSignup }) => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [profilePic, setProfilePic] = useState(null)
   const [errors, setErrors] = useState([])
+  const [ready, setReady] = useState(false)
+
+  const params = [
+    firstName,
+    lastName,
+    email,
+    company,
+    jobTitle,
+    password,
+    confirmPassword
+  ]
+
+  useEffect(() => {
+    setReady(params.every(x => Boolean(x)))
+
+  }, params)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -129,7 +145,7 @@ const SignupForm = ({ openLogin, closeSignup }) => {
           <ImageInput aspect={1} onChange={setProfilePic} />
         </div>
       </div>
-      <Button disabled={!email || !password} color="primary" onClick={handleSubmit}>Signup</Button>
+      <Button disabled={!ready} color="primary" onClick={handleSubmit}>Signup</Button>
       <span onClick={switchToSignup}>Already have an account?</span>
     </form >
   );
