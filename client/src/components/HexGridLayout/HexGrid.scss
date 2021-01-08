@@ -1,0 +1,142 @@
+/*
+FULL CREDIT FOR HEXAGON LOGIC
+GOES TO JESSE BRENEMAN FROM THIS TUTORIAL:
+https://ninjarockstar.dev/css-hex-grids/
+*/
+
+$block: '.hex-grid';
+
+@mixin grid-item($amount) {
+  @for $i from 1 through $amount {
+    &:nth-of-type(#{$amount}n + #{$i}) {
+      grid-column: #{$i + $i - 1} / span 3;
+      @if $i % 2 == 0 {
+        grid-row: calc(var(--counter) + var(--counter) - 1) / span 2;
+      }
+    }
+  }
+
+  @for $i from 1 through 20 {
+    &:nth-of-type(n + #{$i * $amount + 1}) {
+      --counter: #{$i + 1};
+    }
+  }
+}
+
+#{$block} {
+    display: flex;
+  justify-content: center;
+
+    &__list {
+        --amount: 5;
+        position: relative;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        display: grid;
+        grid-template-columns: repeat(var(--amount), 30px 60px) 30px;
+        grid-gap: 2.5em 5em;
+    }
+
+    &__item {
+      position: relative;
+      grid-column: 1 / span 3;
+      grid-row: calc(var(--counter) + var(--counter)) / span 2;
+      filter: drop-shadow(0 0 10px var(--shadow));
+      height: 0;
+      padding-bottom: 90%;
+
+      &:hover{
+        filter: drop-shadow(0 0 10px var(--shadow-dark));
+        transition: filter 1s;
+        z-index: 20;
+      }
+    }
+
+    &__content {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      font-size: 1.125em;
+      color: #111111;
+      background-color: white;
+      clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2em 25%;
+      text-decoration: none;
+      text-align: center;
+      transition: transform .24s ease-out;
+
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+  #{$block} {
+    &__list {
+      --amount: 5;
+      --counter: 1;
+    }
+
+    &__item {
+      @include grid-item(5);
+    }
+  }
+}
+
+@media screen and (min-width: 1120px) and (max-width: 1439px) {
+  #{$block} {
+    &__list {
+      --amount: 4;
+      --counter: 1;
+    }
+
+    &__item {
+      @include grid-item(4);
+    }
+  }
+}
+
+@media screen and (min-width: 840px) and (max-width: 1119px) {
+  #{$block} {
+    &__list {
+      --amount: 3;
+      --counter: 1;
+      grid-gap: 1.5em 3em;
+    }
+
+    &__item {
+      @include grid-item(3);
+    }
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 839px) {
+  #{$block} {
+    &__list {
+      --amount: 2;
+      --counter: 1;
+      grid-gap: 1.5em 3em;
+    }
+
+    &__item {
+      @include grid-item(2);
+    }
+  }
+}
+
+@media screen and (max-width: 479px) {
+  #{$block} {
+    &__list {
+      --amount: 1;
+      grid-gap: 1.5em 3em;
+    }
+  }
+}
