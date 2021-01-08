@@ -56,8 +56,8 @@ class Booth(db.Model):
 
     def to_dict(self):
         return {
-            "id": encodeBoothId(self.id),
-            "showId": encodeShowId(self.show_id),
+            "BID": encodeBoothId(self.id),
+            "SID": encodeShowId(self.show_id),
             "company": self.company,
             "description": self.description,
             "primaryColor": self.primary_color,
