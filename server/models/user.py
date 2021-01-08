@@ -16,11 +16,11 @@ class User(db.Model, UserMixin):
     card = db.Column(db.JSON)
     hashed_password = db.Column(db.String(255), nullable=False)
 
-    shows = db.relationship('Show', backref="owner")
+    shows = db.relationship('Show', backref=db.backref("owner", cascade="all,delete"))
 
     created_invites = db.relationship(
         "Show_Partner_Invite",
-        backref="creator",
+        backref= db.backref("creator", cascade="all,delete"),
         foreign_keys="show_partner_invites.c.created_by"
         )
     accepted_invites = db.relationship(

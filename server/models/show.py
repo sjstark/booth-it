@@ -30,7 +30,7 @@ class Show(db.Model):
     secondary_color = db.Column(db.String(9), nullable=True)
     is_private = db.Column(db.Boolean, default=False)
 
-    dates = db.relationship('Show_Date', backref="show")
+    dates = db.relationship('Show_Date', backref= db.backref("show", cascade="all,delete"))
 
     guests = db.relationship('User',
                             secondary=Show_Guests,
