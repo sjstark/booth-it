@@ -2,20 +2,67 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import './HexGrid.scss'
 
+
+function HexTileCard(props) {
+
+  return (
+    <div className="hex-grid__card">
+      <section>{props.title}</section>
+      <section>{props.description}</section>
+    </div>
+  )
+}
+
+
+function HexTile(props) {
+  let child = props.child
+
+  const [cardViz, setCardViz] = useState(false)
+
+  const showCard = (e) => {
+    setCardViz(true)
+  }
+
+  const hideCard = (e) => {
+    setCardViz(false)
+  }
+
+  return (
+    <li className="hex-grid__item" >
+      <div
+        className="hex-grid__content"
+        style={{ backgroundColor: child.props.hexColor || props.defaultHexColor || "white" }}
+        onMouseEnter={showCard}
+        onMouseLeave={hideCard}
+      >
+        {child}
+      </div>
+      {cardViz && (<HexTileCard title={child.props.title} description={child.props.description} />)}
+    </li>
+  )
+}
+
+
 export default function HexGrid(props) {
+  const containerEle = useRef()
+
   const [width, setWidth] = useState("200px")
   const [padding, setPadding] = useState(props.padding || "20px")
   const [colSize, setColSize] = useState('s')
 
-  const containerEle = useRef({ current: { offsetWidth: 200 } })
 
   useEffect(() => {
     setPadding(props.padding)
   }, [props.padding])
 
   useEffect(() => {
-    setWidth(containerEle.current.offsetWidth)
-  }, [containerEle.current.offsetWidth])
+    const resizeHex = () => setWidth(containerEle.current.offsetWidth)
+    window.addEventListener('resize', resizeHex)
+    resizeHex()
+    return (() => {
+      window.removeEventListener('resize', resizeHex)
+    })
+  }, [containerEle])
 
   useEffect(() => {
     let size
@@ -43,17 +90,9 @@ export default function HexGrid(props) {
   let children = React.Children.toArray(props.children)
 
   return (
-    <div ref={containerEle} style={{ width: props.width, maxWidth: "1600px", minWidth: "300px" }} className={`hex-grid__col-${colSize}`}>
+    <div ref={containerEle} style={{ ...props.style, maxWidth: "1600px", minWidth: "300px" }} className={`hex-grid__col-${colSize}`}>
       <ul className="hex-grid__list" style={{ padding: padding }}>
-        {children.map((child, idx) => {
-          return (
-            <li key={`hex-${idx}`} className="hex-grid__item" >
-              <div className="hex-grid__content" style={{ backgroundColor: child.props.hexColor || props.defaultHexColor || "white" }}>
-                {child}
-              </div>
-            </li>
-          )
-        })}
+        {children.map((child, idx) => (<HexTile key={`hex-${idx}`} child={child} />))}
       </ul>
     </div >
   )

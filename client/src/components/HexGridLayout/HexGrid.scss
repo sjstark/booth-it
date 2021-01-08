@@ -39,8 +39,6 @@ $parent_width: 0;
 
         width: 100%;
 
-        background-color: lime;
-
         margin: 0;
         list-style-type: none;
         display: grid;
@@ -171,5 +169,10 @@ $parent_width: 0;
           }
         }
       }
+    }
+
+    &__card {
+      position:absolute;
+      z-index: 10;
     }
 }
