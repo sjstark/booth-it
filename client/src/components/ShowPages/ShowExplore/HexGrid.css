@@ -1,0 +1,35 @@
+.hex-grid__list {
+  --num-columns: 4;
+
+  width: 100vw;
+  height: 100vh;
+
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  list-style-type: none;
+
+  grid-template-columns: repeat(var(--num-columns), 1fr, 2fr) 1fr;
+}
+
+.hex-grid__item {
+  position: relative;
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 2;
+  height: 0;
+  padding-bottom: 100%;
+
+  @for $i from 1 through 20 {
+
+  }
+}
+
+.hex-grid__content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: whitesmoke;
+}

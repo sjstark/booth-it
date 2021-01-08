@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 
 import './index.css';
 import App from './App';
+import HexGrid from './components/ShowPages/ShowExplore/HexGrid';
 
 import configureStore from './store'
 
@@ -15,7 +16,8 @@ function Root() {
   return (
     <BrowserRouter >
       <Provider store={store}>
-        <App />
+        {/* <App /> */}
+        <HexGrid />
       </Provider>
     </BrowserRouter>
   )
