@@ -18,6 +18,17 @@ class User(db.Model, UserMixin):
 
     shows = db.relationship('Show', backref="owner")
 
+    created_invites = db.relationship(
+        "Show_Partner_Invite",
+        backref="creator",
+        foreign_keys="show_partner_invites.c.created_by"
+        )
+    accepted_invites = db.relationship(
+        "Show_Partner_Invite",
+        backref="accepted",
+        foreign_keys="show_partner_invites.c.accepted_by"
+        )
+
     @property
     def password(self):
         return self.hashed_password

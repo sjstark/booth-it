@@ -23,11 +23,11 @@ class Show(db.Model):
     __tablename__ = "shows"
 
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500), nullable=False)
-    primary_color = db.Column(db.String(8), nullable=True)
-    secondary_color = db.Column(db.String(8), nullable=True)
+    primary_color = db.Column(db.String(9), nullable=True)
+    secondary_color = db.Column(db.String(9), nullable=True)
     is_private = db.Column(db.Boolean, default=False)
 
     dates = db.relationship('Show_Date', backref="show")
@@ -45,7 +45,7 @@ class Show(db.Model):
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
-            "showLogoURL": get_file_url(f"shows/{self.hashedId}/logo.png")
+            "showLogoURL": get_file_url(f"shows/{encodeShowId(self.id)}/logo.png")
         }
 
     def to_dict_full(self):
@@ -86,8 +86,7 @@ class Show_Partner_Invite(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     accepted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
-    creator = db.relationship("User", backref="created_invites")
-    accepted = db.relationship("User", backref="accepted_invites")
+
 
     booth = db.relationship("Booth", backref="invites")
     show = db.relationship("Show", backref="invites")
