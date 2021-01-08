@@ -68,17 +68,17 @@ def create_show_invite(SID):
 
 
 @show_routes.route('/<SID>/invites/<IID>', methods=["DELETE"])
-def create_show_invite(SID, IID):
+def delete_show_invite(SID, IID):
     pass
 
 
 @show_routes.route('/<SID>/partners', methods=["POST"])
-def create_show_invite(SID):
+def add_show_partner(SID):
     pass
 
 
-@show_routes.route('/<SID>/partners/<userId>', methods=["POST"])
-def create_show_invite(SID, userId):
+@show_routes.route('/<SID>/partners/<userId>', methods=["DELETE"])
+def delete_show_partner(SID, userId):
     pass
 
 
@@ -87,6 +87,19 @@ def search_shows():
     includes = request.args.get('includes')
     excludes = request.args.get('excludes')
 
-    Show.query.filter(Show.title.ilike(f"%{includes}%").notilike(f"%{excludes}%")).all()
+    includes = f"%{includes}%" if includes else ""
+    excludes = f"%{excludes}%" if excludes else ""
+
+
+    show_query = Show.query.filter_by(is_private=False)
+
+    if includes:
+        show_query = show_query.filter(Show.title.ilike(includes))
+    if excludes:
+        show_query = show_query.filter(Show.title.notilike(excludes))
+
+
+    public_shows= show_query.all()
+
     data = [show.to_dict() for show in public_shows]
     return jsonify(data)
