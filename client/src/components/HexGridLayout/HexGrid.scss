@@ -6,9 +6,13 @@ https://ninjarockstar.dev/css-hex-grids/
 
 $block: '.hex-grid';
 
-@mixin grid-item($amount) {
-  @for $i from 1 through $amount {
-    &:nth-of-type(#{$amount}n + #{$i}) {
+$parent_width: 0;
+
+
+
+@mixin grid-item($num_hex_columns) {
+  @for $i from 1 through $num_hex_columns {
+    &:nth-of-type(#{$num_hex_columns}n + #{$i}) {
       grid-column: #{$i + $i - 1} / span 3;
       @if $i % 2 == 0 {
         grid-row: calc(var(--counter) + var(--counter) - 1) / span 2;
@@ -17,24 +21,30 @@ $block: '.hex-grid';
   }
 
   @for $i from 1 through 20 {
-    &:nth-of-type(n + #{$i * $amount + 1}) {
+    &:nth-of-type(n + #{$i * $num_hex_columns + 1}) {
       --counter: #{$i + 1};
     }
   }
 }
 
 #{$block} {
-    display: flex;
+  display: flex;
   justify-content: center;
 
+
+
     &__list {
-        --amount: 5;
+        --num_hex_columns: 5;
         position: relative;
-        padding: 0;
+
+        width: 100%;
+
+        background-color: lime;
+
         margin: 0;
         list-style-type: none;
         display: grid;
-        grid-template-columns: repeat(var(--amount), 30px 60px) 30px;
+        grid-template-columns: repeat(var(--num_hex_columns), 1fr 2fr) 1fr;
         grid-gap: 2.5em 5em;
     }
 
@@ -70,73 +80,96 @@ $block: '.hex-grid';
       text-align: center;
       transition: transform .24s ease-out;
 
+      user-select: none;
+
       cursor: pointer;
 
       &:hover {
         transform: scale(1.2);
       }
     }
-}
 
-@media screen and (min-width: 1440px) {
-  #{$block} {
-    &__list {
-      --amount: 5;
-      --counter: 1;
-    }
 
-    &__item {
-      @include grid-item(5);
-    }
-  }
-}
+    &__col {
 
-@media screen and (min-width: 1120px) and (max-width: 1439px) {
-  #{$block} {
-    &__list {
-      --amount: 4;
-      --counter: 1;
-    }
+      &-xl {
+        #{$block} {
+          &__list {
+            --num_hex_columns: 7;
+            --counter: 1;
+          }
 
-    &__item {
-      @include grid-item(4);
-    }
-  }
-}
+          &__item {
+            @include grid-item(7);
+          }
+        }
+      }
 
-@media screen and (min-width: 840px) and (max-width: 1119px) {
-  #{$block} {
-    &__list {
-      --amount: 3;
-      --counter: 1;
-      grid-gap: 1.5em 3em;
-    }
+      &-l {
+        #{$block} {
+          &__list {
+            --num_hex_columns: 5;
+            --counter: 1;
+          }
 
-    &__item {
-      @include grid-item(3);
-    }
-  }
-}
+          &__item {
+            @include grid-item(5);
+          }
+        }
+      }
 
-@media screen and (min-width: 480px) and (max-width: 839px) {
-  #{$block} {
-    &__list {
-      --amount: 2;
-      --counter: 1;
-      grid-gap: 1.5em 3em;
-    }
 
-    &__item {
-      @include grid-item(2);
-    }
-  }
-}
+      &-ml {
+        #{$block} {
+          &__list {
+            --num_hex_columns: 4;
+            --counter: 1;
+          }
 
-@media screen and (max-width: 479px) {
-  #{$block} {
-    &__list {
-      --amount: 1;
-      grid-gap: 1.5em 3em;
+          &__item {
+            @include grid-item(4);
+          }
+        }
+      }
+
+
+      &-m {
+        #{$block} {
+          &__list {
+            --num_hex_columns: 3;
+            --counter: 1;
+            grid-gap: 1.5em 3em;
+          }
+
+          &__item {
+            @include grid-item(3);
+          }
+        }
+      }
+
+
+      &-ms {
+        #{$block} {
+          &__list {
+            --num_hex_columns: 2;
+            --counter: 1;
+            grid-gap: 1.5em 3em;
+          }
+
+          &__item {
+            @include grid-item(2);
+          }
+        }
+      }
+
+
+      &-s {
+        #{$block} {
+          &__list {
+            --num_hex_columns: 1;
+            grid-gap: 1.5em 3em;
+          }
+        }
+      }
     }
-  }
 }
