@@ -19,11 +19,11 @@ function TopLeft({ duration }) {
     from: {
       radians: 0
     },
-    to: {
-      radians: 2 * Math.PI
+    to: async next => {
+      while (1) await next({ radians: 2 * Math.PI })
     },
-    loop: true,
     reset: true,
+    // reset: true,
     config: {
       duration: duration
     }
@@ -46,10 +46,9 @@ function BottomLeft({ duration }) {
     from: {
       radians: 0
     },
-    to: {
-      radians: 2 * Math.PI
+    to: async next => {
+      while (1) await next({ radians: 2 * Math.PI })
     },
-    loop: true,
     reset: true,
     config: {
       duration: duration
@@ -73,10 +72,9 @@ function Right({ duration }) {
     from: {
       radians: 0
     },
-    to: {
-      radians: 2 * Math.PI
+    to: async next => {
+      while (1) await next({ radians: 2 * Math.PI })
     },
-    loop: true,
     reset: true,
     config: {
       duration: duration
@@ -92,15 +90,16 @@ function Right({ duration }) {
 
 
 export default function Loader({ style: { ...styles }, duration }) {
+
   const props = useSpring({
     from: {
-      transform: "rotate(0deg)",
+      transform: `rotate(${0}rad)`,
       ...styles
     },
-    to: {
-      transform: "rotate(360deg)"
+    to: async next => {
+      while (1) await next({ transform: `rotate(${2 * Math.PI}rad)` })
     },
-    loop: true,
+    reset: true,
     config: {
       duration: duration
     }

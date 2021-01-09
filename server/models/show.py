@@ -23,14 +23,14 @@ class Show(db.Model):
     __tablename__ = "shows"
 
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500), nullable=False)
-    primary_color = db.Column(db.String(8), nullable=True)
-    secondary_color = db.Column(db.String(8), nullable=True)
+    primary_color = db.Column(db.String(9), nullable=True)
+    secondary_color = db.Column(db.String(9), nullable=True)
     is_private = db.Column(db.Boolean, default=False)
 
-    dates = db.relationship('Show_Date', backref="show")
+    dates = db.relationship('Show_Date', backref= db.backref("show", cascade="all,delete"))
 
     guests = db.relationship('User',
                             secondary=Show_Guests,
@@ -39,24 +39,28 @@ class Show(db.Model):
 
     def to_dict(self):
         return {
-            "id": encodeShowId(self.id),
+            "SID": encodeShowId(self.id),
             "ownerId": self.owner_id,
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
-            "showLogoURL": get_file_url(f"shows/{self.hashedId}/logo.png")
+            "showLogoURL": get_file_url(f"shows/{encodeShowId(self.id)}/logo.png"),
+            "startDate": min(self.dates).date.strftime("%m/%d/%Y"),
+            "endDate": max(self.dates).date.strftime("%m/%d/%Y")
         }
 
     def to_dict_full(self):
         return {
-            "id": encodeShowId(self.id),
+            "SID": encodeShowId(self.id),
             "owner": self.owner.to_dict(),
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
-            "isPrivate": self.is_private
+            "isPrivate": self.is_private,
+            "booths": [booth.to_dict() for booth in self.booths],
+            "dates": [date.to_dict() for date in self.dates]
         }
 
 
@@ -71,10 +75,26 @@ class Show_Date(db.Model):
 
     def to_dict(self):
         return {
-            "date": self.date,
-            "startTime": self.start_time,
-            "endTime": self.end_time
+            "date": self.date.strftime("%m/%d/%Y"),
+            "startTime": self.start_time.strftime("%H:%M"),
+            "endTime": self.end_time.strftime("%H:%M")
         }
+
+    # Methods for comparison to enable max(show_dates)
+    def __eq__(self, other):
+        return self.date == other.date
+
+    def __gt__(self, other):
+        return self.date > other.date
+
+    def __ge__(self, other):
+        return self.date >= other.date
+
+    def __lt__(self, other):
+        return self.date < other.date
+
+    def __le__(self, other):
+        return self.date <= other.date
 
 
 class Show_Partner_Invite(db.Model):
@@ -86,8 +106,7 @@ class Show_Partner_Invite(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     accepted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
-    creator = db.relationship("User", backref="created_invites")
-    accepted = db.relationship("User", backref="accepted_invites")
+
 
     booth = db.relationship("Booth", backref="invites")
     show = db.relationship("Show", backref="invites")
@@ -116,9 +135,9 @@ class Show_Partner_Invite(db.Model):
 
     def to_dict(self):
         return {
-            "id": encodePartnerId(self.id),
-            "showId": encodeShowId(self.show_id),
-            "boothId": encodeBoothId(self.booth_id),
+            "IID": encodePartnerId(self.id),
+            "SID": encodeShowId(self.show_id),
+            "BID": encodeBoothId(self.booth_id),
             "creator_id": self.created_by,
             "isAccepted": bool(self.accepted_by)
         }

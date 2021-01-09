@@ -39,25 +39,25 @@ class Booth(db.Model):
     show_id = db.Column(db.Integer, db.ForeignKey('shows.id'), nullable=False)
     company = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500), nullable=False)
-    primary_color = db.Column(db.String(8), nullable=True)
-    secondary_color = db.Column(db.String(8), nullable=True)
+    primary_color = db.Column(db.String(9), nullable=True)
+    secondary_color = db.Column(db.String(9), nullable=True)
     size_id = db.Column(db.Integer, db.ForeignKey('booth_sizes.id'))
     profile = db.Column(db.JSON)
 
-    show = db.relationship("Show", backref="booths")
+    show = db.relationship("Show", backref=db.backref("booths", cascade="all,delete"))
 
     guests = db.relationship('User',
                             secondary=Booth_Guests,
-                            backref="visited_shows")
+                            backref=db.backref("visited_booths", cascade="all,delete"))
 
     employees = db.relationship('User',
                                 secondary=Booth_Employees,
-                                backref="assigned_booths")
+                                backref=db.backref("assigned_booths", cascade="all,delete"))
 
     def to_dict(self):
         return {
-            "id": encodeBoothId(self.id),
-            "showId": encodeShowId(self.show_id),
+            "BID": encodeBoothId(self.id),
+            "SID": encodeShowId(self.show_id),
             "company": self.company,
             "description": self.description,
             "primaryColor": self.primary_color,

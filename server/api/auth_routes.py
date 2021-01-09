@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from server.utils.awsS3 import upload_file_to_s3
 
-auth_routes = Blueprint('auth', __name__)
+auth_routes = Blueprint('auth/', __name__)
 
 
 def validation_errors_to_error_messages(validation_errors):
@@ -30,7 +30,7 @@ def authenticate():
     return {'errors': ['Unauthorized']}, 401
 
 
-@auth_routes.route('/login', methods=['POST'])
+@auth_routes.route('/login/', methods=['POST'])
 def login():
     """
     Logs a user in
@@ -47,7 +47,7 @@ def login():
     return {'errors': validation_errors_to_error_messages(form.errors)}, 401
 
 
-@auth_routes.route('/logout')
+@auth_routes.route('/logout/')
 def logout():
     """
     Logs a user out
@@ -56,7 +56,7 @@ def logout():
     return {'message': 'User logged out'}
 
 
-@auth_routes.route('/signup', methods=['POST'])
+@auth_routes.route('/signup/', methods=['POST'])
 def sign_up():
     """
     Creates a new user and logs them in
@@ -87,7 +87,7 @@ def sign_up():
     return {'errors': validation_errors_to_error_messages(form.errors)}
 
 
-@auth_routes.route('/unauthorized')
+@auth_routes.route('/unauthorized/')
 def unauthorized():
     """
     Returns unauthorized JSON when flask-login authentication fails

@@ -1,0 +1,21 @@
+.logo-with-text{
+  position: relative;
+
+  // margin: 5px;
+
+  font-family: "Bungee", sans-serif;
+  font-size: 10px;
+  color: white;
+
+  &__top{
+    position: absolute;
+    right: 3%;
+    top: 32%;
+  }
+
+  &__bottom{
+    position: absolute;
+    right: 3%;
+    bottom: 32%;
+  }
+}

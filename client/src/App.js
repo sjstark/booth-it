@@ -7,7 +7,7 @@ import { restoreUser } from './store/session';
 import SplashPage from "./components/SplashPage"
 import Loader from "./components/Loader"
 import Modals from "./components/Modals"
-import LogoutButton from "./components/auth/LogoutButton"
+import MainContent from './components/MainContent'
 
 function App({ user, modals }) {
   const dispatch = useDispatch()
@@ -34,11 +34,7 @@ function App({ user, modals }) {
         )}
         {user && (
           <>
-            <div>You passed!</div>
-            {user.firstName}
-            {user.lastName}
-            <img src={user.profilePicUrl} alt="profilePic" />
-            <LogoutButton />
+            <MainContent />
           </>
         )}
         <Modals />
