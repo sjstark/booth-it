@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import HexGridLayout from "../../HexGridLayout"
+import Loader from '../../Loader'
 
 export default function ShowExplore() {
   const [shows, setShows] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
+
+  const history = useHistory()
 
   useEffect(() => {
     (async () => {
@@ -15,27 +19,35 @@ export default function ShowExplore() {
     })()
   }, [])
 
+  let loaderHeight = 300
+
   return (
     <>
+      {!isLoaded && (
+        <div className="full-page flex-centered loader-wrapper logo-background__background-wrapper">
+          <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
+        </div>
+      )}
       {isLoaded && (
-        <div>
-          <HexGridLayout style={{ width: "50%" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+          <HexGridLayout style={{ width: "90vw" }}>
             {shows.map(show => {
               let childProps = {
                 hexColor: show.secondaryColor,
                 title: show.title,
-                description: show.description
+                onClick: () => history.push(`/shows/${show.SID}`)
               }
 
               return (
-                <div key={show.SID} {...childProps}>
+                <div key={show.SID}  {...childProps} >
                   <img onDragStart={(e) => e.preventDefault()} style={{ width: "100%" }} src={show.showLogoURL} alt={show.title} />
                 </div>
               )
             })}
           </HexGridLayout>
         </div>
-      )}
+      )
+      }
     </>
   )
 }

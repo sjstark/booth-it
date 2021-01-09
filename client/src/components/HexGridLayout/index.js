@@ -35,7 +35,11 @@ function HexTile(props) {
   }
 
   return (
-    <li className="hex-grid__item" onMouseLeave={hideCard}>
+    <li
+      className="hex-grid__item"
+      onMouseLeave={hideCard}
+      onClick={child.props.onClick}
+    >
       <div
         className="hex-grid__content"
         style={{ backgroundColor: child.props.hexColor || props.defaultHexColor || "white" }}
@@ -98,7 +102,7 @@ export default function HexGrid(props) {
   return (
     <div ref={containerEle} style={{ ...props.style, maxWidth: "1600px", minWidth: "300px" }} className={`hex-grid__col-${colSize}`}>
       <ul className="hex-grid__list" style={{ padding: padding }}>
-        {children.map((child, idx) => (<HexTile key={`hex-${idx}`} child={child} />))}
+        {children.map((child, idx) => (<HexTile onClick={props.onClick} key={`hex-${idx}`} child={child} />))}
       </ul>
     </div >
   )

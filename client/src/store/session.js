@@ -24,7 +24,7 @@ export const login = ({ email, password }) => {
       'Content-Type': 'application/json'
     }
 
-    const res = await fetch('/api/auth/login', { method, body: JSON.stringify(body), headers })
+    const res = await fetch('/api/auth/login/', { method, body: JSON.stringify(body), headers })
     const resJSON = await res.json()
 
     if (!resJSON.errors) {
@@ -72,7 +72,7 @@ export const signup = (user) => {
       }
     }
 
-    const res = await axios.post('/api/auth/signup', formData, config)
+    const res = await axios.post('/api/auth/signup/', formData, config)
     console.log({ res })
     const resJSON = res.data
 
@@ -90,7 +90,7 @@ export const signup = (user) => {
 
 export const logout = () => {
   return async dispatch => {
-    const res = await fetch('/api/auth/logout')
+    const res = await fetch('/api/auth/logout/')
 
     dispatch(endSession())
   }

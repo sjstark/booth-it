@@ -1,0 +1,34 @@
+$block: ".NavBar";
+
+#{$block} {
+  position: sticky;
+  height: 70px;
+  width: 100vw;
+
+  padding: 5px 20px;
+
+  box-shadow: var(--better-shadow);
+
+  display: flex;
+  justify-content: space-between;
+
+  font-family: "Bungee", sans-serif;
+
+  user-select: none;
+
+  &__right {
+    width: 30vw;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    div {
+      cursor: pointer;
+
+      &:hover {
+        text-shadow: 2px 2px 5px var(--shadow);
+      }
+
+    }
+  }
+}
