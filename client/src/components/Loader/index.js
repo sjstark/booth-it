@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSpring, animated } from 'react-spring'
 
 import "./Loader.css"
@@ -10,20 +10,21 @@ function interpRadian(r, max) {
 }
 
 
-function TopLeft({ duration }) {
+function TopLeft({ duration, mounted }) {
+
   const bounceInterp = r => {
     return `translate(${-1 * interpRadian(r, 16)}%, ${-1 * interpRadian(r, 25)}%)`
   }
+
+  const [resetAnimation, setResetAnimation] = useState(false)
 
   const { radians } = useSpring({
     from: {
       radians: 0
     },
-    to: async next => {
-      while (1) await next({ radians: 2 * Math.PI })
-    },
-    reset: true,
-    // reset: true,
+    to: { radians: 2 * Math.PI },
+    onRest: () => setResetAnimation(state => !state),
+    reset: resetAnimation,
     config: {
       duration: duration
     }
@@ -37,19 +38,21 @@ function TopLeft({ duration }) {
 }
 
 
-function BottomLeft({ duration }) {
+function BottomLeft({ duration, mounted }) {
+
   const bounceInterp = r => {
     return `translate(${-1 * interpRadian(r, 16)}%, ${interpRadian(r, 25)}%)`
   }
+
+  const [resetAnimation, setResetAnimation] = useState(false)
 
   const { radians } = useSpring({
     from: {
       radians: 0
     },
-    to: async next => {
-      while (1) await next({ radians: 2 * Math.PI })
-    },
-    reset: true,
+    to: { radians: 2 * Math.PI },
+    onRest: () => setResetAnimation(state => !state),
+    reset: resetAnimation,
     config: {
       duration: duration
     }
@@ -63,19 +66,20 @@ function BottomLeft({ duration }) {
 }
 
 
-function Right({ duration }) {
+function Right({ duration, mounted }) {
   const bounceInterp = r => {
     return `translate(${interpRadian(r, 33)}%, 0%)`
   }
+
+  const [resetAnimation, setResetAnimation] = useState(false)
 
   const { radians } = useSpring({
     from: {
       radians: 0
     },
-    to: async next => {
-      while (1) await next({ radians: 2 * Math.PI })
-    },
-    reset: true,
+    to: { radians: 2 * Math.PI },
+    onRest: () => setResetAnimation(state => !state),
+    reset: resetAnimation,
     config: {
       duration: duration
     }
@@ -90,16 +94,16 @@ function Right({ duration }) {
 
 
 export default function Loader({ style: { ...styles }, duration }) {
+  const [resetAnimation, setResetAnimation] = useState(false)
 
   const props = useSpring({
     from: {
-      transform: `rotate(${0}rad)`,
+      transform: `rotate(0deg)`,
       ...styles
     },
-    to: async next => {
-      while (1) await next({ transform: `rotate(${2 * Math.PI}rad)` })
-    },
-    reset: true,
+    to: { transform: "rotate(360deg)" },
+    onRest: () => setResetAnimation(state => !state),
+    reset: resetAnimation,
     config: {
       duration: duration
     }

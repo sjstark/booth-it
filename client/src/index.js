@@ -19,10 +19,10 @@ function Root() {
   return (
     <BrowserRouter >
       <Provider store={store}>
-        {/* <App /> */}
-        <div className="full-page flex-centered loader-wrapper logo-background__background-wrapper">
+        <App />
+        {/* <div className="full-page flex-centered loader-wrapper logo-background__background-wrapper">
           <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
-        </div>
+        </div> */}
       </Provider>
     </BrowserRouter>
   )

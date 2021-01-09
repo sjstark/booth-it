@@ -25,21 +25,22 @@ function App({ user, modals }) {
     <>
       {!isLoaded && (
         <div className="full-page flex-centered loader-wrapper logo-background__background-wrapper">
-          <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
+          {!isLoaded && (<Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />)}
         </div>
       )}
-      <>
-        {!user && (
-          <SplashPage />
-        )}
-        {user && (
-          <>
-            <MainContent />
-          </>
-        )}
-        <Modals />
-      </>
-
+      {isLoaded && (
+        <>
+          {!user && (
+            <SplashPage />
+          )}
+          {user && (
+            <>
+              <MainContent />
+            </>
+          )}
+          <Modals />
+        </>
+      )}
     </>
   )
 }

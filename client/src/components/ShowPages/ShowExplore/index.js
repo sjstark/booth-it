@@ -23,11 +23,11 @@ export default function ShowExplore() {
 
   return (
     <>
-      {!isLoaded && (
+      {/* {!isLoaded && (
         <div className="full-page flex-centered loader-wrapper logo-background__background-wrapper">
           <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
         </div>
-      )}
+      )} */}
       {isLoaded && (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
           <HexGridLayout style={{ width: "90vw" }}>
