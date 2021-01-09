@@ -30,6 +30,7 @@ $parent_width: 0;
 #{$block} {
   display: flex;
   justify-content: center;
+  align-items: center;
 
 
 
@@ -57,7 +58,17 @@ $parent_width: 0;
       &:hover{
         filter: drop-shadow(0 0 10px var(--shadow-dark));
         transition: filter 1s;
-        z-index: 20;
+        z-index: 10;
+
+        #{$block} {
+          &__content{
+            transform: scale(1.2);
+            z-index: 15;
+          }
+          &__card{
+            z-index: 10;
+          }
+        }
       }
     }
 
@@ -82,10 +93,8 @@ $parent_width: 0;
 
       cursor: pointer;
 
-      &:hover {
-        transform: scale(1.2);
-      }
     }
+
 
 
     &__col {
@@ -173,6 +182,80 @@ $parent_width: 0;
 
     &__card {
       position:absolute;
-      z-index: 10;
+      top: 5%;
+      left: 0%;
+
+      height: 90%;
+      width: 90%;
+      background-color: whitesmoke;
+      border-radius: 20px;
+
+      z-index: 5;
+
+      padding-right: 20px;
+      padding-left: 60px;
+
+      font-size: 12px;
+
+      cursor: pointer;
+
+      transform: translate(0);
+        transition: transform .3s;
+
+      &-hide{
+        transform: translate(-200%);
+        transition: transform .3s;
+      }
+
+      &-title {
+        font-size: 1.5rem;
+        margin: .7rem;
+        text-align: justify;
+      }
+
+      &-subtitle {
+        font-size: 0.7rem;
+        line-height: 1.5;
+        text-align: justify;
+      }
+
+      &-container {
+        position: absolute;
+        left:65%;
+        top: -10%;
+        // background-color: orange;
+        width: 200%;
+        height: 120%;
+        overflow: hidden;
+      }
+
+
+      &-crop {
+        float: left;
+        width: 25%;
+        height: 100%;
+        // background-color: #dda4d377;
+        clip-path: polygon(40% 0, 100% 50%, 40% 100%, 0 100%, 0 0);
+        shape-outside: polygon(40% 0, 100% 50%, 40% 100%, 0 100%, 0 0);
+      }
+
+      &-shadow-crop {
+        width: 100%;
+        height: 100%;
+        background-color: whitesmoke;
+        clip-path: polygon(40% 0, 100% 50%, 40% 100%, 0 100%, 0 0);
+        shape-outside: polygon(40% 0, 100% 50%, 40% 100%, 0 100%, 0 0);
+      }
+
+      &-shadow {
+        position:absolute;
+        bottom:0;
+        left:0;
+        width: 25%;
+        height: 100%;
+        filter: drop-shadow(0 0 10px black)
+      }
+
+
     }
 }

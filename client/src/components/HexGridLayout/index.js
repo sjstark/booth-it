@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useSpring, animated } from 'react-spring'
 
 import './HexGrid.scss'
 
@@ -6,9 +7,16 @@ import './HexGrid.scss'
 function HexTileCard(props) {
 
   return (
-    <div className="hex-grid__card">
-      <section>{props.title}</section>
-      <section>{props.description}</section>
+    <div className="hex-grid__card-container">
+      <div className={`hex-grid__card ${!props.show && " hex-grid__card-hide"}`}>
+        <div className="hex-grid__card-shadow">
+          <div className="hex-grid__card-shadow-crop" />
+        </div>
+        <div className="hex-grid__card-crop" />
+        <section className="hex-grid__card-title">{props.title}</section>
+        <section className="hex-grid__card-subtitle">{props.description}</section>
+
+      </div>
     </div>
   )
 }
@@ -16,7 +24,6 @@ function HexTileCard(props) {
 
 function HexTile(props) {
   let child = props.child
-
   const [cardViz, setCardViz] = useState(false)
 
   const showCard = (e) => {
@@ -28,16 +35,15 @@ function HexTile(props) {
   }
 
   return (
-    <li className="hex-grid__item" >
+    <li className="hex-grid__item" onMouseLeave={hideCard}>
       <div
         className="hex-grid__content"
         style={{ backgroundColor: child.props.hexColor || props.defaultHexColor || "white" }}
         onMouseEnter={showCard}
-        onMouseLeave={hideCard}
       >
         {child}
       </div>
-      {cardViz && (<HexTileCard title={child.props.title} description={child.props.description} />)}
+      <HexTileCard title={child.props.title} description={child.props.description} show={cardViz} />
     </li>
   )
 }
