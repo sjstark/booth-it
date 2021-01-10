@@ -4,22 +4,27 @@ import { animated, useTrail } from 'react-spring'
 import './HexGrid.scss'
 
 
-// function HexTileCard(props) {
+function HexTileCard(props) {
 
-//   return (
-//     <div className="hex-grid__card-container">
-//       <div className={`hex-grid__card ${!props.show && " hex-grid__card-hide"}`}>
-//         <div className="hex-grid__card-shadow">
-//           <div className="hex-grid__card-shadow-crop" />
-//         </div>
-//         <div className="hex-grid__card-crop" />
-//         <section className="hex-grid__card-title">{props.title}</section>
-//         <section className="hex-grid__card-subtitle">{props.description}</section>
+  return (
+    // <div className="hex-grid__card-container">
+    //   <div className={`hex-grid__card ${!props.show && " hex-grid__card-hide"}`}>
+    //     <div className="hex-grid__card-shadow">
+    //       <div className="hex-grid__card-shadow-crop" />
+    //     </div>
+    //     <div className="hex-grid__card-crop" />
+    //     <section className="hex-grid__card-title">{props.title}</section>
+    //     <section className="hex-grid__card-subtitle">{props.description}</section>
 
-//       </div>
-//     </div>
-//   )
-// }
+    //   </div>
+    // </div>
+    <div>
+      <div>
+        {props.title}
+      </div>
+    </div>
+  )
+}
 
 
 function HexTile(props) {
@@ -48,7 +53,7 @@ function HexTile(props) {
       >
         {child}
       </div>
-      {/* <HexTileCard title={child.props.title} description={child.props.description} show={cardViz} /> */}
+      <HexTileCard title={child.props.title} description={child.props.description} show={cardViz} />
     </animated.li>
   )
 }

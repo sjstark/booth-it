@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import NavBar from '../NavBar'
 import ShowExplore from '../ShowPages/ShowExplore';
 import ShowDetails from '../ShowPages/ShowDetails';
+import BoothDetails from '../BoothPages/BoothDetails';
 
 import './MainContent.scss'
 
@@ -59,8 +60,9 @@ export default function MainContent() {
       <NavBar />
       <div className="main_content">
         <Switch >
+          <Route path="/shows/:SID/booths/:BID" component={BoothDetails} exact />
+          <Route path="/shows/:SID" exact component={ShowDetails} />
           <Route path="/shows" exact component={ShowExplore} />
-          <Route path="/shows/:SID" component={ShowDetails} />
           <Route path="/create-show" exact component={Create} />
           <Route path="/" component={Base} />
           {/* <Route>

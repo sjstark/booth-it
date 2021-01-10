@@ -90,6 +90,18 @@ def delete_show_partner(SID, userId):
     pass
 
 
+@show_routes.route('/<SID>/booths/<BID>/', methods=["GET"])
+@login_required
+def get_booth_info(SID, BID):
+    id = decodeBoothId(BID)
+    if id:
+        booth = Booth.query.get(id)
+        if booth:
+            print(booth.to_dict_full())
+            return booth.to_dict_full()
+    return {'errors': ['The requested show does not exist']}, 404
+
+
 @show_routes.route('/search/')
 @login_required
 def search_shows():

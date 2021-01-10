@@ -68,6 +68,21 @@ class Booth(db.Model):
         }
 
 
+    def to_dict_full(self):
+        return {
+            "BID": encodeBoothId(self.id),
+            "SID": encodeShowId(self.show_id),
+            "company": self.company,
+            "description": self.description,
+            "primaryColor": self.primary_color,
+            "secondaryColor": self.secondary_color,
+            "size": self.size.to_string(),
+            "profile": self.profile,
+            "boothLogoURL": get_file_url(f"shows/{encodeShowId(self.show_id)}/booths/{encodeBoothId(self.id)}/logo.png"),
+            "employees": [employee.to_dict() for employee in self.employees]
+        }
+
+
 
 class Booth_Size(db.Model):
     __tablename__ = "booth_sizes"

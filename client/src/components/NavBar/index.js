@@ -55,15 +55,15 @@ export default function NavBar() {
       <LogoWithText onClick={() => history.push('/')} style={{ width: "60px", cursor: "pointer" }} />
 
       <NavBarRight>
-        <div onClick={() => history.push('/shows')}>
+        <a onClick={() => history.push('/shows')}>
           EXPLORE
-        </div>
-        <div onClick={() => history.push('/create-show')}>
+        </a>
+        <a onClick={() => history.push('/create-show')}>
           HOST
-        </div>
-        <div onClick={onLogout}>
+        </a>
+        <a onClick={onLogout}>
           LOGOUT
-        </div>
+        </a>
       </NavBarRight>
 
     </animated.div>
