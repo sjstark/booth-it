@@ -8,23 +8,6 @@ import { LightenDarkenColor, getTextColor } from '../../utils/color'
 import Button from '../Button'
 
 
-// function HexTileCard(props) {
-
-//   let backgroundColor = LightenDarkenColor(props.backgroundColor, 125)
-//   let cardTextColor = getTextColor(backgroundColor)
-
-//   return (
-//     <div className="hex-grid__details">
-//       <div className="hex-grid__details-crop">
-//         <div className="hex-grid__details-card" style={{ color: cardTextColor, backgroundColor: backgroundColor }}>
-
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-
 function HexTile(props) {
 
   let child = props.child
@@ -38,6 +21,8 @@ function HexTile(props) {
     setCardViz(false)
   }
 
+  let backgroundColor = (child.props.cardColor || props.defaultHexColor || "#ffffff");
+
   return (
     <animated.li
       className="hex-grid__item"
@@ -47,23 +32,20 @@ function HexTile(props) {
     >
       <div
         className="hex-grid__content"
-        style={{ backgroundColor: child.props.cardColor || props.defaultHexColor || "white" }}
+        style={{ backgroundColor: backgroundColor }}
         onMouseEnter={showCard}
       >
-        <span className="hex-grid__details-title">
-          {child.props.title}
-        </span>
+        <div className="hex-grid__details">
+          <span className="hex-grid__details-title" >
+            {child.props.title}
+          </span>
+          <div className="hex-grid__details-button">
+            <Button size="small" color={child.props.buttonColor}>Visit</Button>
+          </div>
+        </div>
         {child}
-        <Button size="small" color={child.props.buttonColor}>Visit</Button>
       </div>
-      {/* <HexTileCard
-        title={child.props.title}
-        description={child.props.description}
-        show={cardViz}
-        buttonColor={child.props.buttonColor}
-        backgroundColor={child.props.cardColor || props.defaultHexColor || "white"}
-      /> */}
-    </animated.li>
+    </animated.li >
   )
 }
 

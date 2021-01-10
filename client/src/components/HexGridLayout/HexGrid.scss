@@ -65,6 +65,10 @@ $parent_width: 0;
         &__card{
           z-index: 10;
         }
+        &__details{
+          opacity: 1;
+          transition: opacity .2s;
+        }
       }
     }
   }
@@ -180,40 +184,25 @@ $parent_width: 0;
 
 
   &__details {
-    position: relative;
+    opacity: 0;
+    transition: opacity .2s;
+
     height: 100%;
     width: 100%;
-    border: 1px solid orange;
-    &-crop {
-      border: 2px solid lime;
-      position: absolute;
-      // overflow: hidden;
-      top: 11vh;
-      width: 100%;
-      height: 100%;
+    background-color: #ffffffaf;
 
-    }
-    &-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+    padding: 3em;
+    padding-top: 2em;
+    padding-bottom: 0em;
 
-      padding: 1em;
+    position: absolute;
+    z-index: 50;
 
-      position:absolute;
-      right: 10%;
-
-      background-color:white;
-
-
-      width: 80%;
-
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-
-      z-index: 50;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
 
     &-title {
       font-size: 1.2em;
