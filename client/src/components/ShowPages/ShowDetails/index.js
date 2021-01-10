@@ -16,8 +16,9 @@ function BoothsList({ showInfo, SID }) {
     <HexGridLayout style={{ width: "90vw" }}>
       {showInfo.booths.map(booth => {
         let childProps = {
-          hexColor: booth.secondaryColor,
-          title: booth.title,
+          cardColor: booth.secondaryColor,
+          buttonColor: booth.primaryColor,
+          title: booth.company,
           onClick: () => history.push(`/shows/${SID}/booths/${booth.BID}`)
         }
 
@@ -27,6 +28,7 @@ function BoothsList({ showInfo, SID }) {
               onDragStart={(e) => e.preventDefault()}
               style={{ width: "100%" }}
               src={booth.boothLogoURL}
+              alt={booth.title}
             />
           </div>
         )
@@ -66,7 +68,14 @@ export default function ShowDetails() {
     <div>
       {!isLoaded && (
         <div style={{ width: "100%", height: "100%" }}>
-          <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
+          <Loader
+            duration={2500}
+            style={{
+              width: `${loaderHeight * 0.86602543}px`,
+              height: `${loaderHeight}px`,
+              margin: "200px auto"
+            }}
+          />
         </div>
       )}
       {isLoaded && (
