@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify, session, request
 from server.models import *
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from server.utils.awsS3 import upload_file_to_s3
 from server.utils.cipher_suite import *
-from server.utils.auth import login_required
+
 
 show_routes = Blueprint('show', __name__)
 
@@ -25,9 +25,6 @@ def get_user_shows():
     """
     Sends shows that user is owner of as JSON
     """
-    if not current_user.is_authenticated:
-        return {'errors': ['Unauthorized']}, 401
-
     users_shows = Show.query.filter_by(owner=current_user).all()
     data = [show.to_dict() for show in public_shows]
     return jsonify(data)

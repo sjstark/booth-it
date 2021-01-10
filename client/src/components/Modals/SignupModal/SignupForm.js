@@ -61,22 +61,18 @@ const SignupForm = ({ openLogin, closeSignup }) => {
     }
     if (hasError) {
       setErrors(newErrors)
-      console.log(newErrors)
       return
     }
 
     const user = { email, firstName, lastName, company, jobTitle, profilePic, password }
     return dispatch(sessionActions.signup(user))
       .then((res) => {
-        console.log('then:')
-        console.log({ res })
         if (res.errors) throw res
         closeSignup()
         return res
       })
       .catch((res) => {
         if (res && res.errors) {
-          console.log(res.errors)
           setErrors(res.errors)
         }
       })

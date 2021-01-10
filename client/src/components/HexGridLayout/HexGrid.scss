@@ -28,11 +28,8 @@ $parent_width: 0;
 }
 
 #{$block} {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
-
+  margin: 40px;
 
     &__list {
         --num_hex_columns: 5;
@@ -172,6 +169,7 @@ $parent_width: 0;
 
       &-s {
         #{$block} {
+
           &__list {
             --num_hex_columns: 1;
             grid-gap: 1.5em 3em;

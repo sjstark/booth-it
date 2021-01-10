@@ -1,12 +1,36 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated, useTrail, useTransition } from 'react-spring'
 import { useDispatch } from 'react-redux'
 
 import { logout } from "../../store/session";
 import LogoWithText from '../Logo/LogoWithText'
 
 import './NavBar.scss'
+
+function NavBarRight({ children, ...props }) {
+  const items = React.Children.toArray(children)
+
+  const trail = useTrail(items.length, {
+    transform: "translate(0vw)",
+    opacity: 1,
+    from: { opacity: 0, transform: "translate(100%)" },
+    delay: 100
+  })
+
+  return (
+    <div className="NavBar__right" {...props}>
+      {trail.map((style, idx) => (
+        <animated.div
+          key={items[idx]}
+          style={style}
+        >
+          {items[idx]}
+        </animated.div>
+      ))}
+    </div>
+  )
+}
 
 export default function NavBar() {
   const dispatch = useDispatch()
@@ -17,21 +41,12 @@ export default function NavBar() {
   };
 
   const dropIn = useSpring({
-    from: {
-      transform: "translate(0, -100%)"
-    },
+    // from: {
+    //   transform: "translate(0, -100%)"
+    // },
     to: {
       transform: "translate(0, 0%)"
     },
-  })
-
-  const slideFromRight = useSpring({
-    from: {
-      transform: "translate(50vw)"
-    },
-    to: {
-      transform: "translate(0vw)"
-    }
   })
 
 
@@ -39,17 +54,17 @@ export default function NavBar() {
     <animated.div style={dropIn} className="NavBar">
       <LogoWithText onClick={() => history.push('/')} style={{ width: "60px", cursor: "pointer" }} />
 
-      <div className="NavBar__right">
-        <animated.div style={slideFromRight} onClick={() => history.push('/shows')}>
+      <NavBarRight>
+        <div onClick={() => history.push('/shows')}>
           EXPLORE
-        </animated.div>
-        <animated.div style={slideFromRight} onClick={() => history.push('/create-show')}>
+        </div>
+        <div onClick={() => history.push('/create-show')}>
           HOST
-        </animated.div>
-        <animated.div style={slideFromRight} onClick={onLogout}>
+        </div>
+        <div onClick={onLogout}>
           LOGOUT
-        </animated.div>
-      </div>
+        </div>
+      </NavBarRight>
 
     </animated.div>
   )

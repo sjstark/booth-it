@@ -64,6 +64,7 @@ class Booth(db.Model):
             "secondaryColor": self.secondary_color,
             "size": self.size.to_string(),
             "profile": self.profile,
+            "boothLogoURL": get_file_url(f"shows/{encodeShowId(self.show_id)}/booths/{encodeBoothId(self.id)}/logo.png"),
         }
 
 
