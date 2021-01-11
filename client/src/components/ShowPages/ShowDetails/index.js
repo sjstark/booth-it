@@ -12,6 +12,10 @@ import { cacheImages } from '../../../utils/cacheImages'
 function BoothsList({ showInfo, SID }) {
   const history = useHistory()
 
+  const addDefaultSrc = (e) => {
+    e.target.src = "https://boothit-hosting.s3.amazonaws.com/shows/DEFAULT/logo.png"
+  }
+
   return (
     <HexGridLayout style={{ width: "90vw" }}>
       {showInfo.booths.map(booth => {
@@ -29,6 +33,7 @@ function BoothsList({ showInfo, SID }) {
               style={{ width: "100%" }}
               src={booth.boothLogoURL}
               alt={booth.title}
+              onError={addDefaultSrc}
             />
           </div>
         )

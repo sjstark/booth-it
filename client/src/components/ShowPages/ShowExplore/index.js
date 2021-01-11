@@ -30,6 +30,11 @@ export default function ShowExplore() {
   }, [jsonLoaded, imagesLoaded])
 
 
+  const addDefaultSrc = (e) => {
+    e.target.src = "https://boothit-hosting.s3.amazonaws.com/shows/DEFAULT/logo.png"
+  }
+
+
   let loaderHeight = 200
 
   return (
@@ -70,7 +75,9 @@ export default function ShowExplore() {
                     onDragStart={(e) => e.preventDefault()}
                     style={{ width: "100%" }}
                     src={show.showLogoURL}
-                    alt={show.title} />
+                    alt={show.title}
+                    onError={addDefaultSrc}
+                  />
                 </div>
               )
             })}
