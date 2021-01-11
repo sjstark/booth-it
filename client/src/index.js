@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from "react-router-dom";
+import DateFnsUtils from '@date-io/date-fns'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 
 import { Provider } from 'react-redux';
 
@@ -23,7 +25,9 @@ function Root() {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Root />
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <Root />
+    </MuiPickersUtilsProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

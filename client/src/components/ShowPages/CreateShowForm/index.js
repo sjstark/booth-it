@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, connect } from 'react-redux';
 import axios from 'axios'
 
+import { DatePicker, TimePicker } from '@material-ui/pickers'
+import { compareAsc, format } from 'date-fns'
+
+
 import Button from '../../Button'
 import FormInput from '../../FormFields/FormInput'
 import FormInputField from '../../FormFields/FormInputField'
@@ -10,8 +14,75 @@ import FormFile from '../../FormFields/FormFile'
 import ColorPickerBox from "../../Color/ColorPicker";
 
 import { alphaToHex } from '../../../utils/color'
+import { useHistory } from "react-router-dom";
+
+
+function FormDates({ value, setValue }) {
+  const [date, setDate] = useState(new Date())
+  const [startTime, setStartTime] = useState(new Date())
+  const [endTime, setEndTime] = useState(new Date())
+
+  const addDateToList = () => {
+    const showDate = { date, startTime, endTime }
+    setValue(prevList => {
+      if (prevList.includes(showDate)) {
+        return prevList
+      }
+      let newList = [...prevList, showDate]
+      newList.sort(
+        compareAsc
+        // (a, b) => (a.date > b.date) ? 1 : -1
+      )
+      return newList
+    })
+  }
+
+  useEffect(() => {
+    console.log({ date, type: typeof date })
+    console.log(format(date, "MM-dd-yyyy"))
+  }, [date])
+
+  return (
+    <>
+      <div style={{ height: '200px', width: '400px' }}>
+        {value.map(date => (
+          <div>
+            <span>{format(date.date, "LLL Lo yyyy")}</span>
+            <span>{format(date.startTime, 'K:mm aa')}</span>
+            <span>{format(date.endTime, 'K:mm aa')}</span>
+          </div>
+        ))}
+      </div>
+      <DatePicker
+        label="Event Date"
+        value={date}
+        onChange={setDate}
+      />
+      <TimePicker
+        label="Start Time"
+        value={startTime}
+        minutesStep={5}
+        onChange={setStartTime}
+      />
+      <TimePicker
+        label="End Time"
+        value={endTime}
+        minutesStep={5}
+        onChange={setEndTime}
+      />
+      <Button
+        onClick={addDateToList}
+      >
+        Add Date
+      </Button>
+    </>
+  )
+}
+
 
 export default function CreateShowForm() {
+  const history = useHistory()
+
   const [primaryColor, setPrimaryColor] = useState({ hex: "#d5d5d5", rgb: { r: 213, g: 213, b: 213, a: 1 } })
   const [primaryAlphaHex, setPrimaryAlphaHex] = useState("#d5d5d5ff")
   const [secondaryColor, setSecondaryColor] = useState({ hex: "#000000", rgb: { r: 0, g: 0, b: 0, a: 1 } })
@@ -35,8 +106,8 @@ export default function CreateShowForm() {
     formData.append('title', title)
     formData.append('description', description)
     formData.append('isPrivate', isPrivate)
-    formData.append('primaryColor', primaryColor)
-    formData.append('secondaryColor', secondaryColor)
+    formData.append('primaryColor', primaryAlphaHex)
+    formData.append('secondaryColor', secondaryAlphaHex)
     formData.append('showDates', showDates)
     if (showLogo) {
       formData.append('showLogo', showLogo)
@@ -48,7 +119,7 @@ export default function CreateShowForm() {
       }
     }
 
-    const res = await axios.post('/shows/', formData, config)
+    const res = await axios.post('/api/shows/', formData, config)
     const resJSON = res.data
 
     if (resJSON.errors) {
@@ -66,6 +137,11 @@ export default function CreateShowForm() {
   useEffect(() => {
     setSecondaryAlphaHex(`${secondaryColor.hex}${alphaToHex(primaryColor.rgb.a)}`)
   }, [secondaryColor])
+
+
+  const goBack = () => {
+    history.goBack()
+  }
 
   return (
     <div>
@@ -97,18 +173,27 @@ export default function CreateShowForm() {
         value={showLogo}
         onChange={({ target }) => setShowLogo(target.value)}
       />
-      <Button
-        color="primary"
-      >
-        Create Show
-      </Button>
+      <div style={{ margin: "50px" }}>
+        <FormDates
+          value={showDates}
+          setValue={setShowDates}
+        />
+      </div>
+
       <div>
         <Button
+          color="primary"
+          onClick={handleSubmit}
+        >
+          Create Show
+        </Button>
+        <Button
           color="warning"
+          onClick={goBack}
         >
           Cancel
         </Button>
       </div>
-    </div>
+    </div >
   )
 }

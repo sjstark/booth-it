@@ -22,41 +22,6 @@ def validation_errors_to_error_messages(validation_errors):
     return errorMessages
 
 
-@show_routes.route('/', methods=["GET"])
-def get_public_shows():
-    """
-    Retrieves all shows that are not marked as private as JSON
-    """
-    public_shows = Show.query.filter_by(is_private=False).all()
-    data = [show.to_dict() for show in public_shows]
-    print(data)
-    return jsonify(data)
-
-
-@show_routes.route('/my-shows/')
-@login_required
-def get_user_shows():
-    """
-    Sends shows that user is owner of as JSON
-    """
-    users_shows = Show.query.filter_by(owner=current_user).all()
-    data = [show.to_dict() for show in public_shows]
-    return jsonify(data)
-
-
-@show_routes.route('/<SID>/')
-@login_required
-def get_show_by_SID(SID):
-    id = decodeShowId(SID)
-    if id:
-        show = Show.query.get(id)
-        if show:
-            print(show.to_dict_full())
-            return show.to_dict_full()
-    return {'errors': ['The requested show does not exist']}, 404
-
-
-@show_routes.route('/', methods=["POST"])
 @login_required
 def create_new_show():
     form = ShowCreateForm()
@@ -66,7 +31,7 @@ def create_new_show():
 
     if form.validate_on_submit():
 
-        dates = request.json['showDates']
+        dates = request.form['showDates']
         if not dates:
             return {'errors': 'No dates provided for show'}, 400
 
@@ -101,6 +66,52 @@ def create_new_show():
         return jsonify(show.to_dict())
 
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
+
+
+def get_public_shows():
+    """
+    GET - Retrieves all shows that are not marked as private as JSON
+    POST - Creates a new show
+    """
+    public_shows = Show.query.filter_by(is_private=False).all()
+    data = [show.to_dict() for show in public_shows]
+    print(data)
+    return jsonify(data)
+
+
+@show_routes.route('/', methods=["GET", "POST"])
+def get_public_shows():
+    """
+    GET - Retrieves all shows that are not marked as private as JSON
+    POST - Creates a new show
+    """
+    if request.method == "POST":
+        return create_new_show()
+    if request.method == "GET":
+        return get_public_show()
+
+
+@show_routes.route('/my-shows/')
+@login_required
+def get_user_shows():
+    """
+    Sends shows that user is owner of as JSON
+    """
+    users_shows = Show.query.filter_by(owner=current_user).all()
+    data = [show.to_dict() for show in public_shows]
+    return jsonify(data)
+
+
+@show_routes.route('/<SID>/')
+@login_required
+def get_show_by_SID(SID):
+    id = decodeShowId(SID)
+    if id:
+        show = Show.query.get(id)
+        if show:
+            print(show.to_dict_full())
+            return show.to_dict_full()
+    return {'errors': ['The requested show does not exist']}, 404
 
 
 @show_routes.route('/<SID>/', methods=["PUT"])
