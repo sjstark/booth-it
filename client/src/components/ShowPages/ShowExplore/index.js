@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import HexGridLayout from "../../HexGridLayout"
+import HolderSVG from '../../HolderSVG'
 import Loader from '../../Loader'
 
 import { cacheImages } from '../../../utils/cacheImages'
@@ -71,13 +72,17 @@ export default function ShowExplore() {
 
               return (
                 <div key={show.SID}  {...childProps} >
-                  <img
-                    onDragStart={(e) => e.preventDefault()}
-                    style={{ width: "100%" }}
-                    src={show.showLogoURL}
-                    alt={show.title}
-                    onError={addDefaultSrc}
-                  />
+                  {
+
+                    <img
+                      onDragStart={(e) => e.preventDefault()}
+                      style={{ width: "100%" }}
+                      src={show.showLogoURL}
+                      alt={show.title}
+                      onError={addDefaultSrc}
+                    />
+
+                  }
                 </div>
               )
             })}
