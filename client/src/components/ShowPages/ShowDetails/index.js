@@ -52,9 +52,7 @@ export default function ShowDetails() {
   const [showInfo, setShowInfo] = useState(null)
 
   useEffect(() => {
-    console.log('effect called');
     (async () => {
-      console.log('async called');
       const res = await fetch(`/api/shows/${SID}/`)
       const resJSON = await res.json()
       setShowInfo(resJSON)

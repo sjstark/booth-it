@@ -8,7 +8,7 @@ import Loader from '../../Loader'
 import { cacheImages } from '../../../utils/cacheImages'
 
 
-function ShowImage({ show }) {
+export function ShowImage({ show }) {
   const [imageError, setImageError] = useState(false)
 
   return (
@@ -99,16 +99,6 @@ export default function ShowExplore() {
               return (
                 <div key={show.SID}  {...childProps} >
                   <ShowImage show={show} />
-
-                  {/* {
-                    <img
-                      onDragStart={(e) => e.preventDefault()}
-                      style={{ width: "100%" }}
-                      src={show.showLogoURL}
-                      alt={show.title}
-                      onError={addDefaultSrc}
-                    />
-                  } */}
                 </div>
               )
             })}

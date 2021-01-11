@@ -13,6 +13,10 @@ import FormBoolean from '../../FormFields/FormBoolean'
 import FormFile from '../../FormFields/FormFile'
 import ColorPickerBox from "../../Color/ColorPicker";
 
+import HexGridLayout from "../../HexGridLayout"
+import HolderSVG from '../../HolderSVG'
+
+
 import { alphaToHex } from '../../../utils/color'
 import { useHistory } from "react-router-dom";
 
@@ -88,9 +92,35 @@ function FormDates({ value, setValue }) {
   )
 }
 
+export function ShowImagePreview({ show }) {
+  const [imageError, setImageError] = useState(false)
+
+  return (
+    <>
+      {
+        !imageError || !show.showLogoURL
+          ?
+          <img
+            onDragStart={(e) => e.preventDefault()}
+            style={{ width: "100%" }}
+            file={show.showLogoURL}
+            alt={show.title}
+            onError={() => setImageError(true)}
+          />
+          :
+          <HolderSVG
+            style={{ width: "100%" }}
+            color={show.primaryColor}
+          />
+      }
+    </>
+  )
+}
 
 export default function CreateShowForm() {
   const history = useHistory()
+
+  const [shows, setShows] = useState([])
 
   const [primaryColor, setPrimaryColor] = useState({ hex: "#d5d5d5", rgb: { r: 213, g: 213, b: 213, a: 1 } })
   const [primaryAlphaHex, setPrimaryAlphaHex] = useState("#d5d5d5ff")
@@ -103,7 +133,18 @@ export default function CreateShowForm() {
   const [showDates, setShowDates] = useState([])
   const [showLogo, setShowLogo] = useState(null)
 
+  const [imageError, setImageError] = useState(false)
   const [errors, setErrors] = useState([])
+
+  useEffect(() => {
+    console.log(showLogo)
+    setShows([{
+      title,
+      primaryColor: primaryAlphaHex,
+      secondaryColor: secondaryAlphaHex,
+      showLogoURL: showLogo ? URL.createObjectURL(showLogo) : null
+    }])
+  }, [title, primaryAlphaHex, secondaryAlphaHex, showLogo])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -162,8 +203,14 @@ export default function CreateShowForm() {
     history.goBack()
   }
 
+  const fileChange = ({ target }) => {
+    if (target.files && target.files.length > 0) {
+      setShowLogo(target.files[0])
+    }
+  }
+
   return (
-    <div>
+    <form className="create-show-form">
       <FormInput
         name="Show Title"
         required={true}
@@ -180,18 +227,52 @@ export default function CreateShowForm() {
         error={false}
         onChange={({ target }) => setDescription(target.value)}
       />
-      <ColorPickerBox color={primaryColor} onChangeComplete={(color) => { setPrimaryColor(color) }} />
-      <ColorPickerBox color={secondaryColor} onChangeComplete={(color) => { setSecondaryColor(color) }} />
+      <div>
+        <div>
+          <ColorPickerBox color={primaryColor} onChangeComplete={(color) => { setPrimaryColor(color) }} />
+          <ColorPickerBox color={secondaryColor} onChangeComplete={(color) => { setSecondaryColor(color) }} />
+          <FormFile
+            name="Show Logo PNG"
+            onChange={fileChange}
+          />
+        </div>
+        <div>
+          <HexGridLayout preload={false} style={{ width: "90vw" }}>
+            {shows.map(show => {
+              let childProps = {
+                cardColor: show.secondaryColor,
+                buttonColor: show.primaryColor,
+                title: show.title,
+                onClick: () => null
+              }
+
+              return (
+                <div key={show.SID}  {...childProps} >
+                  {
+                    show.showLogoURL
+                      ?
+                      <img
+                        onDragStart={(e) => e.preventDefault()}
+                        style={{ width: "100%" }}
+                        src={show.showLogoURL}
+                        alt={show.title}
+                        onError={() => setImageError(true)}
+                      />
+                      :
+                      <HolderSVG color={childProps.buttonColor} />
+                  }
+                </div>
+              )
+            })}
+          </HexGridLayout>
+        </div>
+      </div>
       <FormBoolean
         name="Private Show?"
         value={isPrivate}
         onChange={({ target }) => setIsPrivate(target.checked)}
       />
-      <FormFile
-        name="Show Logo PNG"
-        value={showLogo}
-        onChange={({ target }) => setShowLogo(target.value)}
-      />
+
       <div style={{ margin: "50px" }}>
         <FormDates
           value={showDates}
@@ -213,6 +294,6 @@ export default function CreateShowForm() {
           Cancel
         </Button>
       </div>
-    </div >
+    </form >
   )
 }

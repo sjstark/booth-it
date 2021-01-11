@@ -10,7 +10,6 @@ import './index.css';
 import App from './App';
 
 import configureStore from './store'
-import HolderSVG from './components/HolderSVG';
 
 const store = configureStore()
 

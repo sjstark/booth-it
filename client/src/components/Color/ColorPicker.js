@@ -64,7 +64,7 @@ class ColorPickerBox extends React.Component {
         </div>
         { this.state.displayColorPicker ? <div style={styles.popover}>
           <div style={styles.cover} onClick={this.handleClose} />
-          <SketchPicker color={this.props.color.rgb} onChange={this.handleChange} />
+          <SketchPicker disableAlpha color={this.props.color.rgb} onChange={this.handleChange} />
         </div> : null}
 
       </div>

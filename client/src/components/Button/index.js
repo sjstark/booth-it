@@ -13,7 +13,6 @@ export default function Button(props) {
   if (props.color && props.color.startsWith("#")) {
     style["backgroundColor"] = props.color
     style["color"] = getTextColor(props.color)
-    console.log(style)
   } else {
     className += props.color ? " " + props.color : ""
   }
