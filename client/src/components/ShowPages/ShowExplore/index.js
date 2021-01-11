@@ -8,6 +8,32 @@ import Loader from '../../Loader'
 import { cacheImages } from '../../../utils/cacheImages'
 
 
+function ShowImage({ show }) {
+  const [imageError, setImageError] = useState(false)
+
+  return (
+    <>
+      {
+        !imageError
+          ?
+          <img
+            onDragStart={(e) => e.preventDefault()}
+            style={{ width: "100%" }}
+            src={show.showLogoURL}
+            alt={show.title}
+            onError={() => setImageError(true)}
+          />
+          :
+          <HolderSVG
+            style={{ width: "100%" }}
+            color={show.primaryColor}
+          />
+      }
+    </>
+  )
+}
+
+
 export default function ShowExplore() {
   const [shows, setShows] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
@@ -72,8 +98,9 @@ export default function ShowExplore() {
 
               return (
                 <div key={show.SID}  {...childProps} >
-                  {
+                  <ShowImage show={show} />
 
+                  {/* {
                     <img
                       onDragStart={(e) => e.preventDefault()}
                       style={{ width: "100%" }}
@@ -81,8 +108,7 @@ export default function ShowExplore() {
                       alt={show.title}
                       onError={addDefaultSrc}
                     />
-
-                  }
+                  } */}
                 </div>
               )
             })}
