@@ -1,3 +1,6 @@
+import json
+from datetime import datetime
+
 from flask import Blueprint, jsonify, session, request
 from server.models import *
 from flask_login import current_user, login_required
@@ -44,11 +47,12 @@ def create_new_show():
             is_private = form.data['isPrivate']
         )
 
+        dates = json.loads(dates)
         for dateobj in dates:
             show_date = Show_Date(
-                date = dateobj['date'],
-                start_time = dateobj['startTime'],
-                end_time = dateobj['endTime']
+                date = datetime.strptime(dateobj['date'], "%a, %d %b %Y %H:%M:%S %Z"),
+                start_time = datetime.strptime(dateobj['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
+                end_time = datetime.strptime(dateobj['endTime'], "%a, %d %b %Y %H:%M:%S %Z")
             )
 
             show.dates.append(show_date)
@@ -62,8 +66,8 @@ def create_new_show():
             filename = f"shows/{show.SID}/logo.png"
 
             upload_file_to_s3(request.files['showLogo'], filename)
-
-        return jsonify(show.to_dict())
+        return ({'key': 'pass'})
+        # return (show.to_dict())
 
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
@@ -80,7 +84,7 @@ def get_public_shows():
 
 
 @show_routes.route('/', methods=["GET", "POST"])
-def get_public_shows():
+def show_router():
     """
     GET - Retrieves all shows that are not marked as private as JSON
     POST - Creates a new show
@@ -88,7 +92,7 @@ def get_public_shows():
     if request.method == "POST":
         return create_new_show()
     if request.method == "GET":
-        return get_public_show()
+        return get_public_shows()
 
 
 @show_routes.route('/my-shows/')

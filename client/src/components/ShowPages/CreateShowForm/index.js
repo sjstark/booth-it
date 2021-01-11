@@ -50,9 +50,10 @@ function FormDates({ value, setValue }) {
       <div style={{ height: '200px', width: '400px' }}>
         {value.map((date, idx) => (
           <div key={`dates-list-${idx}`}>
-            <span>{format(date.date, "LLL do yyyy")}</span>
+            <span>{format(date.date, "PPPP")}</span>
             <span>{format(date.startTime, 'K:mm aa')}</span>
             <span>{format(date.endTime, 'K:mm aa')}</span>
+            <span>Times are shown in local time</span>
             <Button
               onClick={() => removeDate(idx)}
             >
@@ -109,6 +110,16 @@ export default function CreateShowForm() {
 
     setErrors([])
 
+    let formattedDates = []
+    for (let i = 0; i < showDates.length; i++) {
+      let showDate = showDates[i]
+      let formattedDate = {}
+      formattedDate["date"] = showDate["date"].toUTCString()
+      formattedDate["startTime"] = showDate["startTime"].toUTCString()
+      formattedDate["endTime"] = showDate["date"].toUTCString()
+      formattedDates.push(formattedDate)
+    }
+
     const formData = new FormData()
 
     formData.append('title', title)
@@ -116,7 +127,7 @@ export default function CreateShowForm() {
     formData.append('isPrivate', isPrivate)
     formData.append('primaryColor', primaryAlphaHex)
     formData.append('secondaryColor', secondaryAlphaHex)
-    formData.append('showDates', showDates)
+    formData.append('showDates', JSON.stringify(formattedDates))
     if (showLogo) {
       formData.append('showLogo', showLogo)
     }
