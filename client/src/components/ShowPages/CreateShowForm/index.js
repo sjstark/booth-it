@@ -14,6 +14,9 @@ export default function CreateShowForm() {
   const [secondaryColor, setSecondaryColor] = useState({ hex: "#000000", rgb: { r: 0, g: 0, b: 0, a: 1 } })
   const [secondaryAlphaHex, setSecondaryAlphaHex] = useState("#000000ff")
 
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+
   useEffect(() => {
     setPrimaryAlphaHex(`${primaryColor.hex}${alphaToHex(primaryColor.rgb.a)}`)
   }, [primaryColor])
@@ -26,6 +29,7 @@ export default function CreateShowForm() {
     <div>
       <ColorPickerBox color={primaryColor} onChangeComplete={(color) => { setPrimaryColor(color) }} />
       <ColorPickerBox color={secondaryColor} onChangeComplete={(color) => { setSecondaryColor(color) }} />
+
     </div>
   )
 }

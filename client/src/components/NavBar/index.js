@@ -22,7 +22,7 @@ function NavBarRight({ children, ...props }) {
     <div className="NavBar__right" {...props}>
       {trail.map((style, idx) => (
         <animated.div
-          key={items[idx]}
+          key={`navbar-${idx}`}
           style={style}
         >
           {items[idx]}
