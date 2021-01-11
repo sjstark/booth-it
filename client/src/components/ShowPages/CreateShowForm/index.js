@@ -25,31 +25,39 @@ function FormDates({ value, setValue }) {
   const addDateToList = () => {
     const showDate = { date, startTime, endTime }
     setValue(prevList => {
-      if (prevList.includes(showDate)) {
+      if (prevList.find(listDate => {
+        return listDate.date == date
+      })) {
         return prevList
       }
       let newList = [...prevList, showDate]
-      newList.sort(
-        compareAsc
-        // (a, b) => (a.date > b.date) ? 1 : -1
-      )
+      newList.sort((a, b) => (a.date > b.date) ? 1 : -1)
       return newList
     })
   }
 
-  useEffect(() => {
-    console.log({ date, type: typeof date })
-    console.log(format(date, "MM-dd-yyyy"))
-  }, [date])
+  const removeDate = idx => {
+    setValue(prevList => {
+      if (idx < 0 || idx >= prevList.length) {
+        return prevList
+      }
+      return [...prevList.slice(0, idx), ...prevList.slice(idx + 1)]
+    })
+  }
 
   return (
     <>
       <div style={{ height: '200px', width: '400px' }}>
-        {value.map(date => (
-          <div>
-            <span>{format(date.date, "LLL Lo yyyy")}</span>
+        {value.map((date, idx) => (
+          <div key={`dates-list-${idx}`}>
+            <span>{format(date.date, "LLL do yyyy")}</span>
             <span>{format(date.startTime, 'K:mm aa')}</span>
             <span>{format(date.endTime, 'K:mm aa')}</span>
+            <Button
+              onClick={() => removeDate(idx)}
+            >
+              Delete Date
+            </Button>
           </div>
         ))}
       </div>
