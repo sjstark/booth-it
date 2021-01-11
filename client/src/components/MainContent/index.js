@@ -5,16 +5,9 @@ import NavBar from '../NavBar'
 import ShowExplore from '../ShowPages/ShowExplore';
 import ShowDetails from '../ShowPages/ShowDetails';
 import BoothDetails from '../BoothPages/BoothDetails';
+import CreateShowForm from '../ShowPages/CreateShowForm';
 
 import './MainContent.scss'
-
-function Create() {
-  return (
-    <div>
-      Form
-    </div>
-  )
-}
 
 
 function Base() {
@@ -63,7 +56,7 @@ export default function MainContent() {
           <Route path="/shows/:SID/booths/:BID" component={BoothDetails} exact />
           <Route path="/shows/:SID" exact component={ShowDetails} />
           <Route path="/shows" exact component={ShowExplore} />
-          <Route path="/create-show" exact component={Create} />
+          <Route path="/create-show" exact component={CreateShowForm} />
           <Route path="/" component={Base} />
           {/* <Route>
             <NoMatch />

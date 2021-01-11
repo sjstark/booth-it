@@ -39,6 +39,12 @@ export const hexToRgb = (hex) => {
   } : null
 }
 
+export const alphaToHex = (a) => {
+  a = Math.round(a * 255).toString(16)
+  if (a.length == 1) a = "0" + a;
+  return a
+}
+
 // takes hex background color and gets luminence to determine font color
 export const getTextColor = (col) => {
   if (col[0] == "#") {
