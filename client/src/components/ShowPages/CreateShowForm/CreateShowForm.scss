@@ -73,9 +73,16 @@ $block: '.create-show-form';
   }
   &__dates {
     grid-area: dates;
+    margin-top: 30px;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 0 10px var(--shadow);
+    border-radius: 20px;
   }
   &__buttons {
     grid-area: buttons;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 
@@ -84,10 +91,6 @@ $block: '.create-show-form';
   #{$block} {
     display: flex;
     flex-direction: column;
-
-    &__details {
-      // box-shadow: none;
-    }
 
   }
 }

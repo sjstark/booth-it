@@ -252,7 +252,7 @@ export default function CreateShowForm() {
         <FormBoolean
           name="Private Show?"
           value={isPrivate}
-          onChange={({ target }) => setIsPrivate(target.checked)}
+          onChange={setIsPrivate}
         />
       </section>
       <section className="create-show-form__preview">
@@ -288,26 +288,27 @@ export default function CreateShowForm() {
       </section>
 
       <section className="create-show-form__dates">
+        <h2 className="create-show-form__titles">Show Dates:</h2>
         <FormDates
           value={showDates}
           setValue={setShowDates}
         />
+        <section className="create-show-form__buttons">
+          <Button
+            color="warning"
+            onClick={goBack}
+          >
+            Cancel
+        </Button>
+          <Button
+            color="primary"
+            onClick={handleSubmit}
+          >
+            Create Show
+        </Button>
+        </section>
       </section>
 
-      <section className="create-show-form__buttons">
-        <Button
-          color="warning"
-          onClick={goBack}
-        >
-          Cancel
-        </Button>
-        <Button
-          color="primary"
-          onClick={handleSubmit}
-        >
-          Create Show
-        </Button>
-      </section>
     </form >
   )
 }
