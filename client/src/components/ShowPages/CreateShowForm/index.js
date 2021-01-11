@@ -3,7 +3,7 @@ import { useDispatch, connect } from 'react-redux';
 import axios from 'axios'
 
 import { DatePicker, TimePicker } from '@material-ui/pickers'
-import { compareAsc, format } from 'date-fns'
+import { format } from 'date-fns'
 
 
 import Button from '../../Button'
@@ -19,6 +19,8 @@ import HolderSVG from '../../HolderSVG'
 
 import { alphaToHex } from '../../../utils/color'
 import { useHistory } from "react-router-dom";
+
+import './CreateShowForm.scss'
 
 
 function FormDates({ value, setValue }) {
@@ -117,6 +119,7 @@ export function ShowImagePreview({ show }) {
   )
 }
 
+
 export default function CreateShowForm() {
   const history = useHistory()
 
@@ -211,89 +214,100 @@ export default function CreateShowForm() {
 
   return (
     <form className="create-show-form">
-      <FormInput
-        name="Show Title"
-        required={true}
-        type="text"
-        value={title}
-        error={false}
-        onChange={({ target }) => setTitle(target.value)}
-      />
-      <FormInputField
-        name="Show Description"
-        required={true}
-        type="text"
-        value={description}
-        error={false}
-        onChange={({ target }) => setDescription(target.value)}
-      />
-      <div>
-        <div>
-          <ColorPickerBox color={primaryColor} onChangeComplete={(color) => { setPrimaryColor(color) }} />
-          <ColorPickerBox color={secondaryColor} onChangeComplete={(color) => { setSecondaryColor(color) }} />
+      <section className="create-show-form__details">
+        <h2 className="create-show-form__titles">Show Details</h2>
+        <div className="create-show-form__details-title-container">
+          <FormInput
+            name="Show Title"
+            required={true}
+            type="text"
+            value={title}
+            error={false}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div className="create-show-form__details-field-container">
+          <FormInputField
+            name="Show Description"
+            required={true}
+            type="text"
+            value={description}
+            error={false}
+            onChange={({ target }) => setDescription(target.value)}
+            rows={4}
+          />
+        </div>
+        <div className="create-show-form__details-style">
+          <div className="create-show-form__details-style-colors">
+            <label>Primary Color:</label>
+            <ColorPickerBox color={primaryColor} onChangeComplete={(color) => { setPrimaryColor(color) }} />
+            <label>Secondary Color:</label>
+            <ColorPickerBox color={secondaryColor} onChangeComplete={(color) => { setSecondaryColor(color) }} />
+          </div>
           <FormFile
             name="Show Logo PNG"
             onChange={fileChange}
           />
         </div>
-        <div>
-          <HexGridLayout preload={false} style={{ width: "90vw" }}>
-            {shows.map(show => {
-              let childProps = {
-                cardColor: show.secondaryColor,
-                buttonColor: show.primaryColor,
-                title: show.title,
-                onClick: () => null
-              }
+        <FormBoolean
+          name="Private Show?"
+          value={isPrivate}
+          onChange={({ target }) => setIsPrivate(target.checked)}
+        />
+      </section>
+      <section className="create-show-form__preview">
+        <h2 className="create-show-form__titles">Show Card Preview:</h2>
+        <HexGridLayout style={{ width: "10%" }}>
+          {shows.map(show => {
+            let childProps = {
+              cardColor: show.secondaryColor,
+              buttonColor: show.primaryColor,
+              title: show.title,
+              onClick: () => null
+            }
 
-              return (
-                <div key={show.SID}  {...childProps} >
-                  {
-                    show.showLogoURL
-                      ?
-                      <img
-                        onDragStart={(e) => e.preventDefault()}
-                        style={{ width: "100%" }}
-                        src={show.showLogoURL}
-                        alt={show.title}
-                        onError={() => setImageError(true)}
-                      />
-                      :
-                      <HolderSVG color={childProps.buttonColor} />
-                  }
-                </div>
-              )
-            })}
-          </HexGridLayout>
-        </div>
-      </div>
-      <FormBoolean
-        name="Private Show?"
-        value={isPrivate}
-        onChange={({ target }) => setIsPrivate(target.checked)}
-      />
+            return (
+              <div key={show.SID}  {...childProps} >
+                {
+                  show.showLogoURL
+                    ?
+                    <img
+                      onDragStart={(e) => e.preventDefault()}
+                      style={{ width: "100%" }}
+                      src={show.showLogoURL}
+                      alt={show.title}
+                      onError={() => setImageError(true)}
+                    />
+                    :
+                    <HolderSVG color={childProps.buttonColor} />
+                }
+              </div>
+            )
+          })}
+        </HexGridLayout>
+      </section>
 
-      <div style={{ margin: "50px" }}>
+      <section className="create-show-form__dates">
         <FormDates
           value={showDates}
           setValue={setShowDates}
         />
-      </div>
+      </section>
 
-      <div>
-        <Button
-          color="primary"
-          onClick={handleSubmit}
-        >
-          Create Show
-        </Button>
+      <section className="create-show-form__buttons">
         <Button
           color="warning"
           onClick={goBack}
         >
           Cancel
         </Button>
-      </div>
+        <Button
+          color="primary"
+          onClick={handleSubmit}
+        >
+          Create Show
+        </Button>
+      </section>
     </form >
   )
 }

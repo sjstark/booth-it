@@ -48,6 +48,7 @@
 }
 
 .form-input__container--error {
+  margin: 18px 0px;
   border: 2px solid var(--red);
   transition: border .4s;
 }
