@@ -66,7 +66,7 @@ def create_new_show():
 
     if form.validate_on_submit():
 
-        dates = request.json['dates']
+        dates = request.json['showDates']
         if not dates:
             return {'errors': 'No dates provided for show'}, 400
 

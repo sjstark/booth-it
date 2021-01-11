@@ -10,7 +10,7 @@ export default function Button(props) {
 
   className += props.variant ? " " + props.variant : " default"
 
-  if (props.color.startsWith("#")) {
+  if (props.color && props.color.startsWith("#")) {
     style["backgroundColor"] = props.color
     style["color"] = getTextColor(props.color)
     console.log(style)

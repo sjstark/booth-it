@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
+import { useHistory } from 'react-router-dom';
 import { useDispatch, connect, useSelector } from 'react-redux'
 
 import { restoreUser } from './store/session';
@@ -10,6 +10,7 @@ import Modals from "./components/Modals"
 import MainContent from './components/MainContent'
 
 function App({ user, modals }) {
+  const history = useHistory()
   const dispatch = useDispatch()
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -30,14 +31,13 @@ function App({ user, modals }) {
       )}
       {isLoaded && (
         <>
-          {!user && (
-            <SplashPage />
-          )}
-          {user && (
+          {user ?
             <>
               <MainContent />
             </>
-          )}
+            :
+            <SplashPage />
+          }
           <Modals />
         </>
       )}

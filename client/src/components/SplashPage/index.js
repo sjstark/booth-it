@@ -8,8 +8,10 @@ import Button from '../Button'
 import { login } from '../../store/session'
 
 import "./SplashPage.css"
+import { useHistory } from 'react-router-dom'
 
 function SplashForm({ modals }) {
+  const history = useHistory()
   const dispatch = useDispatch()
   const props = useSpring({
     transform: "translate(0, 0vh)",
@@ -27,6 +29,8 @@ function SplashForm({ modals }) {
       password: "password"
     }))
   }
+
+  history.replace('/')
 
   return (
     <>
