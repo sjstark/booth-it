@@ -2,11 +2,24 @@ from flask import Blueprint, jsonify, session, request
 from server.models import *
 from flask_login import current_user, login_required
 
+from server.forms.show_form import ShowCreateForm
+
 from server.utils.awsS3 import upload_file_to_s3
 from server.utils.cipher_suite import *
 
 
 show_routes = Blueprint('show', __name__)
+
+
+def validation_errors_to_error_messages(validation_errors):
+    """
+    Simple function that turns the WTForms validation errors into a simple list
+    """
+    errorMessages = []
+    for field in validation_errors:
+        for error in validation_errors[field]:
+            errorMessages.append(f"{field} : {error}")
+    return errorMessages
 
 
 @show_routes.route('/', methods=["GET"])
@@ -16,6 +29,7 @@ def get_public_shows():
     """
     public_shows = Show.query.filter_by(is_private=False).all()
     data = [show.to_dict() for show in public_shows]
+    print(data)
     return jsonify(data)
 
 
@@ -45,13 +59,99 @@ def get_show_by_SID(SID):
 @show_routes.route('/', methods=["POST"])
 @login_required
 def create_new_show():
-    pass
+    form = ShowCreateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    owner = current_user
+
+    if form.validate_on_submit():
+
+        dates = request.json['dates']
+        if not dates:
+            return {'errors': 'No dates provided for show'}, 400
+
+        show = Show(
+            owner = owner,
+            title = form.data['title'],
+            description = form.data['description'],
+            primary_color = form.data['primaryColor'],
+            secondary_color = form.data['secondaryColor'],
+            is_private = form.data['isPrivate']
+        )
+
+        for dateobj in dates:
+            show_date = Show_Date(
+                date = dateobj['date'],
+                start_time = dateobj['startTime'],
+                end_time = dateobj['endTime']
+            )
+
+            show.dates.append(show_date)
+
+        db.session.add(show)
+        db.session.commit()
+
+        # AWS S3 Show Logo Upload
+
+        if form.data['showLogo']:
+            filename = f"shows/{show.SID}/logo.png"
+
+            upload_file_to_s3(request.files['showLogo'], filename)
+
+        return jsonify(show.to_dict())
+
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 
 @show_routes.route('/<SID>/', methods=["PUT"])
 @login_required
 def complete_show_update(SID):
-    pass
+    show_id = decodeShowId(SID)
+
+    form = ShowCreateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    owner = current_user
+
+    if form.validate_on_submit():
+
+        dates = request.json['dates']
+        if not dates:
+            return {'errors': 'No dates provided for show'}, 400
+
+        show = Show.query.get(show_id)
+
+        show.owner = owner
+
+        show.title = form.data['title'],
+        show.description = form.data['description'],
+        show.primary_color = form.data['primaryColor'],
+        show.secondary_color = form.data['secondaryColor'],
+        show.is_private = form.data['isPrivate']
+
+        show.dates = []
+
+        for dateobj in dates:
+            show_date = Show_Date(
+                date = dateobj['date'],
+                start_time = dateobj['startTime'],
+                end_time = dateobj['endTime']
+            )
+            show.dates.append(show_date)
+
+        db.session.update(show)
+        db.session.commit()
+
+        # AWS S3 Show Logo Upload
+
+        if form.data['showLogo']:
+            filename = f"shows/{show.SID}/logo.png"
+
+            upload_file_to_s3(request.files['showLogo'], filename)
+
+        return jsonify(show.to_dict())
+
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 
 @show_routes.route('/<SID>/', methods=["PATCH"])

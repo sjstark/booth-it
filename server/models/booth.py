@@ -54,24 +54,30 @@ class Booth(db.Model):
                                 secondary=Booth_Employees,
                                 backref=db.backref("assigned_booths", cascade="all,delete"))
 
+
+    @property
+    def BID(self):
+        return encodeBoothId(self.id)
+
+
     def to_dict(self):
         return {
-            "BID": encodeBoothId(self.id),
-            "SID": encodeShowId(self.show_id),
+            "BID": self.BID,
+            "SID": self.show.SID,
             "company": self.company,
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
             "size": self.size.to_string(),
             "profile": self.profile,
-            "boothLogoURL": get_file_url(f"shows/{encodeShowId(self.show_id)}/booths/{encodeBoothId(self.id)}/logo.png"),
+            "boothLogoURL": get_file_url(f"shows/{self.show.SID}/booths/{self.BID}/logo.png"),
         }
 
 
     def to_dict_full(self):
         return {
-            "BID": encodeBoothId(self.id),
-            "SID": encodeShowId(self.show_id),
+            "BID": self.BID,
+            "SID": self.show.SID,
             "company": self.company,
             "description": self.description,
             "primaryColor": self.primary_color,

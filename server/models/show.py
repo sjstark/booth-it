@@ -37,28 +37,34 @@ class Show(db.Model):
                             backref="visited_shows")
 
 
+    @property
+    def SID(self):
+        return encodeShowId(self.id)
+
+
     def to_dict(self):
         return {
-            "SID": encodeShowId(self.id),
+            "SID": self.SID,
             "ownerId": self.owner_id,
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
-            "showLogoURL": get_file_url(f"shows/{encodeShowId(self.id)}/logo.png"),
+            "showLogoURL": get_file_url(f"shows/{self.SID}/logo.png"),
             "startDate": min(self.dates).date.strftime("%m/%d/%Y"),
             "endDate": max(self.dates).date.strftime("%m/%d/%Y")
         }
 
     def to_dict_full(self):
         return {
-            "SID": encodeShowId(self.id),
+            "SID": self.SID,
             "owner": self.owner.to_dict(),
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
             "isPrivate": self.is_private,
+            "showLogoURL": get_file_url(f"shows/{self.SID}/logo.png"),
             "booths": [booth.to_dict() for booth in self.booths],
             "dates": [date.to_dict() for date in self.dates]
         }
