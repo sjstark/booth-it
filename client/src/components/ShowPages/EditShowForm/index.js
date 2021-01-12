@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { useDispatch, connect } from 'react-redux'
+
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
 
@@ -13,6 +15,8 @@ import FormInputField from '../../FormFields/FormInputField'
 import FormBoolean from '../../FormFields/FormBoolean'
 import FormFile from '../../FormFields/FormFile'
 import ColorPickerBox from "../../Color/ColorPicker";
+
+import DeleteModal from '../../Modals/DeleteModal'
 
 import HexGridLayout from "../../HexGridLayout"
 import HolderSVG from '../../HolderSVG'
@@ -148,7 +152,7 @@ export function ShowImagePreview({ show }) {
 }
 
 
-export default function EditShowForm() {
+function EditShowForm({ deleteModal }) {
   const history = useHistory()
   const { SID } = useParams()
 
@@ -165,6 +169,7 @@ export default function EditShowForm() {
   const [showDates, setShowDates] = useState([])
   const [showLogo, setShowLogo] = useState(null)
 
+  const [openDelete, setOpenDelete] = useState(false)
   const [imageError, setImageError] = useState(false)
   const [errors, setErrors] = useState([])
 
@@ -287,6 +292,12 @@ export default function EditShowForm() {
     }
   }
 
+  const deleteShow = async () => {
+    const res = await axios.delete(`/api/shows/${SID}/`)
+    console.log(res)
+    // history.push('/')
+  }
+
   return (
     <form className="create-show-form">
       <section className="create-show-form__details">
@@ -375,10 +386,16 @@ export default function EditShowForm() {
         />
         <section className="create-show-form__buttons">
           <Button
-            color="warning"
+            color="caution"
             onClick={goBack}
           >
             Cancel
+        </Button>
+          <Button
+            color="warning"
+            onClick={() => setOpenDelete(true)}
+          >
+            Delete Show
         </Button>
           <Button
             color="primary"
@@ -388,7 +405,16 @@ export default function EditShowForm() {
         </Button>
         </section>
       </section>
-
+      <DeleteModal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        deleteFn={deleteShow}
+        message={`Are you sure you want to delete ${title}?\nAll associated booths will also be deleted.\nThere is no recovering this action.`}
+      />
     </form >
   )
 }
+
+const mapStateToProps = state => ({ deleteModal: state.modals.delete })
+
+export default connect(mapStateToProps)(EditShowForm)

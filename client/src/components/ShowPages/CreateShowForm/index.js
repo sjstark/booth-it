@@ -330,7 +330,7 @@ export default function CreateShowForm() {
         />
         <section className="create-show-form__buttons">
           <Button
-            color="warning"
+            color="caution"
             onClick={goBack}
           >
             Cancel
