@@ -51,9 +51,7 @@ export const restoreUser = () => {
 }
 
 export const signup = (user) => {
-  console.log('created thunk')
   return async dispatch => {
-    console.log('dispatched')
     const { profilePic, firstName, lastName, company, jobTitle, password, email } = user;
     const formData = new FormData();
     formData.append('firstName', firstName)
@@ -73,10 +71,7 @@ export const signup = (user) => {
     }
 
     const res = await axios.post('/api/auth/signup/', formData, config)
-    console.log({ res })
     const resJSON = res.data
-
-    console.log({ resJSON })
 
     if (!resJSON.errors) {
       dispatch(setUser(resJSON))

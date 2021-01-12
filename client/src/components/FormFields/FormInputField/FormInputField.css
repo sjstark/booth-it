@@ -8,7 +8,7 @@
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 20px;
 
-  padding: 20px 20px;
+  padding: 20px;
   margin: 20px 0px;
 
   cursor: text;
@@ -30,12 +30,14 @@
 }
 
 .form-input-field__input {
-  /* position: absolute; */
 
   resize: none;
 
   justify-self: start;
   align-self: center;
+
+  width: 100%;
+  height: 100%;
 
   border: none !important;
 
@@ -51,6 +53,7 @@
 }
 
 .form-input-field__container--focused {
+  margin: 19px 0px;
   border: 2px solid var(--logo1);
 }
 
@@ -58,4 +61,17 @@
   top: -11px;
   font-size: 12px;
   transition: all 0.3s;
+}
+
+.form-input-field__container--error {
+  margin: 18px 0px;
+  border: 2px solid var(--red);
+  transition: border .4s;
+}
+
+.form-input-field__error-msg {
+  position: absolute;
+  color: var(--red);
+  left: 0;
+  bottom: -1.2em;
 }

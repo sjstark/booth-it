@@ -1,28 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useSpring, animated } from 'react-spring'
+import { animated, useTrail } from 'react-spring'
 
 import './HexGrid.scss'
 
+import { LightenDarkenColor, getTextColor } from '../../utils/color'
 
-// function HexTileCard(props) {
-
-//   return (
-//     <div className="hex-grid__card-container">
-//       <div className={`hex-grid__card ${!props.show && " hex-grid__card-hide"}`}>
-//         <div className="hex-grid__card-shadow">
-//           <div className="hex-grid__card-shadow-crop" />
-//         </div>
-//         <div className="hex-grid__card-crop" />
-//         <section className="hex-grid__card-title">{props.title}</section>
-//         <section className="hex-grid__card-subtitle">{props.description}</section>
-
-//       </div>
-//     </div>
-//   )
-// }
+import Button from '../Button'
 
 
 function HexTile(props) {
+
   let child = props.child
   const [cardViz, setCardViz] = useState(false)
 
@@ -34,21 +21,59 @@ function HexTile(props) {
     setCardViz(false)
   }
 
+  let backgroundColor = (child.props.cardcolor || props.defaultHexColor || "#ffffff");
+
   return (
-    <li
+    <animated.li
       className="hex-grid__item"
       onMouseLeave={hideCard}
       onClick={child.props.onClick}
+      style={props.style}
     >
       <div
         className="hex-grid__content"
-        style={{ backgroundColor: child.props.hexColor || props.defaultHexColor || "white" }}
+        style={{ backgroundColor: backgroundColor }}
         onMouseEnter={showCard}
       >
+        <div className="hex-grid__details">
+          <span className="hex-grid__details-title" >
+            {child.props.title}
+          </span>
+          <div className="hex-grid__details-button">
+            <Button size="small" color={child.props.buttoncolor}>Visit</Button>
+          </div>
+        </div>
         {child}
       </div>
-      {/* <HexTileCard title={child.props.title} description={child.props.description} show={cardViz} /> */}
-    </li>
+    </animated.li >
+  )
+}
+
+function RisingTrailList(props) {
+  const items = props.children
+
+  const trail = useTrail(items.length, {
+    to: {
+      opacity: 1,
+      transform: "translateY(0)"
+    },
+    from: {
+      opacity: 0,
+      transform: "translateY(8vh)"
+    }
+  })
+
+  return (
+    <animated.ul className="hex-grid__list" {...props}>
+      {trail.map((style, idx) => (
+        <HexTile
+          style={style}
+          onClick={props.onClick}
+          key={`hex-${idx}`}
+          child={items[idx]}
+        />
+      ))}
+    </animated.ul>
   )
 }
 
@@ -97,13 +122,9 @@ export default function HexGrid(props) {
     setColSize(size)
   }, [width])
 
-  let children = React.Children.toArray(props.children)
-
   return (
-    <div ref={containerEle} style={{ ...props.style, maxWidth: "1600px", minWidth: "300px" }} className={`hex-grid__col-${colSize}`}>
-      <ul className="hex-grid__list" style={{ padding: padding }}>
-        {children.map((child, idx) => (<HexTile onClick={props.onClick} key={`hex-${idx}`} child={child} />))}
-      </ul>
+    <div ref={containerEle} style={{ ...props.style, maxWidth: "1600px", minWidth: "300px" }} className={`hex-grid hex-grid__col-${colSize}`}>
+      <RisingTrailList children={props.children} />
     </div >
   )
 }

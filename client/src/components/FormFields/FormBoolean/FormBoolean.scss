@@ -1,0 +1,35 @@
+.form-boolean{
+  &__container{
+    display: flex;
+  }
+
+  &__checkbox {
+
+    margin-left: 20px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    border-radius: 50%;
+
+    background-color: white;
+
+    cursor: pointer;
+
+    &:hover{
+      box-shadow: 0 0 4px var(--shadow);
+    }
+
+    &--checked {
+      background-color: var(--logo3);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 12px;
+        // transform: translateY(-2px)
+      }
+    }
+  }
+}

@@ -2,22 +2,65 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import HexGridLayout from "../../HexGridLayout"
+import HolderSVG from '../../HolderSVG'
 import Loader from '../../Loader'
+
+import { cacheImages } from '../../../utils/cacheImages'
+
+
+export function ShowImage({ show }) {
+  const [imageError, setImageError] = useState(false)
+
+  return (
+    <>
+      {
+        !imageError
+          ?
+          <img
+            onDragStart={(e) => e.preventDefault()}
+            style={{ width: "100%" }}
+            src={show.showLogoURL}
+            alt={show.title}
+            onError={() => setImageError(true)}
+          />
+          :
+          <HolderSVG
+            style={{ width: "100%" }}
+            color={show.primaryColor}
+          />
+      }
+    </>
+  )
+}
+
 
 export default function ShowExplore() {
   const [shows, setShows] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
+  const [jsonLoaded, setJsonLoaded] = useState(false)
+  const [imagesLoaded, setImagesLoaded] = useState(false)
 
   const history = useHistory()
 
   useEffect(() => {
     (async () => {
-      const res = await fetch('/api/shows')
+      const res = await fetch('/api/shows/')
       const resJSON = await res.json()
       setShows(resJSON)
-      setIsLoaded(true)
+      cacheImages(resJSON.map(show => show.showLogoURL), setImagesLoaded)
+      setJsonLoaded(true)
     })()
   }, [])
+
+  useEffect(() => {
+    setIsLoaded(jsonLoaded && imagesLoaded)
+  }, [jsonLoaded, imagesLoaded])
+
+
+  const addDefaultSrc = (e) => {
+    e.target.src = "https://boothit-hosting.s3.amazonaws.com/shows/DEFAULT/logo.png"
+  }
+
 
   let loaderHeight = 200
 
@@ -25,29 +68,43 @@ export default function ShowExplore() {
     <>
       {!isLoaded && (
         <div style={{ width: "100%", height: "100%" }}>
-          <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
+          <Loader
+            duration={2500}
+            style={{
+              width: `${loaderHeight * 0.86602543}px`,
+              height: `${loaderHeight}px`,
+              margin: "200px auto"
+            }}
+          />
         </div>
       )}
+      <h1>
+        Shows
+      </h1>
       {isLoaded && (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
           <HexGridLayout style={{ width: "90vw" }}>
             {shows.map(show => {
               let childProps = {
-                hexColor: show.secondaryColor,
+                cardcolor: show.secondaryColor,
+                buttoncolor: show.primaryColor,
                 title: show.title,
                 onClick: () => history.push(`/shows/${show.SID}`)
               }
 
               return (
                 <div key={show.SID}  {...childProps} >
-                  <img onDragStart={(e) => e.preventDefault()} style={{ width: "100%" }} src={show.showLogoURL} alt={show.title} />
+                  <ShowImage show={show} />
                 </div>
               )
             })}
           </HexGridLayout>
         </div>
-      )
-      }
+      )}
     </>
   )
 }

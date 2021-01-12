@@ -22,7 +22,6 @@ const LoginForm = ({ closeLogin, openSignup }) => {
     setErrors([]);
     return dispatch(sessionActions.login({ email, password }))
       .then((res) => {
-        console.log({ res })
         if (res && res.errors) {
           setErrors(res.errors)
         }

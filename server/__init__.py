@@ -9,6 +9,8 @@ from .models import *
 from .api.auth_routes import auth_routes
 from .api.show_routes import show_routes
 
+from server.utils.auth import unauthorized
+
 from .seeds import seed_commands
 
 from .config import Config
@@ -25,16 +27,22 @@ def load_user(id):
     return User.query.get(int(id))
 
 
+@login.unauthorized_handler
+def unauth_handler():
+    return {'errors': ['Unauthorized']}, 401
+
+
 # Integrate flask seeding here eventually
 app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
-app.register_blueprint(auth_routes, url_prefix='/api/auth')
-app.register_blueprint(show_routes, url_prefix='/api/shows')
 
 # Init db with app here
 db.init_app(app)
 Migrate(app, db)
+
+app.register_blueprint(auth_routes, url_prefix='/api/auth')
+app.register_blueprint(show_routes, url_prefix='/api/shows')
 
 # Application Security
 CORS(app)

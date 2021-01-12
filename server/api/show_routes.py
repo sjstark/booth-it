@@ -1,22 +1,102 @@
+import json
+from datetime import datetime
+
 from flask import Blueprint, jsonify, session, request
 from server.models import *
-from flask_login import current_user
+from flask_login import current_user, login_required
+
+from server.forms.show_form import ShowCreateForm
 
 from server.utils.awsS3 import upload_file_to_s3
 from server.utils.cipher_suite import *
-from server.utils.auth import login_required
+
 
 show_routes = Blueprint('show', __name__)
 
 
-@show_routes.route('/', methods=["GET"])
+def validation_errors_to_error_messages(validation_errors):
+    """
+    Simple function that turns the WTForms validation errors into a simple list
+    """
+    errorMessages = []
+    for field in validation_errors:
+        for error in validation_errors[field]:
+            errorMessages.append(f"{field} : {error}")
+    return errorMessages
+
+
+@login_required
+def create_new_show():
+    form = ShowCreateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    owner = current_user
+
+    if form.validate_on_submit():
+
+        dates = request.form['showDates']
+        dates = json.loads(dates)
+
+        if not len(dates):
+            return {'errors': 'dates: No dates provided for show'}, 400
+
+
+
+        show = Show(
+            owner = owner,
+            title = form.data['title'],
+            description = form.data['description'],
+            primary_color = form.data['primaryColor'],
+            secondary_color = form.data['secondaryColor'],
+            is_private = form.data['isPrivate']
+        )
+
+
+        for dateobj in dates:
+            show_date = Show_Date(
+                date = datetime.strptime(dateobj['date'], "%a, %d %b %Y %H:%M:%S %Z"),
+                start_time = datetime.strptime(dateobj['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
+                end_time = datetime.strptime(dateobj['endTime'], "%a, %d %b %Y %H:%M:%S %Z")
+            )
+
+            show.dates.append(show_date)
+
+        db.session.add(show)
+        db.session.commit()
+
+        # AWS S3 Show Logo Upload
+
+        if form.data['showLogo']:
+            filename = f"shows/{show.SID}/logo.png"
+
+            upload_file_to_s3(request.files['showLogo'], filename)
+        # return ({'key': 'pass'})
+        return (show.to_dict())
+
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
+
+
 def get_public_shows():
     """
-    Retrieves all shows that are not marked as private as JSON
+    GET - Retrieves all shows that are not marked as private as JSON
+    POST - Creates a new show
     """
     public_shows = Show.query.filter_by(is_private=False).all()
     data = [show.to_dict() for show in public_shows]
+    print(data)
     return jsonify(data)
+
+
+@show_routes.route('/', methods=["GET", "POST"])
+def show_router():
+    """
+    GET - Retrieves all shows that are not marked as private as JSON
+    POST - Creates a new show
+    """
+    if request.method == "POST":
+        return create_new_show()
+    if request.method == "GET":
+        return get_public_shows()
 
 
 @show_routes.route('/my-shows/')
@@ -25,9 +105,6 @@ def get_user_shows():
     """
     Sends shows that user is owner of as JSON
     """
-    if not current_user.is_authenticated:
-        return {'errors': ['Unauthorized']}, 401
-
     users_shows = Show.query.filter_by(owner=current_user).all()
     data = [show.to_dict() for show in public_shows]
     return jsonify(data)
@@ -40,21 +117,62 @@ def get_show_by_SID(SID):
     if id:
         show = Show.query.get(id)
         if show:
-            print(show.to_dict_full())
-            return show.to_dict_full()
+            showDict = show.to_dict_full()
+            if show.owner == current_user:
+                showDict["owner"] = current_user.id
+            return showDict
     return {'errors': ['The requested show does not exist']}, 404
-
-
-@show_routes.route('/', methods=["POST"])
-@login_required
-def create_new_show():
-    pass
 
 
 @show_routes.route('/<SID>/', methods=["PUT"])
 @login_required
 def complete_show_update(SID):
-    pass
+    show_id = decodeShowId(SID)
+
+    form = ShowCreateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    owner = current_user
+
+    if form.validate_on_submit():
+
+        dates = request.json['dates']
+        if not dates:
+            return {'errors': 'No dates provided for show'}, 400
+
+        show = Show.query.get(show_id)
+
+        show.owner = owner
+
+        show.title = form.data['title'],
+        show.description = form.data['description'],
+        show.primary_color = form.data['primaryColor'],
+        show.secondary_color = form.data['secondaryColor'],
+        show.is_private = form.data['isPrivate']
+
+        show.dates = []
+
+        for dateobj in dates:
+            show_date = Show_Date(
+                date = dateobj['date'],
+                start_time = dateobj['startTime'],
+                end_time = dateobj['endTime']
+            )
+            show.dates.append(show_date)
+
+        db.session.update(show)
+        db.session.commit()
+
+        # AWS S3 Show Logo Upload
+
+        if form.data['showLogo']:
+            filename = f"shows/{show.SID}/logo.png"
+
+            upload_file_to_s3(request.files['showLogo'], filename)
+
+        return jsonify(show.to_dict())
+
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 
 @show_routes.route('/<SID>/', methods=["PATCH"])
@@ -91,6 +209,18 @@ def add_show_partner(SID):
 @login_required
 def delete_show_partner(SID, userId):
     pass
+
+
+@show_routes.route('/<SID>/booths/<BID>/', methods=["GET"])
+@login_required
+def get_booth_info(SID, BID):
+    id = decodeBoothId(BID)
+    if id:
+        booth = Booth.query.get(id)
+        if booth:
+            print(booth.to_dict_full())
+            return booth.to_dict_full()
+    return {'errors': ['The requested show does not exist']}, 404
 
 
 @show_routes.route('/search/')

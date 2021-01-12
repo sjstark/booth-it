@@ -1,11 +1,14 @@
 $block: ".NavBar";
 
 #{$block} {
-  position: sticky;
+  position: fixed;
+  top:0;
   height: 70px;
   width: 100vw;
 
   padding: 5px 20px;
+
+  z-index: 50;
 
   box-shadow: var(--better-shadow);
 
@@ -20,6 +23,7 @@ $block: ".NavBar";
 
   &__right {
     width: 30vw;
+    min-width: 250px;
 
     display: flex;
     justify-content: space-between;

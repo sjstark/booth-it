@@ -1,0 +1,45 @@
+.form-file__container {
+  position: relative;
+
+  box-sizing: border-box;
+  /* width: 300px; */
+  width: 100%;
+  /* height: 40px; */
+
+  /* border: 1px solid rgba(0, 0, 0, 0.3); */
+
+  /* padding: 10px 20px; */
+  margin: 20px 0px;
+
+  cursor: text;
+
+  display: flex;
+  align-items: center;
+}
+
+.form-file__name {
+  /* position: absolute; */
+  text-align: center;
+
+  background-color: white;
+  margin-right: 20px;
+}
+
+.form-file__input {
+
+  font-size: .9em;
+
+  outline: none;
+
+  text-overflow: ellipsis;
+}
+
+.form-file__container--focused.form-file__container--error,
+.form-file__container--focused {
+  /* border: 2px solid var(--logo1); */
+}
+
+.form-file__container--error {
+  border: 2px solid var(--red);
+  transition: border .4s;
+}

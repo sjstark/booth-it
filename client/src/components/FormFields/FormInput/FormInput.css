@@ -48,6 +48,7 @@
 }
 
 .form-input__container--error {
+  margin: 18px 0px;
   border: 2px solid var(--red);
   transition: border .4s;
 }
@@ -56,4 +57,11 @@
   top: -11px;
   font-size: 12px;
   transition: all 0.3s;
+}
+
+.form-input__error-msg {
+  position: absolute;
+  color: var(--red);
+  left: 0;
+  bottom: -1.2em;
 }
