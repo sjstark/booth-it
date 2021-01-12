@@ -92,7 +92,10 @@ function FormDates({ value, setValue }) {
             value.length == 0
               ?
               (<tr>
-                <td col="2">No Dates Entered</td>
+                <td>No Dates Entered</td>
+                <td aria-hidden style={{ visibility: "hidden" }}>No Dates Entered</td>
+                <td aria-hidden style={{ visibility: "hidden" }}>No Dates Entered</td>
+                <td aria-hidden style={{ visibility: "hidden" }}>No Dates Entered</td>
               </tr>)
               :
               value.map((date, idx) => (
@@ -149,10 +152,10 @@ export default function CreateShowForm() {
 
   const [shows, setShows] = useState([])
 
-  const [primaryColor, setPrimaryColor] = useState({ hex: "#d5d5d5", rgb: { r: 213, g: 213, b: 213, a: 1 } })
-  const [primaryAlphaHex, setPrimaryAlphaHex] = useState("#d5d5d5ff")
-  const [secondaryColor, setSecondaryColor] = useState({ hex: "#000000", rgb: { r: 0, g: 0, b: 0, a: 1 } })
-  const [secondaryAlphaHex, setSecondaryAlphaHex] = useState("#000000ff")
+  const [primaryColor, setPrimaryColor] = useState({ hex: "#31C6E8" })
+  const [primaryAlphaHex, setPrimaryAlphaHex] = useState("#31C6E8")
+  const [secondaryColor, setSecondaryColor] = useState({ hex: " #31E89F" })
+  const [secondaryAlphaHex, setSecondaryAlphaHex] = useState(" #31E89F")
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -218,11 +221,11 @@ export default function CreateShowForm() {
   }
 
   useEffect(() => {
-    setPrimaryAlphaHex(`${primaryColor.hex}${alphaToHex(primaryColor.rgb.a)}`)
+    setPrimaryAlphaHex(`${primaryColor.hex}`)
   }, [primaryColor])
 
   useEffect(() => {
-    setSecondaryAlphaHex(`${secondaryColor.hex}${alphaToHex(primaryColor.rgb.a)}`)
+    setSecondaryAlphaHex(`${secondaryColor.hex}`)
   }, [secondaryColor])
 
 
@@ -263,21 +266,25 @@ export default function CreateShowForm() {
         </div>
         <div className="create-show-form__details-style">
           <div className="create-show-form__details-style-colors">
-            <label>Primary Color:</label>
-            <ColorPickerBox color={primaryColor} onChangeComplete={(color) => { setPrimaryColor(color) }} />
-            <label>Secondary Color:</label>
-            <ColorPickerBox color={secondaryColor} onChangeComplete={(color) => { setSecondaryColor(color) }} />
+            <section>
+              <label>Logo Color:</label>
+              <ColorPickerBox color={primaryColor} onChangeComplete={(color) => { setPrimaryColor(color) }} />
+            </section>
+            <section>
+              <label>Background Color:</label>
+              <ColorPickerBox color={secondaryColor} onChangeComplete={(color) => { setSecondaryColor(color) }} />
+            </section>
           </div>
           <FormFile
             name="Show Logo PNG"
             onChange={fileChange}
           />
+          <FormBoolean
+            name="Private Show?"
+            value={isPrivate}
+            onChange={setIsPrivate}
+          />
         </div>
-        <FormBoolean
-          name="Private Show?"
-          value={isPrivate}
-          onChange={setIsPrivate}
-        />
       </section>
       <section className="create-show-form__preview">
         <h2 className="create-show-form__titles">Show Card Preview:</h2>

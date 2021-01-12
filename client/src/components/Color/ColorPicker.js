@@ -33,7 +33,7 @@ class ColorPickerBox extends React.Component {
           width: '36px',
           height: '14px',
           borderRadius: '2px',
-          background: `rgba(${this.props.color.rgb.r}, ${this.props.color.rgb.g}, ${this.props.color.rgb.b}, ${this.props.color.rgb.a})`,
+          background: this.props.color.hex,
         },
         swatch: {
           padding: '5px',
