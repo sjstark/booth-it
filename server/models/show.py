@@ -34,7 +34,7 @@ class Show(db.Model):
 
     dates = db.relationship(
         'Show_Date',
-        backref= db.backref("show", cascade="all,delete"),
+        backref= db.backref("show"),
         )
 
     guests = db.relationship('User',

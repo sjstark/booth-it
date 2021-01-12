@@ -150,28 +150,20 @@ def complete_show_update(SID):
         show.secondary_color = form.data['secondaryColor'],
         show.is_private = form.data['isPrivate']
 
-        dates = [{
-            date : datetime.strptime(x['date'], "%a, %d %b %Y %H:%M:%S %Z"),
-            start_time : datetime.strptime(x['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
-            end_time : datetime.strptime(x['endTime'], "%a, %d %b %Y %H:%M:%S %Z")
-        } for x in dates]
-
         for show_date in show.dates:
-            print(show_date)
-            JSONdate = show_date.date_in(dates)
-            print(JSONdate)
-            # if not JSONdate:
-            #     db.session.delete(show_date)
-            # else:
-            #     dates.remove(JSONdate)
+            db.session.delete(show_date)
 
         for JSONdate in dates:
+
+            print(JSONdate)
+
             show_date = Show_Date(
-                show_id = show_id,
                 date = datetime.strptime(JSONdate['date'], "%a, %d %b %Y %H:%M:%S %Z"),
                 start_time = datetime.strptime(JSONdate['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
                 end_time = datetime.strptime(JSONdate['endTime'], "%a, %d %b %Y %H:%M:%S %Z")
             )
+
+            show.dates.append(show_date)
 
         db.session.commit()
 
