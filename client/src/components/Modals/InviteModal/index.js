@@ -22,19 +22,7 @@ export default function InviteModal({ open, onClose, show, booth }) {
     >
       <DialogContent>
         <div className="invite-modal">
-          <div className="invite-modal__buttons">
-            <Button
-              onClick={onClose}
-              color="primary"
-            >
-              Cancel
-            </Button>
-            <Button
-              color="warning"
-            >
-              Confirm Delete
-            </Button>
-          </div>
+
         </div>
       </DialogContent>
     </Dialog>
