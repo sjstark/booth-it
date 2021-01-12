@@ -52,45 +52,69 @@ function FormDates({ value, setValue }) {
   }
 
   return (
-    <>
-      <div style={{ height: '200px', width: '400px' }}>
-        {value.map((date, idx) => (
-          <div key={`dates-list-${idx}`}>
-            <span>{format(date.date, "PPPP")}</span>
-            <span>{format(date.startTime, 'K:mm aa')}</span>
-            <span>{format(date.endTime, 'K:mm aa')}</span>
-            <span>Times are shown in local time</span>
-            <Button
-              onClick={() => removeDate(idx)}
-            >
-              Delete Date
-            </Button>
-          </div>
-        ))}
-      </div>
-      <DatePicker
-        label="Event Date"
-        value={date}
-        onChange={setDate}
-      />
-      <TimePicker
-        label="Start Time"
-        value={startTime}
-        minutesStep={5}
-        onChange={setStartTime}
-      />
-      <TimePicker
-        label="End Time"
-        value={endTime}
-        minutesStep={5}
-        onChange={setEndTime}
-      />
-      <Button
-        onClick={addDateToList}
-      >
-        Add Date
-      </Button>
-    </>
+    <div className="create-show-form__dates-widget">
+      <form className="create-show-form__dates-form">
+
+        <DatePicker
+          label="Event Date"
+          value={date}
+          onChange={setDate}
+        />
+        <TimePicker
+          label="Start Time"
+          value={startTime}
+          minutesStep={5}
+          onChange={setStartTime}
+        />
+        <TimePicker
+          label="End Time"
+          value={endTime}
+          minutesStep={5}
+          onChange={setEndTime}
+        />
+        <Button
+          onClick={addDateToList}
+        >
+          Add Date
+        </Button>
+      </form>
+      <table className="create-show-form__dates-list">
+        <thead className="create-show-form__dates-list-item-head">
+          <tr>
+            <th>Show Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody className="create-show-form__dates-list-body">
+          {
+            value.length == 0
+              ?
+              (<tr>
+                <td col="2">No Dates Entered</td>
+              </tr>)
+              :
+              value.map((date, idx) => (
+                <tr key={`dates-list-${idx}`} className="create-show-form__dates-list-item">
+                  <td>{format(date.date, "PPPP")}</td>
+                  <td>{format(date.startTime, 'K:mm aa')}</td>
+                  <td>{format(date.endTime, 'K:mm aa')}</td>
+                  <td>
+                    <Button
+                      color="warning"
+                      onClick={() => removeDate(idx)}
+                    >
+                      Delete
+                  </Button>
+                  </td>
+                </tr>
+              ))
+
+          }
+        </tbody>
+      </table>
+    </div>
   )
 }
 

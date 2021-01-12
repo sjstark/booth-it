@@ -78,6 +78,62 @@ $block: '.create-show-form';
     background-color: white;
     box-shadow: 0 0 10px var(--shadow);
     border-radius: 20px;
+
+    &-widget {
+      margin-top: 20px;
+      width: 100%;
+      // height: 100%;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 50px;
+    }
+
+    &-form{
+      // min-width: 200px;;
+
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    &-list {
+      display: inline-block;
+      max-height: 200px;
+      overflow-y: auto;
+
+      thead {
+
+      }
+
+
+      th {
+        font-weight: bold;
+        font-size: 1.2em;
+        position:sticky;
+        top: 0;
+        background: white;
+      }
+
+      th,
+      td {
+        width: 30%;
+        text-align: center;
+
+
+        :last-of-type {
+          width: 40px;
+        }
+      }
+
+      &-body {
+
+
+
+      }
+
+    }
+
+
   }
   &__buttons {
     grid-area: buttons;
@@ -92,5 +148,10 @@ $block: '.create-show-form';
     display: flex;
     flex-direction: column;
 
+
+    &__dates-widget {
+        display: flex;
+        flex-direction: column;
+      }
   }
 }
