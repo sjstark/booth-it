@@ -40,8 +40,6 @@ def create_new_show():
         if not len(dates):
             return {'errors': 'dates: No dates provided for show'}, 400
 
-
-
         show = Show(
             owner = owner,
             title = form.data['title'],
@@ -50,7 +48,6 @@ def create_new_show():
             secondary_color = form.data['secondaryColor'],
             is_private = form.data['isPrivate']
         )
-
 
         for dateobj in dates:
             show_date = Show_Date(
@@ -70,7 +67,6 @@ def create_new_show():
             filename = f"shows/{show.SID}/logo.png"
 
             upload_file_to_s3(request.files['showLogo'], filename)
-        # return ({'key': 'pass'})
         return (show.to_dict())
 
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
@@ -132,35 +128,51 @@ def complete_show_update(SID):
     form = ShowCreateForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
-    owner = current_user
+
 
     if form.validate_on_submit():
 
-        dates = request.json['dates']
+        dates = request.form['showDates']
+        dates = json.loads(dates)
+
         if not dates:
             return {'errors': 'No dates provided for show'}, 400
 
         show = Show.query.get(show_id)
 
-        show.owner = owner
+        if show.owner.id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
 
+        show.owner_id = current_user.id
         show.title = form.data['title'],
         show.description = form.data['description'],
         show.primary_color = form.data['primaryColor'],
         show.secondary_color = form.data['secondaryColor'],
         show.is_private = form.data['isPrivate']
 
-        show.dates = []
+        dates = [{
+            date : datetime.strptime(x['date'], "%a, %d %b %Y %H:%M:%S %Z"),
+            start_time : datetime.strptime(x['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
+            end_time : datetime.strptime(x['endTime'], "%a, %d %b %Y %H:%M:%S %Z")
+        } for x in dates]
 
-        for dateobj in dates:
+        for show_date in show.dates:
+            print(show_date)
+            JSONdate = show_date.date_in(dates)
+            print(JSONdate)
+            # if not JSONdate:
+            #     db.session.delete(show_date)
+            # else:
+            #     dates.remove(JSONdate)
+
+        for JSONdate in dates:
             show_date = Show_Date(
-                date = dateobj['date'],
-                start_time = dateobj['startTime'],
-                end_time = dateobj['endTime']
+                show_id = show_id,
+                date = datetime.strptime(JSONdate['date'], "%a, %d %b %Y %H:%M:%S %Z"),
+                start_time = datetime.strptime(JSONdate['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
+                end_time = datetime.strptime(JSONdate['endTime'], "%a, %d %b %Y %H:%M:%S %Z")
             )
-            show.dates.append(show_date)
 
-        db.session.update(show)
         db.session.commit()
 
         # AWS S3 Show Logo Upload

@@ -49,7 +49,7 @@ class Show(db.Model):
     def to_dict(self):
         return {
             "SID": self.SID,
-            "ownerId": self.owner_id,
+            # "ownerId": self.owner_id,
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
@@ -62,7 +62,7 @@ class Show(db.Model):
     def to_dict_full(self):
         return {
             "SID": self.SID,
-            "owner": self.owner.to_dict(),
+            # "owner": self.owner.to_dict(),
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
@@ -91,6 +91,15 @@ class Show_Date(db.Model):
             "startTime": self.start_time.strftime("%H:%M"),
             "endTime": self.end_time.strftime("%H:%M")
         }
+
+    def date_in(self, array):
+        for x in array:
+            print(x)
+            if ((x['date'] == self.date)
+            and (x['startTime'] == self.start_time)
+            and (x['endTime'] == self.end_time)):
+                return x
+        return None
 
     # Methods for comparison to enable max(show_dates)
     def __eq__(self, other):

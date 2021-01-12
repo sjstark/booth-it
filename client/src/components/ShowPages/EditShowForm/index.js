@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, connect } from 'react-redux';
+
+import { useParams } from 'react-router-dom';
 import axios from 'axios'
 
 import { DatePicker, TimePicker } from '@material-ui/pickers'
@@ -18,7 +19,7 @@ import HolderSVG from '../../HolderSVG'
 
 import { useHistory } from "react-router-dom";
 
-import './CreateShowForm.scss'
+import './EditShowForm.scss'
 
 
 function FormDates({ value, setValue, error }) {
@@ -147,8 +148,9 @@ export function ShowImagePreview({ show }) {
 }
 
 
-export default function CreateShowForm() {
+export default function EditShowForm() {
   const history = useHistory()
+  const { SID } = useParams()
 
   const [shows, setShows] = useState([])
 
@@ -165,6 +167,47 @@ export default function CreateShowForm() {
 
   const [imageError, setImageError] = useState(false)
   const [errors, setErrors] = useState([])
+
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`/api/shows/${SID}/`)
+      const show = await res.json()
+      console.log(show)
+      setPrimaryColor({ hex: show.primaryColor })
+      setSecondaryColor({ hex: show.secondaryColor })
+      setTitle(show.title)
+      setDescription(show.description)
+      setIsPrivate(show.isPrivate)
+      setShowDates(show.dates.map(showDate => {
+        let date = showDate.date.split('/')
+        let yyyy = date[2]
+        let mm = parseInt(date[0]) - 1
+        let dd = date[1]
+
+        date = new Date(yyyy, mm, dd)
+
+        let startTime = new Date();
+        let startH = parseInt(showDate.startTime.split(':')[0])
+        let startM = parseInt(showDate.startTime.split(':')[1])
+        startTime.setUTCHours(startH, startM)
+
+        let endTime = new Date();
+        let endH = parseInt(showDate.endTime.split(':')[0])
+        let endM = parseInt(showDate.endTime.split(':')[1])
+        endTime.setUTCHours(endH, endM)
+
+        console.log({ date, startTime, endTime })
+
+        return {
+          date,
+          startTime,
+          endTime
+        }
+      }))
+    })()
+  }, [])
+
 
   useEffect(() => {
     setShows([{
@@ -186,9 +229,11 @@ export default function CreateShowForm() {
       let formattedDate = {}
       formattedDate["date"] = showDate["date"].toUTCString()
       formattedDate["startTime"] = showDate["startTime"].toUTCString()
-      formattedDate["endTime"] = showDate["endTime"].toUTCString()
+      formattedDate["endTime"] = showDate["date"].toUTCString()
       formattedDates.push(formattedDate)
     }
+
+    console.log({ showDates, formattedDates })
 
     const formData = new FormData()
 
@@ -208,7 +253,7 @@ export default function CreateShowForm() {
       }
     }
 
-    axios.post('/api/shows/', formData, config)
+    axios.put(`/api/shows/${SID}/`, formData, config)
       .then(({ data }) => {
         console.log(data)
         history.push(`/shows/${data.SID}`)
@@ -339,7 +384,7 @@ export default function CreateShowForm() {
             color="primary"
             onClick={handleSubmit}
           >
-            Create Show
+            Update Show
         </Button>
         </section>
       </section>

@@ -6,6 +6,7 @@ import ShowExplore from '../ShowPages/ShowExplore';
 import ShowDetails from '../ShowPages/ShowDetails';
 import BoothDetails from '../BoothPages/BoothDetails';
 import CreateShowForm from '../ShowPages/CreateShowForm';
+import EditShowForm from '../ShowPages/EditShowForm';
 
 import './MainContent.scss'
 
@@ -54,6 +55,7 @@ export default function MainContent() {
       <div className="main_content">
         <Switch >
           <Route path="/shows/:SID/booths/:BID" component={BoothDetails} exact />
+          <Route path="/shows/:SID/edit" exact component={EditShowForm} />
           <Route path="/shows/:SID" exact component={ShowDetails} />
           <Route path="/shows" exact component={ShowExplore} />
           <Route path="/create-show" exact component={CreateShowForm} />

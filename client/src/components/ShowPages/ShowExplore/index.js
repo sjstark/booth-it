@@ -21,7 +21,7 @@ export function ShowImage({ show }) {
             style={{ width: "100%" }}
             src={show.showLogoURL}
             alt={show.title}
-            onError={() => setImageError(true)}
+            onError={(e) => setImageError(true)}
           />
           :
           <HolderSVG
@@ -55,11 +55,6 @@ export default function ShowExplore() {
   useEffect(() => {
     setIsLoaded(jsonLoaded && imagesLoaded)
   }, [jsonLoaded, imagesLoaded])
-
-
-  const addDefaultSrc = (e) => {
-    e.target.src = "https://boothit-hosting.s3.amazonaws.com/shows/DEFAULT/logo.png"
-  }
 
 
   let loaderHeight = 200
