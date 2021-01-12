@@ -53,7 +53,7 @@ function FormDates({ value, setValue }) {
 
   return (
     <div className="create-show-form__dates-widget">
-      <form className="create-show-form__dates-form">
+      <div className="create-show-form__dates-form">
 
         <DatePicker
           label="Event Date"
@@ -77,7 +77,7 @@ function FormDates({ value, setValue }) {
         >
           Add Date
         </Button>
-      </form>
+      </div>
       <table className="create-show-form__dates-list">
         <thead className="create-show-form__dates-list-item-head">
           <tr>
@@ -209,14 +209,25 @@ export default function CreateShowForm() {
       }
     }
 
-    const res = await axios.post('/api/shows/', formData, config)
-    const resJSON = res.data
+    axios.post('/api/shows/', formData, config)
+      .then(res => res.data)
+      .then(res => {
+        if (!res.ok) {
+          throw res
+        }
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    // console.log(res)
+    // const resJSON = res.data
 
-    if (resJSON.errors) {
-      setErrors(resJSON.errors)
-    }
+    // if (resJSON.errors) {
+    //   console.log(resJSON.errors)
+    //   setErrors(resJSON.errors)
+    // }
 
-    console.log(resJSON)
 
   }
 
@@ -291,14 +302,14 @@ export default function CreateShowForm() {
         <HexGridLayout style={{ width: "10%" }}>
           {shows.map(show => {
             let childProps = {
-              cardColor: show.secondaryColor,
-              buttonColor: show.primaryColor,
+              cardcolor: show.secondaryColor,
+              buttoncolor: show.primaryColor,
               title: show.title,
               onClick: () => null
             }
 
             return (
-              <div key={show.SID}  {...childProps} >
+              <div key={"showpreview" + show.SID}  {...childProps} >
                 {
                   show.showLogoURL
                     ?
@@ -310,7 +321,7 @@ export default function CreateShowForm() {
                       onError={() => setImageError(true)}
                     />
                     :
-                    <HolderSVG color={childProps.buttonColor} />
+                    <HolderSVG color={childProps.buttoncolor} />
                 }
               </div>
             )

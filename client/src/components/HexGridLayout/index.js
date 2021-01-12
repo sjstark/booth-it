@@ -21,7 +21,7 @@ function HexTile(props) {
     setCardViz(false)
   }
 
-  let backgroundColor = (child.props.cardColor || props.defaultHexColor || "#ffffff");
+  let backgroundColor = (child.props.cardcolor || props.defaultHexColor || "#ffffff");
 
   return (
     <animated.li
@@ -40,7 +40,7 @@ function HexTile(props) {
             {child.props.title}
           </span>
           <div className="hex-grid__details-button">
-            <Button size="small" color={child.props.buttonColor}>Visit</Button>
+            <Button size="small" color={child.props.buttoncolor}>Visit</Button>
           </div>
         </div>
         {child}

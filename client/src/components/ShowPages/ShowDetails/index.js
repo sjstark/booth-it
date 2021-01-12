@@ -20,8 +20,8 @@ function BoothsList({ showInfo, SID }) {
     <HexGridLayout style={{ width: "90vw" }}>
       {showInfo.booths.map(booth => {
         let childProps = {
-          cardColor: booth.secondaryColor,
-          buttonColor: booth.primaryColor,
+          cardcolor: booth.secondaryColor,
+          buttoncolor: booth.primaryColor,
           title: booth.company,
           onClick: () => history.push(`/shows/${SID}/booths/${booth.BID}`)
         }

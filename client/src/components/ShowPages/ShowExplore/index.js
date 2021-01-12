@@ -90,8 +90,8 @@ export default function ShowExplore() {
           <HexGridLayout style={{ width: "90vw" }}>
             {shows.map(show => {
               let childProps = {
-                cardColor: show.secondaryColor,
-                buttonColor: show.primaryColor,
+                cardcolor: show.secondaryColor,
+                buttoncolor: show.primaryColor,
                 title: show.title,
                 onClick: () => history.push(`/shows/${show.SID}`)
               }
