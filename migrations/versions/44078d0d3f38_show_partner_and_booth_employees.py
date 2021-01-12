@@ -28,7 +28,7 @@ def upgrade():
     op.create_table('show_partner_invites',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('show_id', sa.Integer(), nullable=False),
-    sa.Column('booth_id', sa.Integer(), nullable=False),
+    sa.Column('booth_id', sa.Integer(), nullable=True),
     sa.Column('created_by', sa.Integer(), nullable=False),
     sa.Column('accepted_by', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['accepted_by'], ['users.id'], ),

@@ -38,7 +38,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('show_id', sa.Integer(), nullable=False),
     sa.Column('company', sa.String(length=150), nullable=False),
-    sa.Column('description', sa.String(length=500), nullable=False),
+    sa.Column('description', sa.String(length=500), nullable=True),
     sa.Column('primary_color', sa.String(length=9), nullable=True),
     sa.Column('secondary_color', sa.String(length=9), nullable=True),
     sa.Column('size_id', sa.Integer(), nullable=True),

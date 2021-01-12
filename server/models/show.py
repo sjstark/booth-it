@@ -140,7 +140,7 @@ class Show_Partner_Invite(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     show_id = db.Column(db.Integer, db.ForeignKey('shows.id'), nullable=False)
-    booth_id = db.Column(db.Integer, db.ForeignKey('booths.id'), nullable=False)
+    booth_id = db.Column(db.Integer, db.ForeignKey('booths.id'), nullable=True)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     accepted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
@@ -152,6 +152,7 @@ class Show_Partner_Invite(db.Model):
         backref= db.backref("created_invites", cascade="all, delete-orphan"),
         foreign_keys="show_partner_invites.c.created_by"
         )
+
     acceptee = db.relationship(
         "User",
         backref=db.backref("accepted_invites", cascade="all, delete-orphan"),
@@ -160,7 +161,6 @@ class Show_Partner_Invite(db.Model):
 
     def is_open(self):
         return not bool(self.accepted_by)
-
 
     def is_valid_invite(self, IID, BID):
         """
@@ -172,18 +172,27 @@ class Show_Partner_Invite(db.Model):
             return self.is_open()
         return False
 
-
     @classmethod
     def get_invite(cls, IID):
         invite_id = decodeInviteId(IID)
         return db.query.get(invite_id)
 
+    @property
+    def IID(self):
+        return encodeInviteId(self.id)
+
+    @property
+    def url(self):
+        return f"/invites?IID={self.IID}&SID={self.show.SID}" + (
+            ("&BID="+self.booth.BID) if self.booth else ""
+        )
 
     def to_dict(self):
         return {
-            "IID": encodePartnerId(self.id),
-            "SID": encodeShowId(self.show_id),
-            "BID": encodeBoothId(self.booth_id),
+            "IID": self.IID,
+            "SID": self.show.SID,
+            "BID": self.booth.BID,
             "creator_id": self.created_by,
-            "isAccepted": bool(self.accepted_by)
+            "isAccepted": bool(self.accepted_by),
+            "url": self.url
         }

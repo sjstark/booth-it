@@ -38,7 +38,7 @@ class Booth(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     show_id = db.Column(db.Integer, db.ForeignKey('shows.id'), nullable=False)
     company = db.Column(db.String(150), nullable=False)
-    description = db.Column(db.String(500), nullable=False)
+    description = db.Column(db.String(500), nullable=True)
     primary_color = db.Column(db.String(9), nullable=True)
     secondary_color = db.Column(db.String(9), nullable=True)
     size_id = db.Column(db.Integer, db.ForeignKey('booth_sizes.id'))

@@ -201,10 +201,26 @@ def delete_show(SID):
     return {'message': "Show successfully deleted"}, 200
 
 
+@show_routes.route('/<SID>/booths/<BID>/invites/', methods=["POST"])
 @show_routes.route('/<SID>/invites/', methods=["POST"])
 @login_required
-def create_show_invite(SID):
-    pass
+def create_show_invite(SID, BID=None):
+    show_id = decodeShowId(SID)
+    show = Show.query.get(show_id)
+
+    if not BID:
+        if show.owner.id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
+
+        show_invite = Show_Partner_Invite(
+            show = show,
+            creator = current_user
+        )
+
+        db.session.add(show_invite)
+        db.session.commit()
+
+        return jsonify(show_invite.url)
 
 
 @show_routes.route('/<SID>/invites/<IID>/', methods=["DELETE"])

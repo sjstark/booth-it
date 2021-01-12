@@ -37,9 +37,9 @@ def decodeBoothId(id):
     return BOOTH_CIPHER_SUITE.decode(id)
 
 
-def encodePartnerId(id):
+def encodeInviteId(id):
     return URLify(PARTNER_CIPHER_SUITE.encode(id))
 
 
-def decodePartnerId(id):
+def decodeInviteId(id):
     return deURLify(PARTNER_CIPHER_SUITE.decode(id))
