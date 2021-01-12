@@ -44,15 +44,22 @@ class Booth(db.Model):
     size_id = db.Column(db.Integer, db.ForeignKey('booth_sizes.id'))
     profile = db.Column(db.JSON)
 
-    show = db.relationship("Show", backref=db.backref("booths"))
+    show = db.relationship("Show", backref=db.backref("booths", cascade="all, delete-orphan"))
 
     guests = db.relationship('User',
                             secondary=Booth_Guests,
-                            backref=db.backref("visited_booths"))
+                            backref=db.backref("visited_booths",
+                                cascade="all, delete-orphan",
+                                single_parent=True
+                            ))
 
     employees = db.relationship('User',
                                 secondary=Booth_Employees,
-                                backref=db.backref("assigned_booths"))
+                                backref=db.backref("assigned_booths",
+                                    cascade="all, delete-orphan",
+                                    single_parent=True
+                                ))
+
 
 
     @property

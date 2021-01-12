@@ -188,7 +188,17 @@ def partial_show_update(SID):
 @show_routes.route('/<SID>/', methods=["DELETE"])
 @login_required
 def delete_show(SID):
-    pass
+    show_id = decodeShowId(SID)
+
+    show = Show.query.get(show_id)
+
+    if show.owner.id != current_user.id:
+        return {'errors': ['Unauthorized']}, 401
+
+    db.session.delete(show)
+    db.session.commit()
+
+    return {'message': "Show successfully deleted"}, 200
 
 
 @show_routes.route('/<SID>/invites/', methods=["POST"])

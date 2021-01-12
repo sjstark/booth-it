@@ -32,14 +32,24 @@ class Show(db.Model):
     secondary_color = db.Column(db.String(9), nullable=True)
     is_private = db.Column(db.Boolean, default=False)
 
-    dates = db.relationship(
-        'Show_Date',
-        backref= db.backref("show"),
-        )
+    owner = db.relationship('User', backref=db.backref("shows", cascade="all, delete-orphan"))
+
+    # invites = db.relationship("Show_Partner_Invite", backref=db.backref("show", cascade="all, delete-orphan"))
+
+    # dates = db.relationship(
+    #     'Show_Date',
+    #     backref= db.backref(
+    #         "show",
+    #         cascade="all, delete-orphan",
+    #         single_parent=True
+    #     ))
 
     guests = db.relationship('User',
                             secondary=Show_Guests,
-                            backref="visited_shows")
+                            backref= db.backref("visited_shows",
+                                cascade="all, delete-orphan",
+                                single_parent=True
+                                ))
 
     @property
     def SID(self):
@@ -85,6 +95,13 @@ class Show_Date(db.Model):
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)
 
+    show = db.relationship(
+        'Show',
+        backref= db.backref(
+            "dates",
+            cascade="all, delete-orphan",
+        ))
+
     def to_dict(self):
         return {
             "date": self.date.strftime("%m/%d/%Y"),
@@ -127,11 +144,19 @@ class Show_Partner_Invite(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     accepted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
+    booth = db.relationship("Booth", backref=db.backref("invites", cascade="all, delete-orphan"))
+    show = db.relationship("Show", backref=db.backref("invites", cascade="all, delete-orphan"))
 
-
-    booth = db.relationship("Booth", backref="invites")
-    show = db.relationship("Show", backref="invites")
-
+    creator = db.relationship(
+        "User",
+        backref= db.backref("created_invites", cascade="all, delete-orphan"),
+        foreign_keys="show_partner_invites.c.created_by"
+        )
+    acceptee = db.relationship(
+        "User",
+        backref=db.backref("accepted_invites", cascade="all, delete-orphan"),
+        foreign_keys="show_partner_invites.c.accepted_by"
+        )
 
     def is_open(self):
         return not bool(self.accepted_by)

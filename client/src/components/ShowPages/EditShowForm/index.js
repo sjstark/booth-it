@@ -294,8 +294,7 @@ function EditShowForm({ deleteModal }) {
 
   const deleteShow = async () => {
     const res = await axios.delete(`/api/shows/${SID}/`)
-    console.log(res)
-    // history.push('/')
+    history.push('/')
   }
 
   return (

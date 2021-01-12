@@ -16,18 +16,19 @@ class User(db.Model, UserMixin):
     card = db.Column(db.JSON)
     hashed_password = db.Column(db.String(255), nullable=False)
 
-    shows = db.relationship('Show', backref=db.backref("owner"))
+    # Moved to the "one" side of the relationship
+    # shows = db.relationship('Show', backref=db.backref("owner"))
 
-    created_invites = db.relationship(
-        "Show_Partner_Invite",
-        backref= db.backref("creator"),
-        foreign_keys="show_partner_invites.c.created_by"
-        )
-    accepted_invites = db.relationship(
-        "Show_Partner_Invite",
-        backref="accepted",
-        foreign_keys="show_partner_invites.c.accepted_by"
-        )
+    # created_invites = db.relationship(
+    #     "Show_Partner_Invite",
+    #     backref= db.backref("creator", cascade="all, delete-orphan"),
+    #     foreign_keys="show_partner_invites.c.created_by"
+    #     )
+    # accepted_invites = db.relationship(
+    #     "Show_Partner_Invite",
+    #     backref=db.backref("accepted", cascade="all, delete-orphan"),
+    #     foreign_keys="show_partner_invites.c.accepted_by"
+    #     )
 
     @property
     def password(self):
