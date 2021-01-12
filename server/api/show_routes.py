@@ -117,8 +117,10 @@ def get_show_by_SID(SID):
     if id:
         show = Show.query.get(id)
         if show:
-            print(show.to_dict_full())
-            return show.to_dict_full()
+            showDict = show.to_dict_full()
+            if show.owner == current_user:
+                showDict["owner"] = current_user.id
+            return showDict
     return {'errors': ['The requested show does not exist']}, 404
 
 
