@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import './FormInputField.css'
 
-export default function FormInputField({ name, value, onChange, required, rows, cols, maxLength }) {
+export default function FormInputField({ name, value, onChange, required, rows, cols, maxLength, error }) {
   const [focused, setFocused] = useState(false)
 
   const focusChildInput = (e) => {
@@ -36,7 +36,7 @@ export default function FormInputField({ name, value, onChange, required, rows, 
   }
 
   return (
-    <div onClick={focusChildInput} className={`form-input-field__container${value && ' form-input-field__container--filled'}`}>
+    <div onClick={focusChildInput} className={`form-input-field__container${value && ' form-input-field__container--filled'} ${error && ' form-input-field__container--error'}`}>
       <div onClick={focusSiblingInput} className="form-input-field__name">{name}</div>
       <textarea
         onClick={(e) => e.stopPropagation()}
@@ -50,6 +50,9 @@ export default function FormInputField({ name, value, onChange, required, rows, 
         rows={rows}
         cols={cols}
       />
+      <div className="form-input-field__error-msg">
+        {Boolean(error) && error.msg}
+      </div>
     </div>
   )
 }

@@ -58,3 +58,10 @@
   font-size: 12px;
   transition: all 0.3s;
 }
+
+.form-input__error-msg {
+  position: absolute;
+  color: var(--red);
+  left: 0;
+  bottom: -1.2em;
+}

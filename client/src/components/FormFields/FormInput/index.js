@@ -52,6 +52,9 @@ export default function FormInput({ name, type, value, onChange, required, maxLe
         min={min}
         step={step}
       />
+      <div className="form-input__error-msg">
+        {Boolean(error) && error.msg}
+      </div>
     </div>
   )
 }

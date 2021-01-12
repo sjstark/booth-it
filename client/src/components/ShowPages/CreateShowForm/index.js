@@ -16,8 +16,6 @@ import ColorPickerBox from "../../Color/ColorPicker";
 import HexGridLayout from "../../HexGridLayout"
 import HolderSVG from '../../HolderSVG'
 
-
-import { alphaToHex } from '../../../utils/color'
 import { useHistory } from "react-router-dom";
 
 import './CreateShowForm.scss'
@@ -210,23 +208,13 @@ export default function CreateShowForm() {
     }
 
     axios.post('/api/shows/', formData, config)
-      .then(res => res.data)
-      .then(res => {
-        if (!res.ok) {
-          throw res
-        }
-        console.log(res)
-      })
+      .then(({ data }) => console.log(data))
       .catch(err => {
-        console.log(err)
+        if (err.response) {
+          console.log(err.response.data)
+          setErrors(err.response.data.errors)
+        }
       })
-    // console.log(res)
-    // const resJSON = res.data
-
-    // if (resJSON.errors) {
-    //   console.log(resJSON.errors)
-    //   setErrors(resJSON.errors)
-    // }
 
 
   }
@@ -260,7 +248,7 @@ export default function CreateShowForm() {
             required={true}
             type="text"
             value={title}
-            error={false}
+            error={errors.includes("title : This field is required.") && { msg: "This field is required." }}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -270,7 +258,7 @@ export default function CreateShowForm() {
             required={true}
             type="text"
             value={description}
-            error={false}
+            error={errors.includes("description : This field is required.") && { msg: "This field is required." }}
             onChange={({ target }) => setDescription(target.value)}
             rows={4}
           />
