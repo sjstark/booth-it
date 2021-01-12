@@ -23,8 +23,8 @@ import './CreateShowForm.scss'
 
 function FormDates({ value, setValue, error }) {
   const [date, setDate] = useState(new Date())
-  const [startTime, setStartTime] = useState(new Date())
-  const [endTime, setEndTime] = useState(new Date())
+  const [startTime, setStartTime] = useState(new Date().setHours(9, 0))
+  const [endTime, setEndTime] = useState(new Date().setHours(18, 0))
 
   const addDateToList = () => {
     const showDate = { date, startTime, endTime }
