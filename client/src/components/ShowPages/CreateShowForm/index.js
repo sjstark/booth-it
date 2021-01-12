@@ -210,12 +210,10 @@ export default function CreateShowForm() {
 
     axios.post('/api/shows/', formData, config)
       .then(({ data }) => {
-        console.log(data)
         history.push(`/shows/${data.SID}`)
       })
       .catch(err => {
         if (err.response) {
-          console.log(err.response.data)
           setErrors(err.response.data.errors)
         }
       })

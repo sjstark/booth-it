@@ -178,7 +178,6 @@ function EditShowForm({ deleteModal }) {
     (async () => {
       const res = await fetch(`/api/shows/${SID}/`)
       const show = await res.json()
-      console.log(show)
       setPrimaryColor({ hex: show.primaryColor })
       setSecondaryColor({ hex: show.secondaryColor })
       setTitle(show.title)
@@ -201,8 +200,6 @@ function EditShowForm({ deleteModal }) {
         let endH = parseInt(showDate.endTime.split(':')[0])
         let endM = parseInt(showDate.endTime.split(':')[1])
         endTime.setUTCHours(endH, endM)
-
-        console.log({ date, startTime, endTime })
 
         return {
           date,
@@ -238,8 +235,6 @@ function EditShowForm({ deleteModal }) {
       formattedDates.push(formattedDate)
     }
 
-    console.log({ showDates, formattedDates })
-
     const formData = new FormData()
 
     formData.append('title', title)
@@ -260,12 +255,10 @@ function EditShowForm({ deleteModal }) {
 
     axios.put(`/api/shows/${SID}/`, formData, config)
       .then(({ data }) => {
-        console.log(data)
         history.push(`/shows/${data.SID}`)
       })
       .catch(err => {
         if (err.response) {
-          console.log(err.response.data)
           setErrors(err.response.data.errors)
         }
       })

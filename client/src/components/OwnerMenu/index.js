@@ -4,12 +4,14 @@ import { useHistory } from 'react-router-dom'
 
 import './OwnerMenu.scss'
 
+import InviteModal from '../Modals/InviteModal'
+
 
 export default function OwnerMenu({ show, booth }) {
   const history = useHistory()
 
   const [type, setType] = useState(booth ? "Booth" : "Show")
-
+  const [openInvite, setOpenInvite] = useState(false)
 
   const edit = (e) => {
     e.stopPropagation()
@@ -24,6 +26,7 @@ export default function OwnerMenu({ show, booth }) {
   const invitePartner = (e) => {
     e.stopPropagation()
     console.log('invite')
+    setOpenInvite(true)
   }
 
   return (
@@ -42,6 +45,12 @@ export default function OwnerMenu({ show, booth }) {
       >
         <i className="fas fa-plus"></i>
       </div>
+      <InviteModal
+        open={openInvite}
+        onClose={() => setOpenInvite(false)}
+        show={show}
+        booth={booth}
+      />
     </div>
   )
 }
