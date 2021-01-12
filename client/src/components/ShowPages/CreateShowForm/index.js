@@ -21,7 +21,7 @@ import { useHistory } from "react-router-dom";
 import './CreateShowForm.scss'
 
 
-function FormDates({ value, setValue }) {
+function FormDates({ value, setValue, error }) {
   const [date, setDate] = useState(new Date())
   const [startTime, setStartTime] = useState(new Date())
   const [endTime, setEndTime] = useState(new Date())
@@ -48,6 +48,8 @@ function FormDates({ value, setValue }) {
       return [...prevList.slice(0, idx), ...prevList.slice(idx + 1)]
     })
   }
+
+  let errorStyle = Boolean(error) ? { color: "var(--red)" } : {}
 
   return (
     <div className="create-show-form__dates-widget">
@@ -76,7 +78,7 @@ function FormDates({ value, setValue }) {
           Add Date
         </Button>
       </div>
-      <table className="create-show-form__dates-list">
+      <table className={`create-show-form__dates-list ${error && "create-show-form__dates-list--error"}`}>
         <thead className="create-show-form__dates-list-item-head">
           <tr>
             <th>Show Date</th>
@@ -89,7 +91,7 @@ function FormDates({ value, setValue }) {
           {
             value.length == 0
               ?
-              (<tr>
+              (<tr style={errorStyle}>
                 <td>No Dates Entered</td>
                 <td aria-hidden style={{ visibility: "hidden" }}>No Dates Entered</td>
                 <td aria-hidden style={{ visibility: "hidden" }}>No Dates Entered</td>
@@ -152,8 +154,8 @@ export default function CreateShowForm() {
 
   const [primaryColor, setPrimaryColor] = useState({ hex: "#31C6E8" })
   const [primaryAlphaHex, setPrimaryAlphaHex] = useState("#31C6E8")
-  const [secondaryColor, setSecondaryColor] = useState({ hex: " #31E89F" })
-  const [secondaryAlphaHex, setSecondaryAlphaHex] = useState(" #31E89F")
+  const [secondaryColor, setSecondaryColor] = useState({ hex: "#31E89F" })
+  const [secondaryAlphaHex, setSecondaryAlphaHex] = useState("#31E89F")
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -165,7 +167,6 @@ export default function CreateShowForm() {
   const [errors, setErrors] = useState([])
 
   useEffect(() => {
-    console.log(showLogo)
     setShows([{
       title,
       primaryColor: primaryAlphaHex,
@@ -208,7 +209,10 @@ export default function CreateShowForm() {
     }
 
     axios.post('/api/shows/', formData, config)
-      .then(({ data }) => console.log(data))
+      .then(({ data }) => {
+        console.log(data)
+        history.push(`/shows/${data.SID}`)
+      })
       .catch(err => {
         if (err.response) {
           console.log(err.response.data)
@@ -322,6 +326,7 @@ export default function CreateShowForm() {
         <FormDates
           value={showDates}
           setValue={setShowDates}
+          error={errors.includes("dates: No dates provided for show") && { msg: "Show must have at least one date" }}
         />
         <section className="create-show-form__buttons">
           <Button

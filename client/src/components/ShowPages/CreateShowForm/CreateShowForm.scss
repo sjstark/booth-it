@@ -103,6 +103,11 @@ $block: '.create-show-form';
       max-height: 200px;
       overflow-y: auto;
 
+      &--error {
+        border: 2px solid var(--red);
+        border-radius: 20px;
+      }
+
       th {
         font-weight: bold;
         font-size: 1.2em;

@@ -35,8 +35,12 @@ def create_new_show():
     if form.validate_on_submit():
 
         dates = request.form['showDates']
-        if not dates:
-            return {'errors': 'No dates provided for show'}, 400
+        dates = json.loads(dates)
+
+        if not len(dates):
+            return {'errors': 'dates: No dates provided for show'}, 400
+
+
 
         show = Show(
             owner = owner,
@@ -47,7 +51,7 @@ def create_new_show():
             is_private = form.data['isPrivate']
         )
 
-        dates = json.loads(dates)
+
         for dateobj in dates:
             show_date = Show_Date(
                 date = datetime.strptime(dateobj['date'], "%a, %d %b %Y %H:%M:%S %Z"),
@@ -66,8 +70,8 @@ def create_new_show():
             filename = f"shows/{show.SID}/logo.png"
 
             upload_file_to_s3(request.files['showLogo'], filename)
-        return ({'key': 'pass'})
-        # return (show.to_dict())
+        # return ({'key': 'pass'})
+        return (show.to_dict())
 
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
