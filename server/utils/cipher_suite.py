@@ -42,4 +42,4 @@ def encodeInviteId(id):
 
 
 def decodeInviteId(id):
-    return deURLify(PARTNER_CIPHER_SUITE.decode(id))
+    return PARTNER_CIPHER_SUITE.decode(deURLify(id))[0]
