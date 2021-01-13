@@ -14,3 +14,53 @@
 
   }
 }
+
+.invite-link {
+  display: flex;
+
+  position: relative;
+
+  &__copied {
+    position: absolute;
+    top: 50%;
+    width: 90%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    z-index: 100;
+    color: black;
+    background: #fffe;
+  }
+
+  &__text-container {
+    border: 1px solid grey;
+    border-right: none;
+    padding: 5px 10px;
+    border-top-left-radius: 200px;
+    border-bottom-left-radius: 200px;
+
+    position: relative;
+
+    input {
+      outline: none;
+      border: none;
+
+      text-overflow: ellipsis;
+    }
+
+  }
+
+  &__copy-container {
+    border: 1px solid grey;
+    padding: 5px 10px;
+    border-top-right-radius: 200px;
+    border-bottom-right-radius: 200px;
+
+    cursor: pointer;
+
+    background-color: var(--logo2);
+
+    &:hover {
+      background-color: var(--logo3);
+    }
+  }
+}

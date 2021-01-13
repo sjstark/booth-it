@@ -162,15 +162,6 @@ class Show_Partner_Invite(db.Model):
     def is_open(self):
         return not bool(self.accepted_by)
 
-    def is_valid_invite(self, IID, BID):
-        """
-        Instance method to check if supplied query parameters are valid for the selected invite.
-        invite id (IID) should already be correct by the query to get the invite, this method checks that
-        booth id (BID) is correct as well as that the invite has not already been accepted.
-        """
-        if ((decodeInviteId(IID) == self.id) and (decodeBoothId(BID) == self.booth_id)):
-            return self.is_open()
-        return False
 
     @classmethod
     def get_invite(cls, IID):
@@ -191,7 +182,9 @@ class Show_Partner_Invite(db.Model):
         return {
             "IID": self.IID,
             "SID": self.show.SID,
-            "BID": self.booth.BID,
+            "show": self.show.title,
+            "BID": self.booth.BID if self.booth else None,
+            "booth": self.booth.company if self.booth else None,
             "creator_id": self.created_by,
             "isAccepted": bool(self.accepted_by),
             "url": self.url

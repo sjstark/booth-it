@@ -229,6 +229,18 @@ def delete_show_invite(SID, IID):
     pass
 
 
+@show_routes.route('/<SID>/invites/', methods=["GET"])
+@login_required
+def get_show_invites(SID):
+    show_id = decodeShowId(SID)
+    show = Show.query.get(show_id)
+
+    if show.owner != current_user:
+        return {"errors": ["Unauthorized"]}, 401
+
+    return jsonify([invite.to_dict()['url'] for invite in show.invites])
+
+
 @show_routes.route('/<SID>/partners/', methods=["POST"])
 @login_required
 def add_show_partner(SID):
