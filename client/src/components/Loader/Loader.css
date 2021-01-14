@@ -12,23 +12,19 @@
   clip-path: var(--hexagon);
 }
 
-.loader__hexagon-color {
-  position:absolute;
-  width: 100%;
-  height: 100%;
+.logo-path__hexagon--TL {
+  background-color: var(--logo1);
   opacity: 60%;
 }
 
-.loader__hexagon--TL > .loader__hexagon-color  {
-  background-color: var(--logo1);
-}
-
-.loader__hexagon--BL > .loader__hexagon-color  {
+.logo-path__hexagon--BL {
   background-color: var(--logo2);
+  opacity: 60%;
 }
 
-.loader__hexagon--R > .loader__hexagon-color  {
+.logo-path__hexagon--R {
   background-color: var(--logo3);
+  opacity: 60%;
 }
 
 .loader__hexagon--TL {
