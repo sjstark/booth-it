@@ -249,7 +249,10 @@ export default function CreateShowForm() {
             required={true}
             type="text"
             value={title}
-            error={errors.includes("title : This field is required.") && { msg: "This field is required." }}
+            error={
+              errors.includes("title : This field is required.") && { msg: "This field is required." } ||
+              errors.includes("title : Title must be between 4 and 150 characters in length") && { msg: "This field must be between 4 and 150 characters" }
+            }
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -259,7 +262,11 @@ export default function CreateShowForm() {
             required={true}
             type="text"
             value={description}
-            error={errors.includes("description : This field is required.") && { msg: "This field is required." }}
+            error={
+              errors.includes("description : This field is required.") && { msg: "This field is required." } ||
+              errors.includes("description : Title must be between 10 and 500 characters in length") && { msg: "This field must be between 10 and 500 characters" }
+
+            }
             onChange={({ target }) => setDescription(target.value)}
             rows={4}
           />
