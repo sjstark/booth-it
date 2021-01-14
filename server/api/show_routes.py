@@ -232,19 +232,25 @@ def get_show_invites(SID):
     if show.owner != current_user:
         return {"errors": ["Unauthorized"]}, 401
 
-    return jsonify([invite.to_dict()['url'] for invite in show.invites])
-
-
-@show_routes.route('/<SID>/partners/', methods=["POST"])
-@login_required
-def add_show_partner(SID):
-    pass
+    return jsonify([invite.to_dict()['url'] for invite in show.invites if invite.is_open])
 
 
 @show_routes.route('/<SID>/partners/<userId>/', methods=["DELETE"])
 @login_required
 def delete_show_partner(SID, userId):
     pass
+
+
+@show_routes.route('/<SID>/booths/', methods=["POST"])
+@login_required
+def create_new_booth(SID, BID):
+    id = decodeBoothId(BID)
+    if id:
+        booth = Booth.query.get(id)
+        if booth:
+            print(booth.to_dict_full())
+            return booth.to_dict_full()
+    return {'errors': ['The requested show does not exist']}, 404
 
 
 @show_routes.route('/<SID>/booths/<BID>/', methods=["GET"])

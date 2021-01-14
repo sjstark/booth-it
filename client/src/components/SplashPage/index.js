@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSpring, animated, config } from 'react-spring'
 
+import axios from 'axios'
+
 import LogoBackground from '../LogoBackground'
 import Button from '../Button'
 
@@ -53,6 +55,7 @@ function InviteBody() {
 
   const [validInvite, setValidInvite] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [errors, setErrors] = useState([])
 
   useEffect(() => {
     (async () => {
@@ -65,9 +68,17 @@ function InviteBody() {
     })()
   }, [])
 
-  const acceptInvite = (e) => {
-    console.log('redirect to booth create page')
-    history.push(`/shows/${SID}/create-booth`)
+  const acceptInvite = async (e) => {
+
+    let requestString = `/api/invites/${IID}?SID=${SID}`
+    requestString += BID ? `&BID=${BID}` : ""
+
+    const res = await axios.post(requestString)
+    if (res.data.success) {
+      history.push(`/shows/${SID}/create-booth`)
+    } else {
+      setErrors(res.data.errors)
+    }
   }
 
   const onLogout = async (e) => {
@@ -119,7 +130,27 @@ function InviteBody() {
               </>
               :
               <>
-                We're sorry, but it seems as though you've received an invalid invite or the invite you've received has already been accepted. Please contact the show host.
+                <p>
+                  We're sorry, but it seems as though you've received an invalid invite or the invite you've re ceived has already been accepted.
+                </p>
+                {
+                  errors.length > 0 &&
+                  (
+                    <>
+                      <p>
+                        Below are some additional errors that may help:
+                      </p>
+                      {errors.map(error => <p key={error}>{error}</p>)}
+                    </>
+                  )
+                }
+                <p>
+                  Please contact the show host.
+                </p>
+                <Button
+                  color="primary"
+                  onClick={() => history.push('/')}
+                >Go To Main Page</Button>
               </>
           )
           :

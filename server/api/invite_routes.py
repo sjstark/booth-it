@@ -38,6 +38,32 @@ def check_invite(IID):
         return bad_invite, 401
 
 
+@invite_routes.route('/<IID>', methods=["POST"])
+def accept_invite(IID):
+    invite_id = decodeInviteId(IID)
+
+    check = check_invite(IID)
+
+    if check[1] != 200:
+        return check[0]
+
+    invite = Show_Partner_Invite.query.get(invite_id)
+
+    good_invite = invite.to_dict()
+
+    if invite:
+        print('hit invite')
+        print(invite.is_open)
+
+        # if not invite.is_open:
+            # return {"errors": ["The invite has already been accepted."]}, 400
+        # else:
+        invite.acceptee = current_user
+        db.session.commit()
+        return {'success': 'invite accepted'}
+    return {"errors": ["The supplied invite is invalid"]}, 400
+
+
 @invite_routes.route('/<IID>', methods=["DELETE"])
 @login_required
 def delete_show_invite(IID):
