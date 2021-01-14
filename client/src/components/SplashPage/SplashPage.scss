@@ -28,3 +28,66 @@
     margin: 10px;
   }
 }
+
+
+.main-flavor {
+  cursor: default;
+
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__background{
+    position: absolute;
+    z-index: 0;
+    top: 5vw;
+    left: 5vw;
+
+    img {
+      width: 80%;
+    }
+  }
+
+  &__foreground {
+    z-index: 5;
+
+    background: white;
+
+    font-size: 20px;
+    width: 50vw;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: var(--better-shadow-dark);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h1 {
+      font-size: 2em;
+      margin: 10px 10px 20px;
+      text-align: center;
+    }
+
+    p {
+      padding: 5px;
+      text-indent: 1em;
+      line-height: 1.5em;
+    }
+
+    em {
+      font-family: 'Bungee', sans-serif;
+
+      cursor: pointer;
+
+      &:hover {
+        text-shadow: 0 0 4px var(--shadow);
+      }
+    }
+  }
+}
