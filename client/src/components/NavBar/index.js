@@ -13,7 +13,7 @@ function NavBarRight({ children, ...props }) {
 
   const trail = useTrail(items.length, {
     transform: "translate(0vw)",
-    opacity: 100,
+    opacity: 1,
     from: { opacity: 0, transform: "translate(100%)" },
     delay: 100
   })

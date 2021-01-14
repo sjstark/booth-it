@@ -16,7 +16,7 @@
   position:absolute;
   width: 100%;
   height: 100%;
-  opacity: 60%;
+  opacity: 0.6;
 }
 
 .logo-path__hexagon--TL > .logo-path__hexagon-color  {

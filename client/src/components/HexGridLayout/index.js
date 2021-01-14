@@ -54,7 +54,7 @@ function RisingTrailList(props) {
 
   const trail = useTrail(items.length, {
     to: {
-      opacity: 100,
+      opacity: 1,
       transform: "translateY(0)"
     },
     from: {
