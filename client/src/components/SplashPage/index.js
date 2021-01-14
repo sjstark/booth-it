@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSpring, animated, config } from 'react-spring'
 
-import axios from 'axios'
-
 import LogoBackground from '../LogoBackground'
 import Button from '../Button'
 
 import { login, logout } from '../../store/session'
 
-import "./SplashPage.css"
+import "./SplashPage.scss"
+
 import { Switch, Route, useHistory, useLocation, useParams } from 'react-router-dom'
 
 
@@ -83,7 +82,7 @@ function InviteBody() {
           (
             validInvite
               ?
-              <div>
+              <>
                 <h1>Welcome to <span style={{ fontFamily: '"Bungee", sans-serif' }}>Booth It</span></h1>
                 <h2>You've received an invite to participate in <span style={{ fontFamily: '"Bungee", sans-serif' }}>{validInvite.show}</span>.</h2>
                 {
@@ -117,16 +116,16 @@ function InviteBody() {
                     </>
                 }
 
-              </div>
+              </>
               :
-              <div>
+              <>
                 We're sorry, but it seems as though you've received an invalid invite or the invite you've received has already been accepted. Please contact the show host.
-              </div>
+              </>
           )
           :
-          <div>
+          <>
             Loading...
-        </div>
+          </>
       }
     </>
   )

@@ -223,12 +223,6 @@ def create_show_invite(SID, BID=None):
         return jsonify(show_invite.url)
 
 
-@show_routes.route('/<SID>/invites/<IID>/', methods=["DELETE"])
-@login_required
-def delete_show_invite(SID, IID):
-    pass
-
-
 @show_routes.route('/<SID>/invites/', methods=["GET"])
 @login_required
 def get_show_invites(SID):

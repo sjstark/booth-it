@@ -1,24 +1,34 @@
-.delete-modal{
+.invite-modal{
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-self: center;
+  justify-content: center;
 
-  &__body{
-    font-size: 1.5em;
-    line-height: 1.5em;
-    text-align: center;
-  }
-
-  &__buttons{
+  &__create{
     display: flex;
+    flex-direction: column;
+    align-self: center;
 
+    margin: 20px;
   }
+
+  &__existing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+  }
+
 }
 
 .invite-link {
   display: flex;
+  justify-content: center;
+  align-self: center;
 
   position: relative;
+
+  margin: 5px;
 
   &__copied {
     position: absolute;
@@ -34,15 +44,16 @@
   &__text-container {
     border: 1px solid grey;
     border-right: none;
+    border-left: none;
     padding: 5px 10px;
-    border-top-left-radius: 200px;
-    border-bottom-left-radius: 200px;
+    width: 400px;
 
     position: relative;
 
     input {
       outline: none;
       border: none;
+      width: 100%;
 
       text-overflow: ellipsis;
     }
@@ -63,4 +74,26 @@
       background-color: var(--logo3);
     }
   }
+
+  &__delete-container {
+    border: 1px solid grey;
+    padding: 5px 10px;
+    border-top-left-radius: 200px;
+    border-bottom-left-radius: 200px;
+
+    cursor: pointer;
+
+    background-color: var(--red);
+
+    &:hover {
+      filter: brightness(90%) saturate(150%)
+    }
+  }
+
+  &__existing-container {
+    height: 30vh;
+    width: 500px;
+    overflow-y: auto;
+  }
+
 }

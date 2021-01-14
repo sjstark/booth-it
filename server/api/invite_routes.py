@@ -12,23 +12,15 @@ invite_routes = Blueprint('invite', __name__)
 
 
 @invite_routes.route('/<IID>', methods=["GET"])
-def chect_invite(IID):
+def check_invite(IID):
     bad_invite = {"errors": ["The supplied invite is invalid"]}
     try:
         invite_id = decodeInviteId(IID)
-
-        print(invite_id, IID)
-        print('HEREHREHREHEHRE^^^')
 
         invite = Show_Partner_Invite.query.get(invite_id)
 
         SID = request.args.get("SID")
         BID = request.args.get("BID")
-
-        print(request.args)
-        print("SID: ", SID)
-        print("BID: ", BID)
-
 
         good_invite = invite.to_dict()
 
@@ -44,3 +36,18 @@ def chect_invite(IID):
         raise Exception("Invite does not exist")
     except:
         return bad_invite, 401
+
+
+@invite_routes.route('/<IID>', methods=["DELETE"])
+@login_required
+def delete_show_invite(IID):
+    invite_id = decodeInviteId(IID)
+
+    invite = Show_Partner_Invite.query.get(invite_id)
+
+    if invite and invite.creator == current_user:
+        db.session.delete(invite)
+        db.session.commit()
+        return {'success': 'Invite has been deleted'}
+    else:
+        return {'errors': 'Unauthorized'}
