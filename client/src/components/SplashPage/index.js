@@ -196,14 +196,6 @@ export default function SplashPage() {
       <LogoBackground />
       <div className="full-page flex-centered">
         <SplashForm />
-        <a
-          className="logo-background__github-link"
-          href="https://github.com/sjstark/booth-it"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <i className="fab fa-github"></i>
-        </a>
       </div>
     </>
   )
