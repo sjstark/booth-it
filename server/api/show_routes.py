@@ -272,7 +272,7 @@ def create_new_booth(SID):
         # AWS S3 Show Logo Upload
 
         if form.data['boothLogo']:
-            filename = f"shows/{newBooth.show.SID}/{newBooth.BID}/logo.png"
+            filename = f"shows/{newBooth.show.SID}/booths/{newBooth.BID}/logo.png"
 
             upload_file_to_s3(request.files['boothLogo'], filename)
 
