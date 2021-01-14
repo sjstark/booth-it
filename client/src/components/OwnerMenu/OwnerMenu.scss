@@ -1,0 +1,38 @@
+$block: '.owner-menu';
+
+#{$block} {
+  position: fixed;
+  z-index: 75;
+  right: 25px;
+  top: 80px;
+
+  &__icon{
+    cursor: pointer;
+
+    margin: 0.5em;
+    padding: .5em;
+
+    // width: 2em;
+    // height: 2em;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--logo1);
+
+    font-size: 1.5em;
+
+    box-shadow: 0 0 10px var(--shadow);
+
+
+    &:hover {
+      filter: brightness(110%);
+      box-shadow: 0 0 10px var(--shadow-dark);
+    }
+
+  }
+
+}

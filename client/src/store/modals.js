@@ -54,7 +54,6 @@ export const removeSignupModal = () => {
   }
 }
 
-
 let initialState = {
   login: {},
   signup: {}

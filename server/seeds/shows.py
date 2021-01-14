@@ -4,6 +4,9 @@ from server.models import *
 from server.utils.faker import fake
 
 
+#Realized that the seed data datetime.time function is in UTC... so I made it reasonable
+def get_reasonable_time(hour, minute):
+    return datetime.time(hour - 5, minute)
 
 def seed_shows():
     demoUser = User.query.filter_by(email="demo@user.io").first()
@@ -24,20 +27,20 @@ def seed_shows():
     ces_date1 = Show_Date(
         show = ces_show,
         date = datetime.date(2021,3,1),
-        start_time = datetime.time(8, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(8, 00),
+        end_time = get_reasonable_time(16, 00)
     )
     ces_date2 = Show_Date(
         show = ces_show,
         date = datetime.date(2021,3,2),
-        start_time = datetime.time(8, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(8, 00),
+        end_time = get_reasonable_time(16, 00)
     )
     ces_date3 = Show_Date(
         show = ces_show,
         date = datetime.date(2021,3,3),
-        start_time = datetime.time(8, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(8, 00),
+        end_time = get_reasonable_time(16, 00)
     )
 
     db.session.add(ces_date1)
@@ -65,32 +68,32 @@ def seed_shows():
     nab_date1 = Show_Date(
         show = nab_show,
         date = datetime.date(2021,5,1),
-        start_time = datetime.time(8, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(8, 00),
+        end_time = get_reasonable_time(16, 00)
     )
     nab_date2 = Show_Date(
         show = nab_show,
         date = datetime.date(2021,5,2),
-        start_time = datetime.time(8, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(8, 00),
+        end_time = get_reasonable_time(16, 00)
     )
     nab_date3 = Show_Date(
         show = nab_show,
         date = datetime.date(2021,5,3),
-        start_time = datetime.time(8, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(8, 00),
+        end_time = get_reasonable_time(16, 00)
     )
     nab_date4 = Show_Date(
         show = nab_show,
         date = datetime.date(2021,5,6),
-        start_time = datetime.time(10, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(10, 00),
+        end_time = get_reasonable_time(16, 00)
     )
     nab_date5 = Show_Date(
         show = nab_show,
         date = datetime.date(2021,5,7),
-        start_time = datetime.time(10, 00),
-        end_time = datetime.time(14, 00)
+        start_time = get_reasonable_time(10, 00),
+        end_time = get_reasonable_time(14, 00)
     )
 
     db.session.add(nab_date1)
@@ -123,8 +126,8 @@ def seed_shows():
     def random_times():
         start_range = (8, 12)
         end_range = (14, 20)
-        start = datetime.time(fake.random_int(min=start_range[0], max=start_range[1]), fake.random_int(min=0, max=45, step=15))
-        end = datetime.time(fake.random_int(min=end_range[0], max=end_range[1]), fake.random_int(min=0, max=45, step=15))
+        start = get_reasonable_time(fake.random_int(min=start_range[0], max=start_range[1]), fake.random_int(min=0, max=45, step=15))
+        end = get_reasonable_time(fake.random_int(min=end_range[0], max=end_range[1]), fake.random_int(min=0, max=45, step=15))
         return (start, end)
 
 
@@ -157,32 +160,32 @@ def seed_shows():
     date1 = Show_Date(
         show = cc_show,
         date = datetime.date(2021,10,14),
-        start_time = datetime.time(9, 30),
-        end_time = datetime.time(16, 30)
+        start_time = get_reasonable_time(9, 30),
+        end_time = get_reasonable_time(16, 30)
     )
     date2 = Show_Date(
         show = cc_show,
         date = datetime.date(2021,10,15),
-        start_time = datetime.time(9, 30),
-        end_time = datetime.time(16, 30)
+        start_time = get_reasonable_time(9, 30),
+        end_time = get_reasonable_time(16, 30)
     )
     date3 = Show_Date(
         show = cc_show,
         date = datetime.date(2021,10,16),
-        start_time = datetime.time(9, 30),
-        end_time = datetime.time(16, 30)
+        start_time = get_reasonable_time(9, 30),
+        end_time = get_reasonable_time(16, 30)
     )
     date4 = Show_Date(
         show = cc_show,
         date = datetime.date(2021,10,17),
-        start_time = datetime.time(10, 00),
-        end_time = datetime.time(16, 00)
+        start_time = get_reasonable_time(10, 00),
+        end_time = get_reasonable_time(16, 00)
     )
     date5 = Show_Date(
         show = cc_show,
         date = datetime.date(2021,10,18),
-        start_time = datetime.time(10, 00),
-        end_time = datetime.time(14, 00)
+        start_time = get_reasonable_time(10, 00),
+        end_time = get_reasonable_time(14, 00)
     )
 
     dates = [date1, date2, date3, date4, date5]

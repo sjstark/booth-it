@@ -1,0 +1,16 @@
+.delete-modal{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__body{
+    font-size: 1.5em;
+    line-height: 1.5em;
+    text-align: center;
+  }
+
+  &__buttons{
+    display: flex;
+
+  }
+}

@@ -8,6 +8,7 @@ from flask_login import LoginManager
 from .models import *
 from .api.auth_routes import auth_routes
 from .api.show_routes import show_routes
+from .api.invite_routes import invite_routes
 
 from server.utils.auth import unauthorized
 
@@ -43,6 +44,7 @@ Migrate(app, db)
 
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(show_routes, url_prefix='/api/shows')
+app.register_blueprint(invite_routes, url_prefix='/api/invites')
 
 # Application Security
 CORS(app)

@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 
 import Loader from '../../Loader'
 import HexGridLayout from '../../HexGridLayout'
+import OwnerMenu from '../../OwnerMenu'
 
 import { cacheImages } from '../../../utils/cacheImages'
 
@@ -70,19 +71,26 @@ export default function ShowDetails() {
   return (
     <div>
       {!isLoaded && (
-        <div style={{ width: "100%", height: "100%" }}>
-          <Loader
-            duration={2500}
-            style={{
-              width: `${loaderHeight * 0.86602543}px`,
-              height: `${loaderHeight}px`,
-              margin: "200px auto"
-            }}
-          />
-        </div>
+        <>
+          <div style={{ width: "100%", height: "100%" }}>
+            <Loader
+              duration={2500}
+              style={{
+                width: `${loaderHeight * 0.86602543}px`,
+                height: `${loaderHeight}px`,
+                margin: "200px auto"
+              }}
+            />
+          </div>
+        </>
       )}
       {isLoaded && (
         <>
+          <div>
+            {showInfo.owner &&
+              <OwnerMenu show={showInfo} />
+            }
+          </div>
           <BoothsList showInfo={showInfo} SID={SID} />
         </>
       )

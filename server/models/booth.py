@@ -38,21 +38,28 @@ class Booth(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     show_id = db.Column(db.Integer, db.ForeignKey('shows.id'), nullable=False)
     company = db.Column(db.String(150), nullable=False)
-    description = db.Column(db.String(500), nullable=False)
+    description = db.Column(db.String(500), nullable=True)
     primary_color = db.Column(db.String(9), nullable=True)
     secondary_color = db.Column(db.String(9), nullable=True)
     size_id = db.Column(db.Integer, db.ForeignKey('booth_sizes.id'))
     profile = db.Column(db.JSON)
 
-    show = db.relationship("Show", backref=db.backref("booths", cascade="all,delete"))
+    show = db.relationship("Show", backref=db.backref("booths", cascade="all, delete-orphan"))
 
     guests = db.relationship('User',
                             secondary=Booth_Guests,
-                            backref=db.backref("visited_booths", cascade="all,delete"))
+                            backref=db.backref("visited_booths",
+                                cascade="all, delete-orphan",
+                                single_parent=True
+                            ))
 
     employees = db.relationship('User',
                                 secondary=Booth_Employees,
-                                backref=db.backref("assigned_booths", cascade="all,delete"))
+                                backref=db.backref("assigned_booths",
+                                    cascade="all, delete-orphan",
+                                    single_parent=True
+                                ))
+
 
 
     @property

@@ -95,7 +95,9 @@ $block: '.create-show-form';
     &-form{
       display: flex;
       flex-direction: column;
-      margin: 0;
+      div {
+        margin: 10px 0;
+      }
     }
 
     &-list {

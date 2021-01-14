@@ -40,8 +40,6 @@ def create_new_show():
         if not len(dates):
             return {'errors': 'dates: No dates provided for show'}, 400
 
-
-
         show = Show(
             owner = owner,
             title = form.data['title'],
@@ -50,7 +48,6 @@ def create_new_show():
             secondary_color = form.data['secondaryColor'],
             is_private = form.data['isPrivate']
         )
-
 
         for dateobj in dates:
             show_date = Show_Date(
@@ -70,7 +67,6 @@ def create_new_show():
             filename = f"shows/{show.SID}/logo.png"
 
             upload_file_to_s3(request.files['showLogo'], filename)
-        # return ({'key': 'pass'})
         return (show.to_dict())
 
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
@@ -132,35 +128,43 @@ def complete_show_update(SID):
     form = ShowCreateForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
-    owner = current_user
+
 
     if form.validate_on_submit():
 
-        dates = request.json['dates']
+        dates = request.form['showDates']
+        dates = json.loads(dates)
+
         if not dates:
             return {'errors': 'No dates provided for show'}, 400
 
         show = Show.query.get(show_id)
 
-        show.owner = owner
+        if show.owner.id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
 
+        show.owner_id = current_user.id
         show.title = form.data['title'],
         show.description = form.data['description'],
         show.primary_color = form.data['primaryColor'],
         show.secondary_color = form.data['secondaryColor'],
         show.is_private = form.data['isPrivate']
 
-        show.dates = []
+        for show_date in show.dates:
+            db.session.delete(show_date)
 
-        for dateobj in dates:
+        for JSONdate in dates:
+
+            print(JSONdate)
+
             show_date = Show_Date(
-                date = dateobj['date'],
-                start_time = dateobj['startTime'],
-                end_time = dateobj['endTime']
+                date = datetime.strptime(JSONdate['date'], "%a, %d %b %Y %H:%M:%S %Z"),
+                start_time = datetime.strptime(JSONdate['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
+                end_time = datetime.strptime(JSONdate['endTime'], "%a, %d %b %Y %H:%M:%S %Z")
             )
+
             show.dates.append(show_date)
 
-        db.session.update(show)
         db.session.commit()
 
         # AWS S3 Show Logo Upload
@@ -184,19 +188,51 @@ def partial_show_update(SID):
 @show_routes.route('/<SID>/', methods=["DELETE"])
 @login_required
 def delete_show(SID):
-    pass
+    show_id = decodeShowId(SID)
+
+    show = Show.query.get(show_id)
+
+    if show.owner.id != current_user.id:
+        return {'errors': ['Unauthorized']}, 401
+
+    db.session.delete(show)
+    db.session.commit()
+
+    return {'message': "Show successfully deleted"}, 200
 
 
+@show_routes.route('/<SID>/booths/<BID>/invites/', methods=["POST"])
 @show_routes.route('/<SID>/invites/', methods=["POST"])
 @login_required
-def create_show_invite(SID):
-    pass
+def create_show_invite(SID, BID=None):
+    show_id = decodeShowId(SID)
+    show = Show.query.get(show_id)
+
+    if not BID:
+        if show.owner.id != current_user.id:
+            return {'errors': ['Unauthorized']}, 401
+
+        show_invite = Show_Partner_Invite(
+            show = show,
+            creator = current_user
+        )
+
+        db.session.add(show_invite)
+        db.session.commit()
+
+        return jsonify(show_invite.url)
 
 
-@show_routes.route('/<SID>/invites/<IID>/', methods=["DELETE"])
+@show_routes.route('/<SID>/invites/', methods=["GET"])
 @login_required
-def delete_show_invite(SID, IID):
-    pass
+def get_show_invites(SID):
+    show_id = decodeShowId(SID)
+    show = Show.query.get(show_id)
+
+    if show.owner != current_user:
+        return {"errors": ["Unauthorized"]}, 401
+
+    return jsonify([invite.to_dict()['url'] for invite in show.invites])
 
 
 @show_routes.route('/<SID>/partners/', methods=["POST"])

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, connect, useSelector } from 'react-redux'
 
 import { restoreUser } from './store/session';
@@ -10,10 +10,11 @@ import Modals from "./components/Modals"
 import MainContent from './components/MainContent'
 
 function App({ user, modals }) {
-  const history = useHistory()
+  const location = useLocation()
   const dispatch = useDispatch()
 
   const [isLoaded, setIsLoaded] = useState(false)
+  const inviteLoc = location.pathname == '/invites'
 
   useEffect(() => {
     dispatch(restoreUser())
@@ -31,7 +32,7 @@ function App({ user, modals }) {
       )}
       {isLoaded && (
         <>
-          {user ?
+          {user && !inviteLoc ?
             <>
               <MainContent />
             </>

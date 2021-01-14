@@ -1,0 +1,99 @@
+.invite-modal{
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+
+  &__create{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+
+    margin: 20px;
+  }
+
+  &__existing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+  }
+
+}
+
+.invite-link {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+
+  position: relative;
+
+  margin: 5px;
+
+  &__copied {
+    position: absolute;
+    top: 50%;
+    width: 90%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    z-index: 100;
+    color: black;
+    background: #fffe;
+  }
+
+  &__text-container {
+    border: 1px solid grey;
+    border-right: none;
+    border-left: none;
+    padding: 5px 10px;
+    width: 400px;
+
+    position: relative;
+
+    input {
+      outline: none;
+      border: none;
+      width: 100%;
+
+      text-overflow: ellipsis;
+    }
+
+  }
+
+  &__copy-container {
+    border: 1px solid grey;
+    padding: 5px 10px;
+    border-top-right-radius: 200px;
+    border-bottom-right-radius: 200px;
+
+    cursor: pointer;
+
+    background-color: var(--logo2);
+
+    &:hover {
+      background-color: var(--logo3);
+    }
+  }
+
+  &__delete-container {
+    border: 1px solid grey;
+    padding: 5px 10px;
+    border-top-left-radius: 200px;
+    border-bottom-left-radius: 200px;
+
+    cursor: pointer;
+
+    background-color: var(--red);
+
+    &:hover {
+      filter: brightness(90%) saturate(150%)
+    }
+  }
+
+  &__existing-container {
+    height: 30vh;
+    width: 500px;
+    overflow-y: auto;
+  }
+
+}

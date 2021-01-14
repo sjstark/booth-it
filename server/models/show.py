@@ -32,14 +32,24 @@ class Show(db.Model):
     secondary_color = db.Column(db.String(9), nullable=True)
     is_private = db.Column(db.Boolean, default=False)
 
-    dates = db.relationship(
-        'Show_Date',
-        backref= db.backref("show", cascade="all,delete"),
-        )
+    owner = db.relationship('User', backref=db.backref("shows", cascade="all, delete-orphan"))
+
+    # invites = db.relationship("Show_Partner_Invite", backref=db.backref("show", cascade="all, delete-orphan"))
+
+    # dates = db.relationship(
+    #     'Show_Date',
+    #     backref= db.backref(
+    #         "show",
+    #         cascade="all, delete-orphan",
+    #         single_parent=True
+    #     ))
 
     guests = db.relationship('User',
                             secondary=Show_Guests,
-                            backref="visited_shows")
+                            backref= db.backref("visited_shows",
+                                cascade="all, delete-orphan",
+                                single_parent=True
+                                ))
 
     @property
     def SID(self):
@@ -49,7 +59,7 @@ class Show(db.Model):
     def to_dict(self):
         return {
             "SID": self.SID,
-            "ownerId": self.owner_id,
+            # "ownerId": self.owner_id,
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
@@ -62,7 +72,7 @@ class Show(db.Model):
     def to_dict_full(self):
         return {
             "SID": self.SID,
-            "owner": self.owner.to_dict(),
+            # "owner": self.owner.to_dict(),
             "title": self.title,
             "description": self.description,
             "primaryColor": self.primary_color,
@@ -85,12 +95,28 @@ class Show_Date(db.Model):
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)
 
+    show = db.relationship(
+        'Show',
+        backref= db.backref(
+            "dates",
+            cascade="all, delete-orphan",
+        ))
+
     def to_dict(self):
         return {
             "date": self.date.strftime("%m/%d/%Y"),
             "startTime": self.start_time.strftime("%H:%M"),
             "endTime": self.end_time.strftime("%H:%M")
         }
+
+    def date_in(self, array):
+        for x in array:
+            print(x)
+            if ((x['date'] == self.date)
+            and (x['startTime'] == self.start_time)
+            and (x['endTime'] == self.end_time)):
+                return x
+        return None
 
     # Methods for comparison to enable max(show_dates)
     def __eq__(self, other):
@@ -114,29 +140,27 @@ class Show_Partner_Invite(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     show_id = db.Column(db.Integer, db.ForeignKey('shows.id'), nullable=False)
-    booth_id = db.Column(db.Integer, db.ForeignKey('booths.id'), nullable=False)
+    booth_id = db.Column(db.Integer, db.ForeignKey('booths.id'), nullable=True)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     accepted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
+    booth = db.relationship("Booth", backref=db.backref("invites", cascade="all, delete-orphan"))
+    show = db.relationship("Show", backref=db.backref("invites", cascade="all, delete-orphan"))
 
+    creator = db.relationship(
+        "User",
+        backref= db.backref("created_invites", cascade="all, delete-orphan"),
+        foreign_keys="show_partner_invites.c.created_by"
+        )
 
-    booth = db.relationship("Booth", backref="invites")
-    show = db.relationship("Show", backref="invites")
-
+    acceptee = db.relationship(
+        "User",
+        backref=db.backref("accepted_invites", cascade="all, delete-orphan"),
+        foreign_keys="show_partner_invites.c.accepted_by"
+        )
 
     def is_open(self):
         return not bool(self.accepted_by)
-
-
-    def is_valid_invite(self, IID, BID):
-        """
-        Instance method to check if supplied query parameters are valid for the selected invite.
-        invite id (IID) should already be correct by the query to get the invite, this method checks that
-        booth id (BID) is correct as well as that the invite has not already been accepted.
-        """
-        if ((decodeInviteId(IID) == self.id) and (decodeBoothId(BID) == self.booth_id)):
-            return self.is_open()
-        return False
 
 
     @classmethod
@@ -144,12 +168,24 @@ class Show_Partner_Invite(db.Model):
         invite_id = decodeInviteId(IID)
         return db.query.get(invite_id)
 
+    @property
+    def IID(self):
+        return encodeInviteId(self.id)
+
+    @property
+    def url(self):
+        return f"/invites?IID={self.IID}&SID={self.show.SID}" + (
+            ("&BID="+self.booth.BID) if self.booth else ""
+        )
 
     def to_dict(self):
         return {
-            "IID": encodePartnerId(self.id),
-            "SID": encodeShowId(self.show_id),
-            "BID": encodeBoothId(self.booth_id),
+            "IID": self.IID,
+            "SID": self.show.SID,
+            "show": self.show.title,
+            "BID": self.booth.BID if self.booth else None,
+            "booth": self.booth.company if self.booth else None,
             "creator_id": self.created_by,
-            "isAccepted": bool(self.accepted_by)
+            "isAccepted": bool(self.accepted_by),
+            "url": self.url
         }
