@@ -25,7 +25,7 @@ export default function OwnerMenu({ show, booth }) {
 
   const invitePartner = (e) => {
     e.stopPropagation()
-    console.log('invite')
+    // console.log('invite')
     setOpenInvite(true)
   }
 

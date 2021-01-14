@@ -95,7 +95,7 @@ export default function CreateBoothForm() {
         history.push(`/shows/${data.SID}/booths/${data.BID}`)
       })
       .catch(err => {
-        console.log(err)
+        // console.log(err)
         if (err.response) {
           setErrors(err.response.data.errors)
         }

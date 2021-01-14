@@ -28,7 +28,7 @@ function InviteList({ show, newInvite }) {
   }
 
   useEffect(() => {
-    console.log('reload')
+    // console.log('reload')
     reload()
   }, [show, newInvite])
 

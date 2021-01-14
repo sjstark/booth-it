@@ -9,19 +9,16 @@ import { cacheImages } from '../../../utils/cacheImages'
 
 
 export function ShowImage({ show }) {
-  const [imageError, setImageError] = useState(false)
-
   return (
     <>
       {
-        !imageError
+        show.showLogoURL
           ?
           <img
             onDragStart={(e) => e.preventDefault()}
             style={{ width: "100%" }}
             src={show.showLogoURL}
             alt={show.title}
-            onError={(e) => setImageError(true)}
           />
           :
           <HolderSVG
