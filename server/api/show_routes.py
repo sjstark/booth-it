@@ -5,8 +5,7 @@ from flask import Blueprint, jsonify, session, request
 from server.models import *
 from flask_login import current_user, login_required
 
-from server.forms.show_form import ShowCreateForm
-
+from server.forms import *
 from server.utils.awsS3 import upload_file_to_s3
 from server.utils.cipher_suite import *
 
@@ -243,14 +242,43 @@ def delete_show_partner(SID, userId):
 
 @show_routes.route('/<SID>/booths/', methods=["POST"])
 @login_required
-def create_new_booth(SID, BID):
-    id = decodeBoothId(BID)
-    if id:
-        booth = Booth.query.get(id)
-        if booth:
-            print(booth.to_dict_full())
-            return booth.to_dict_full()
-    return {'errors': ['The requested show does not exist']}, 404
+def create_new_booth(SID):
+    show_id = decodeShowId(SID)
+
+    form = BoothCreateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+
+
+    if form.validate_on_submit():
+
+        show = Show.query.get(show_id)
+        size = Booth_Size.query.filter_by(size='large').first()
+
+        newBooth = Booth(
+            show = show,
+            company = form.data['company'],
+            description = form.data['description'],
+            primary_color = form.data['primaryColor'],
+            secondary_color = form.data['secondaryColor'],
+            size=size
+        )
+
+        newBooth.employees.append(current_user)
+
+        db.session.add(newBooth)
+        db.session.commit()
+
+        # AWS S3 Show Logo Upload
+
+        if form.data['boothLogo']:
+            filename = f"shows/{newBooth.show.SID}/{newBooth.BID}/logo.png"
+
+            upload_file_to_s3(request.files['boothLogo'], filename)
+
+        return newBooth.to_dict()
+
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 
 @show_routes.route('/<SID>/booths/<BID>/', methods=["GET"])

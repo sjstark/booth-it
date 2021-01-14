@@ -92,14 +92,13 @@ export default function CreateBoothForm() {
 
     axios.post(`/api/shows/${SID}/booths/`, formData, config)
       .then(({ data }) => {
-        console.log(data)
-        // history.push(`/shows/${data.SID}/booths/${data.BID}`)
+        history.push(`/shows/${data.SID}/booths/${data.BID}`)
       })
       .catch(err => {
         console.log(err)
-        // if (err.response) {
-        //   setErrors(err.response.data.errors)
-        // }
+        if (err.response) {
+          setErrors(err.response.data.errors)
+        }
       })
 
 
@@ -134,7 +133,10 @@ export default function CreateBoothForm() {
             required={true}
             type="text"
             value={company}
-            error={errors.includes("title : This field is required.") && { msg: "This field is required." }}
+            error={
+              errors.includes("company : This field is required.") && { msg: "This field is required." } ||
+              errors.includes("company : Title must be between 4 and 150 characters in length") && { msg: "This field must be between 4 and 150 characters" }
+            }
             onChange={({ target }) => setCompany(target.value)}
           />
         </div>
@@ -144,7 +146,10 @@ export default function CreateBoothForm() {
             required={true}
             type="text"
             value={description}
-            error={errors.includes("description : This field is required.") && { msg: "This field is required." }}
+            error={
+              errors.includes("description : This field is required.") && { msg: "This field is required." } ||
+              errors.includes("description : Description must be between 10 and 500 characters in length") && { msg: "This field must be between 10 and 500 characters" }
+            }
             onChange={({ target }) => setDescription(target.value)}
             rows={4}
           />
