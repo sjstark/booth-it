@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import io from 'socket.io-client'
 
-const ENDPOINT = "http://localhost:5000"
+// const ENDPOINT = "http://localhost:5000"
 
-const socket = io.connect(ENDPOINT)
+const socket = io()
 
 export default function Messenger() {
   const [messages, setMessages] = useState(["Hello and welcome."])

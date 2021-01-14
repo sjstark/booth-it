@@ -57,17 +57,8 @@ Migrate(app, db)
 # Socket IO for messages
 app.register_blueprint(messenger_bp)
 
-# @socketio.on("connection")
-# def joined(message):
-#     print('New client connected')
-
-# @socketio.on("message")
-# def handle_message(message):
-#     print(message)
-#     send(message, broadcast=True)
-#     return None
-
-socketio.init_app(app, cors_allowed_origins="*")
+# socketio.init_app(app, cors_allowed_origins="*")
+socketio.init_app(app)
 
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(show_routes, url_prefix='/api/shows')
