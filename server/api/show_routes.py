@@ -6,7 +6,6 @@ from server.models import *
 from flask_login import current_user, login_required
 
 from server.forms import *
-from server.utils.awsS3 import upload_file_to_s3
 from server.utils.cipher_suite import *
 
 
@@ -63,9 +62,7 @@ def create_new_show():
         # AWS S3 Show Logo Upload
 
         if form.data['showLogo']:
-            filename = f"shows/{show.SID}/logo.png"
-
-            upload_file_to_s3(request.files['showLogo'], filename)
+            show.upload_picture(request.files['showLogo'])
         return (show.to_dict())
 
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
@@ -153,9 +150,6 @@ def complete_show_update(SID):
             db.session.delete(show_date)
 
         for JSONdate in dates:
-
-            print(JSONdate)
-
             show_date = Show_Date(
                 date = datetime.strptime(JSONdate['date'], "%a, %d %b %Y %H:%M:%S %Z"),
                 start_time = datetime.strptime(JSONdate['startTime'], "%a, %d %b %Y %H:%M:%S %Z"),
@@ -169,9 +163,7 @@ def complete_show_update(SID):
         # AWS S3 Show Logo Upload
 
         if form.data['showLogo']:
-            filename = f"shows/{show.SID}/logo.png"
-
-            upload_file_to_s3(request.files['showLogo'], filename)
+            show.upload_picture(request.files['showLogo'])
 
         return jsonify(show.to_dict())
 
@@ -248,8 +240,6 @@ def create_new_booth(SID):
     form = BoothCreateForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
-
-
     if form.validate_on_submit():
 
         show = Show.query.get(show_id)
@@ -272,9 +262,7 @@ def create_new_booth(SID):
         # AWS S3 Show Logo Upload
 
         if form.data['boothLogo']:
-            filename = f"shows/{newBooth.show.SID}/booths/{newBooth.BID}/logo.png"
-
-            upload_file_to_s3(request.files['boothLogo'], filename)
+            newBooth.upload_picture(request.files['boothLogo'])
 
         return newBooth.to_dict()
 
