@@ -2,7 +2,7 @@ from .db import db
 
 from datetime import datetime
 
-from server.utils.awsS3 import get_file_url
+from server.utils.awsS3 import *
 from server.utils.cipher_suite import *
 
 
@@ -31,18 +31,9 @@ class Show(db.Model):
     primary_color = db.Column(db.String(9), nullable=True)
     secondary_color = db.Column(db.String(9), nullable=True)
     is_private = db.Column(db.Boolean, default=False)
+    has_picture = db.Column(db.Boolean, default=False)
 
     owner = db.relationship('User', backref=db.backref("shows", cascade="all, delete-orphan"))
-
-    # invites = db.relationship("Show_Partner_Invite", backref=db.backref("show", cascade="all, delete-orphan"))
-
-    # dates = db.relationship(
-    #     'Show_Date',
-    #     backref= db.backref(
-    #         "show",
-    #         cascade="all, delete-orphan",
-    #         single_parent=True
-    #     ))
 
     guests = db.relationship('User',
                             secondary=Show_Guests,
@@ -52,9 +43,26 @@ class Show(db.Model):
                                 ))
 
     @property
+    def showLogoUrl(self):
+        if self.has_picture:
+            return get_file_url(f"shows/{self.SID}/logo.png")
+        return None
+
+    @property
     def SID(self):
         return encodeShowId(self.id)
 
+    def upload_picture_file(self, file_location):
+        upload_file_from_local_to_s3(file_location, f"shows/{self.SID}/logo.png")
+        self.has_picture = True
+        db.session.commit()
+        return
+
+    def upload_picture(self, file_buffer):
+        upload_file_to_s3(file_buffer, f"shows/{self.SID}/logo.png")
+        self.has_picture = True
+        db.session.commit()
+        return
 
     def to_dict(self):
         return {
@@ -64,7 +72,7 @@ class Show(db.Model):
             "description": self.description,
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
-            "showLogoURL": get_file_url(f"shows/{self.SID}/logo.png"),
+            "showLogoURL": self.showLogoUrl,
             "startDate": min(self.dates).date.strftime("%m/%d/%Y"),
             "endDate": max(self.dates).date.strftime("%m/%d/%Y")
         }
@@ -78,7 +86,7 @@ class Show(db.Model):
             "primaryColor": self.primary_color,
             "secondaryColor": self.secondary_color,
             "isPrivate": self.is_private,
-            "showLogoURL": get_file_url(f"shows/{self.SID}/logo.png"),
+            "showLogoURL": self.showLogoUrl,
             "booths": [booth.to_dict() for booth in self.booths],
             "dates": [date.to_dict() for date in self.dates],
             "startDate": min(self.dates).date.strftime("%m/%d/%Y"),

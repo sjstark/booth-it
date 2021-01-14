@@ -7,6 +7,7 @@ import HexGridLayout from '../../HexGridLayout'
 import OwnerMenu from '../../OwnerMenu'
 
 import { cacheImages } from '../../../utils/cacheImages'
+import HolderSVG from '../../HolderSVG'
 
 
 
@@ -29,13 +30,21 @@ function BoothsList({ showInfo, SID }) {
 
         return (
           <div key={booth.BID}  {...childProps} >
-            <img
-              onDragStart={(e) => e.preventDefault()}
-              style={{ width: "100%" }}
-              src={booth.boothLogoURL}
-              alt={booth.title}
-              onError={addDefaultSrc}
-            />
+            {
+              booth.boothLogoURL
+                ?
+                <img
+                  onDragStart={(e) => e.preventDefault()}
+                  style={{ width: "100%" }}
+                  src={booth.boothLogoURL}
+                  alt={booth.title}
+                />
+                :
+                <HolderSVG
+                  style={{ widht: "100%" }}
+                  color={booth.primaryColor}
+                />
+            }
           </div>
         )
       })}

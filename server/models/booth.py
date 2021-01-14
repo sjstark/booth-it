@@ -1,6 +1,6 @@
 from .db import db
 
-from server.utils.awsS3 import get_file_url
+from server.utils.awsS3 import *
 from server.utils.cipher_suite import *
 
 
@@ -43,6 +43,8 @@ class Booth(db.Model):
     secondary_color = db.Column(db.String(9), nullable=True)
     size_id = db.Column(db.Integer, db.ForeignKey('booth_sizes.id'))
     profile = db.Column(db.JSON)
+    has_picture = db.Column(db.Boolean, default=False)
+
 
     show = db.relationship("Show", backref=db.backref("booths", cascade="all, delete-orphan"))
 
@@ -60,12 +62,21 @@ class Booth(db.Model):
                                     single_parent=True
                                 ))
 
-
-
     @property
     def BID(self):
         return encodeBoothId(self.id)
 
+    @property
+    def boothLogoUrl(self):
+        if self.has_picture:
+            return get_file_url(f"shows/{self.show.SID}/booths/{self.BID}/logo.png")
+        return None
+
+    def upload_picture(self, file_buffer):
+        upload_file_to_s3(file_buffer, f"shows/{self.show.SID}/booths/{self.BID}/logo.png")
+        self.has_picture = True
+        db.session.commit()
+        return
 
     def to_dict(self):
         return {
@@ -77,7 +88,7 @@ class Booth(db.Model):
             "secondaryColor": self.secondary_color,
             "size": self.size.to_string(),
             "profile": self.profile,
-            "boothLogoURL": get_file_url(f"shows/{self.show.SID}/booths/{self.BID}/logo.png"),
+            "boothLogoURL": self.boothLogoUrl
         }
 
 
@@ -91,7 +102,7 @@ class Booth(db.Model):
             "secondaryColor": self.secondary_color,
             "size": self.size.to_string(),
             "profile": self.profile,
-            "boothLogoURL": get_file_url(f"shows/{encodeShowId(self.show_id)}/booths/{encodeBoothId(self.id)}/logo.png"),
+            "boothLogoURL": self.boothLogoUrl,
             "employees": [employee.to_dict() for employee in self.employees]
         }
 

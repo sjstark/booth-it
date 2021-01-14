@@ -18,13 +18,22 @@ def upload_show_logos():
     alrv_show  = Show.query.filter_by(title="America's Largest RV Show").first()
     ghc_show  = Show.query.filter_by(title="Grace Hopper Celebration").first()
 
-    upload_file_from_local_to_s3('server/seeds/images/shows/CES-logo.png', f"shows/{(ces_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/NAB-logo.png', f"shows/{(nab_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/ComicCon-logo.png', f"shows/{(cc_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/PetCon-logo.png', f"shows/{(pc_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/KBIS-logo.png', f"shows/{(kbis_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/FRVSS-logo.png', f"shows/{(frv_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/UtilityExpo-logo.png', f"shows/{(util_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/SEMA-logo.png', f"shows/{(sema_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/ALRV-logo.png', f"shows/{(alrv_show.to_dict()['SID'])}/logo.png")
-    upload_file_from_local_to_s3('server/seeds/images/shows/GraceHopper-logo.png', f"shows/{(ghc_show.to_dict()['SID'])}/logo.png")
+    ces_show.upload_picture_file('server/seeds/images/shows/CES-logo.png')
+
+    nab_show.upload_picture_file('server/seeds/images/shows/NAB-logo.png')
+
+    cc_show.upload_picture_file('server/seeds/images/shows/ComicCon-logo.png')
+
+    pc_show.upload_picture_file('server/seeds/images/shows/PetCon-logo.png')
+
+    kbis_show.upload_picture_file('server/seeds/images/shows/KBIS-logo.png')
+
+    frv_show.upload_picture_file('server/seeds/images/shows/FRVSS-logo.png')
+
+    util_show.upload_picture_file('server/seeds/images/shows/UtilityExpo-logo.png')
+
+    sema_show.upload_picture_file('server/seeds/images/shows/SEMA-logo.png')
+
+    alrv_show.upload_picture_file('server/seeds/images/shows/ALRV-logo.png')
+
+    ghc_show.upload_picture_file('server/seeds/images/shows/GraceHopper-logo.png')
