@@ -10,7 +10,6 @@ import './index.css';
 import App from './App';
 
 import configureStore from './store'
-import Messenger from './components/Messenger';
 
 const store = configureStore()
 
@@ -27,8 +26,7 @@ function Root() {
 ReactDOM.render(
   <React.StrictMode>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      {/* <Root /> */}
-      <Messenger />
+      <Root />
     </MuiPickersUtilsProvider>
   </React.StrictMode>,
   document.getElementById('root')

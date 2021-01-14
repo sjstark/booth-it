@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, connect, useSelector } from 'react-redux'
 
 import { restoreUser } from './store/session';
@@ -11,6 +11,7 @@ import MainContent from './components/MainContent'
 
 function App({ user, modals }) {
   const location = useLocation()
+  const history = useHistory()
   const dispatch = useDispatch()
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -20,6 +21,12 @@ function App({ user, modals }) {
     dispatch(restoreUser())
       .then(() => setIsLoaded(true))
   }, [dispatch])
+
+  useEffect(() => {
+    if (!user) {
+      history.replace('/')
+    }
+  }, [user])
 
   const loaderHeight = 100;
 
