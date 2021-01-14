@@ -5,10 +5,9 @@ import io from 'socket.io-client'
 
 const socket = io()
 
-export default function Messenger() {
+export default function Messenger({ roomId }) {
   const [messages, setMessages] = useState(["Hello and welcome."])
   const [message, setMessage] = useState('')
-  const [room, setRoom] = useState('')
 
   useEffect(() => {
     getMessages()

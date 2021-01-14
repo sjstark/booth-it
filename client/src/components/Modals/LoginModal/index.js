@@ -13,16 +13,14 @@ function LoginModal({ handleClose }) {
 
   const [open, setOpen] = useState(false)
 
-  // modalsActions.setLoginModal(open, setOpen)
-
   useEffect(() => {
     (async () => {
-      let res = await dispatch(modalsActions.setLoginModal(open, setOpen))
+      await dispatch(modalsActions.setLoginModal(open, setOpen))
     })()
     return async () => {
       await dispatch(modalsActions.removeLoginModal())
     }
-  }, [])
+  }, [dispatch, open])
 
   return (
     <Dialog
