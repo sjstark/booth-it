@@ -1,7 +1,7 @@
 from .db import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from server.utils.awsS3 import get_file_url
+from server.utils.awsS3 import *
 
 
 class User(db.Model, UserMixin):
@@ -15,24 +15,23 @@ class User(db.Model, UserMixin):
     job_title = db.Column(db.String(150))
     card = db.Column(db.JSON)
     hashed_password = db.Column(db.String(255), nullable=False)
-
-    # Moved to the "one" side of the relationship
-    # shows = db.relationship('Show', backref=db.backref("owner"))
-
-    # created_invites = db.relationship(
-    #     "Show_Partner_Invite",
-    #     backref= db.backref("creator", cascade="all, delete-orphan"),
-    #     foreign_keys="show_partner_invites.c.created_by"
-    #     )
-    # accepted_invites = db.relationship(
-    #     "Show_Partner_Invite",
-    #     backref=db.backref("accepted", cascade="all, delete-orphan"),
-    #     foreign_keys="show_partner_invites.c.accepted_by"
-    #     )
+    has_picture = db.Column(db.Boolean, default=False)
 
     @property
     def password(self):
         return self.hashed_password
+
+    def upload_picture(self, file_buffer):
+        upload_file_to_s3(file_buffer, f"users/{self.id}/profilePic.jpg")
+        self.has_picture = True
+        db.session.commit()
+        return
+
+    @property
+    def profilePicUrl(self):
+        if self.has_picture:
+            return get_file_url(f"users/{self.id}/profilePic.jpg")
+        return None
 
     @password.setter
     def password(self, password):
@@ -49,5 +48,5 @@ class User(db.Model, UserMixin):
             "lastName": self.last_name,
             "company": self.company,
             "jobTitle": self.job_title,
-            "profilePicUrl": get_file_url(f"users/{self.id}/profilePic.jpg")
+            "profilePicUrl": self.profilePicUrl
         }
