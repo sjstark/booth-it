@@ -22,7 +22,7 @@ export default function LogoBackground({ animation = true }) {
           <>
             <animated.div style={props}>
               <div className="logo-background__logo-container">
-                <LogoPath style={props} />
+                <LogoPath />
               </div>
             </animated.div>
           </>
@@ -30,7 +30,7 @@ export default function LogoBackground({ animation = true }) {
         {!animated && (
           <>
             <div className="logo-background__logo-container">
-              <LogoPath style={props} />
+              <LogoPath />
             </div>
           </>
         )}
