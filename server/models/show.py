@@ -159,14 +159,9 @@ class Show_Partner_Invite(db.Model):
         foreign_keys="show_partner_invites.c.accepted_by"
         )
 
+    @property
     def is_open(self):
         return not bool(self.accepted_by)
-
-
-    @classmethod
-    def get_invite(cls, IID):
-        invite_id = decodeInviteId(IID)
-        return db.query.get(invite_id)
 
     @property
     def IID(self):
@@ -177,6 +172,11 @@ class Show_Partner_Invite(db.Model):
         return f"/invites?IID={self.IID}&SID={self.show.SID}" + (
             ("&BID="+self.booth.BID) if self.booth else ""
         )
+
+    @classmethod
+    def get_invite(cls, IID):
+        invite_id = decodeInviteId(IID)
+        return db.query.get(invite_id)
 
     def to_dict(self):
         return {
