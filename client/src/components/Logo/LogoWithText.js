@@ -10,7 +10,7 @@ export default function LogoWithText(props) {
 
   const fadeInRight = useSpring({
     to: {
-      opacity: 1,
+      opacity: 100,
       transform: "translate(0)"
     },
     from: {
@@ -21,7 +21,7 @@ export default function LogoWithText(props) {
 
   const fadeInRightDelay = useSpring({
     to: {
-      opacity: 1,
+      opacity: 100,
       transform: "translate(0)"
     },
     from: {
