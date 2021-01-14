@@ -31,10 +31,6 @@ def seed_booths():
             db.session.add(booth)
             db.session.commit() # Commit on each booth in order to get booth.id
 
-            print(booth)
-            print(booth.id)
-            print(booth.BID)
-
             logo = create_company_logo(booth.company, booth.primary_color, booth.secondary_color)
 
             booth.upload_picture(logo)

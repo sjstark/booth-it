@@ -119,7 +119,6 @@ class Show_Date(db.Model):
 
     def date_in(self, array):
         for x in array:
-            print(x)
             if ((x['date'] == self.date)
             and (x['startTime'] == self.start_time)
             and (x['endTime'] == self.end_time)):

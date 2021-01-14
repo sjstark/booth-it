@@ -52,12 +52,6 @@ def accept_invite(IID):
     good_invite = invite.to_dict()
 
     if invite:
-        print('hit invite')
-        print(invite.is_open)
-
-        # if not invite.is_open:
-            # return {"errors": ["The invite has already been accepted."]}, 400
-        # else:
         invite.acceptee = current_user
         db.session.commit()
         return {'success': 'invite accepted'}

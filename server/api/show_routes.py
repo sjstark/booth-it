@@ -75,7 +75,6 @@ def get_public_shows():
     """
     public_shows = Show.query.filter_by(is_private=False).all()
     data = [show.to_dict() for show in public_shows]
-    print(data)
     return jsonify(data)
 
 
