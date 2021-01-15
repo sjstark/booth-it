@@ -18,7 +18,7 @@
   flex-direction: column;
 
   &__connect-status {
-    font-size:12px;
+    font-size:11px;
     margin: 4px auto;
     text-align: center;
   }
@@ -38,30 +38,37 @@
     height: 85%;
     margin: 10px 0;
 
+    display: flex;
+    flex-direction: column;
+
 
     &-item {
       // border: 1px solid orange;
       position: relative;
+      margin:5px 0;
 
       $self: &;
 
       &--local{
         position: relative;
 
-        #{ $self } {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
 
+        #{ $self } {
 
           &-pic{
             left: initial;
             right: 0;
           }
           &-details {
-            transform: translateX(250px);
+            left: initial;
+            right: 60px;
           }
           &-bubble {
-            transform: translateX(375px);
 
-            margin: 0px 50px 30px 00px;
+            margin: 0px 50px 15px 0;
 
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
@@ -87,7 +94,7 @@
       &-pic {
         position: absolute;
 
-        bottom:-15px;
+        bottom:0px;
         left: 0;
 
         width: 30px;
@@ -107,9 +114,9 @@
       }
 
       &-details {
-        font-size: 12px;
+        font-size: 11px;
         position: absolute;
-        bottom: -15px;
+        bottom: 0px;
         left: 60px;
       }
 
@@ -121,7 +128,7 @@
         padding: 10px;
         background-color: var(--neutral-grey);
 
-        margin: 0px 0 30px 50px;
+        margin: 0px 0 15px 50px;
 
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
