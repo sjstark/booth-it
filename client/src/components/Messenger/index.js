@@ -27,7 +27,7 @@ function MessageItem({ msgObj }) {
   if (type === 'message') {
     let msgBody = msg.split('\n').filter(line => line !== '')
     return (
-      <div className={`messenger__list-item${sender.id == user.id ? "--local" : ""}`}>
+      <div className={`messenger__list-item${sender.id === user.id ? "--local" : ""}`}>
         {
           sender.profilePicUrl
             ?
@@ -214,7 +214,7 @@ function MessageInput({ message, setMessage, sendMessage, inputRef }) {
 
 export default function Messenger({ roomId }) {
 
-  const socket = React.useContext(SocketContext)
+  const socket = useContext(SocketContext)
 
   const inputRef = useRef(null)
 
@@ -299,47 +299,45 @@ export default function Messenger({ roomId }) {
   }
 
   return (
-    <div className='messenger__clipping-container'>
-      <div
-        className={`messenger ${showMessenger ? "" : "--hidden"}`}
-        onClick={openMessenger}
-      >
-        <h2 className="messenger__title">
-          <span>
-            Chat:
+    <div
+      className={`messenger ${showMessenger ? "" : "--hidden"}`}
+      onClick={openMessenger}
+    >
+      <h2 className="messenger__title">
+        <span>
+          Chat:
           </span>
-          <span>
-            {roomName}
-          </span>
+        <span>
+          {roomName}
+        </span>
+        {
+          !showMessenger && missedMessages != 0 && (
+            <div className="messenger__missed-messages">
+              {missedMessages}
+            </div>
+          )}
+        <div
+          className="messenger__min"
+          onClick={(e) => { e.stopPropagation(); setShowMessenger(prev => { if (!prev) { inputRef.current.focus() }; return !prev }) }}
+        >
           {
-            !showMessenger && missedMessages != 0 && (
-              <div className="messenger__missed-messages">
-                {missedMessages}
-              </div>
-            )}
-          <div
-            className="messenger__min"
-            onClick={(e) => { e.stopPropagation(); setShowMessenger(prev => { if (!prev) { inputRef.current.focus() }; return !prev }) }}
-          >
-            {
-              showMessenger
-                ?
-                <i className="fas fa-window-minimize" style={{ transform: "translateY(-.55em)" }} />
-                :
-                <i className="far fa-window-maximize" />
-            }
-          </div>
-        </h2>
-        <MessagesList
-          data={messages}
-        />
-        <MessageInput
-          message={message}
-          setMessage={setMessage}
-          sendMessage={sendMessage}
-          inputRef={inputRef}
-        />
-      </div>
+            showMessenger
+              ?
+              <i className="fas fa-window-minimize" style={{ transform: "translateY(-.55em)" }} />
+              :
+              <i className="far fa-window-maximize" />
+          }
+        </div>
+      </h2>
+      <MessagesList
+        data={messages}
+      />
+      <MessageInput
+        message={message}
+        setMessage={setMessage}
+        sendMessage={sendMessage}
+        inputRef={inputRef}
+      />
     </div>
   )
 }

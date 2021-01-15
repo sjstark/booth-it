@@ -20,6 +20,13 @@ date_handler = lambda obj: (
 )
 
 
+@socketio.on_error_default
+def chat_error_handler(e):
+    print('\n\n\n')
+    print('An error has occurred: ' + str(e))
+    print('\n\n\n')
+
+
 @socketio.on("connection")
 def connected(data):
     print('New client connected')
