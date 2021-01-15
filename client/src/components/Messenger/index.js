@@ -46,6 +46,24 @@ function MessageItem({ msgObj }) {
       </div>
     )
   }
+  if (type === 'connection') {
+    return (
+      <>
+        <p className="messenger__connect-status">
+          {`${sender.firstName} ${sender.lastName[0]} joined the chat.`}
+        </p>
+      </>
+    )
+  }
+  if (type === 'disconnection') {
+    return (
+      <>
+        <p className="messenger__connect-status">
+          {`${sender.firstName} ${sender.lastName[0]} left the chat.`}
+        </p>
+      </>
+    )
+  }
   return (
     <>
     </>
@@ -163,7 +181,7 @@ export default function Messenger({ roomId }) {
 
     // On component unmount, leave chat room and remove all relevant listeners
     return (() => {
-      socket.emit('leave', { room: roomId })
+      socket.emit('left', { room: roomId })
       socket.off('message', messageHandler)
       socket.on('user disconnected', disconnectHandler)
       socket.on('user connected', connectHandler)
