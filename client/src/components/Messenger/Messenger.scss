@@ -1,0 +1,24 @@
+.messenger {
+  border-radius: 20px;;
+
+  background-color: white;
+
+  box-shadow: 0 0 10px var(--shadow);
+
+  position: absolute;
+  right: 50px;
+  bottom: 20px;
+
+  padding: 10px;
+  max-height: 60vh;
+  min-height: 40vh;
+
+  &__list {
+    overflow-y: auto;
+    position: relative;
+    max-height:50vh;
+    border: 1px dashed red;
+  }
+
+
+}

@@ -6,6 +6,7 @@ import { format } from 'date-fns'
 
 import SocketContext from '../../utils/socket'
 
+import './Messenger.scss'
 
 // The python json-ify is adding leading and trailing quotes, just remove any for this.
 function parseJSONdatetime(datetime) {
@@ -14,13 +15,64 @@ function parseJSONdatetime(datetime) {
 }
 
 
+
+function MessagesList({ data }) {
+  return (
+    <div className="messenger__list">
+      {data.length > 0 &&
+        data.map((msgObj, idx) => (
+          <div key={`${msgObj.username} ${idx}`}>
+            <p>
+              <span>{msgObj.user.firstName} {msgObj.user.lastName[0]}</span>
+              <span>@ {format(msgObj.time, "K:mm aa")} :</span>
+              <span>{msgObj.msg}</span>
+            </p>
+            <br />
+          </div>
+        ))
+      }
+    </div>
+  )
+}
+
+
+function MessageInput({ message, setMessage, sendMessage }) {
+
+  const keyUp = ({ key }) => {
+    if (key === "Enter") {
+      sendMessage()
+    }
+  }
+
+  return (
+    <div
+      className="messenger__input"
+      onClick={sendMessage}
+      onKeyUp={keyUp}
+    >
+      <div className="messenger__input-text"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <input
+          className="messenger__input-text-field"
+          value={message}
+          onChange={({ target }) => setMessage(target.value)}
+        />
+      </div>
+      <i className="fas fa-paper-plane" />
+    </div>
+  )
+}
+
+
+
 export default function Messenger({ roomId }) {
 
   const socket = React.useContext(SocketContext)
 
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
-  const [room, setRoom] = useState(roomId)
+  const [roomName, setRoomName] = useState('Connecting...')
 
   const user = useSelector(state => state.user)
 
@@ -28,7 +80,7 @@ export default function Messenger({ roomId }) {
 
     // Connect the user to the passed in room id
     socket.emit('join', {
-      room,
+      room: roomId,
       user
     })
 
@@ -43,7 +95,10 @@ export default function Messenger({ roomId }) {
     const connectHandler = (data) => {
       data.type = "connection"
       data.time = parseJSONdatetime(data.time)
+
+      setRoomName(data.roomName)
       console.log(data)
+
       setMessages(prevMsg => [...prevMsg, data])
     }
 
@@ -61,46 +116,42 @@ export default function Messenger({ roomId }) {
 
     // On component unmount, leave chat room and remove all relevant listeners
     return (() => {
-      socket.emit('leave', { room })
+      socket.emit('leave', { room: roomId })
       socket.off('message', messageHandler)
       socket.on('user disconnected', disconnectHandler)
       socket.on('user connected', connectHandler)
     })
-  }, [room])
+  }, [roomId])
 
-  const onChange = e => {
-    setMessage(e.target.value)
-  }
-
-  const onClick = e => {
+  const sendMessage = e => {
     if (message !== '') {
       socket.emit('message', {
-        room,
+        room: roomId,
         msg: message,
         user
       });
       setMessage('')
-    } else {
-      alert('Please Add A Message')
     }
   }
 
   return (
-    <div>
-      {messages.length > 0 &&
-        messages.map((data, idx) => (
-          <div key={`${data.username} ${idx}`}>
-            <p>
-              <span>{data.user.firstName} {data.user.lastName[0]}</span>
-              <span>@ {format(data.time, "K:mm aa")} :</span>
-              <span>{data.msg}</span>
-            </p>
-            <br />
-          </div>
-        ))
-      }
-      <input value={message} name="message" onChange={onChange} />
-      <button onClick={onClick}>Send Message</button>
+    <div className="messenger">
+      <h2 className="messenger__title">
+        <span>
+          Chat:
+        </span>
+        <span>
+          {roomName}
+        </span>
+      </h2>
+      <MessagesList
+        data={messages}
+      />
+      <MessageInput
+        message={message}
+        setMessage={setMessage}
+        sendMessage={sendMessage}
+      />
     </div>
   )
 }

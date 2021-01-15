@@ -24,12 +24,6 @@ function App({ user, modals }) {
       .then(() => setIsLoaded(true))
   }, [dispatch])
 
-  useEffect(() => {
-    if (!user) {
-      history.replace('/')
-    }
-  }, [user])
-
   const loaderHeight = 100;
 
   return (
