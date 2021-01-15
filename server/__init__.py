@@ -57,7 +57,7 @@ Migrate(app, db)
 app.register_blueprint(messenger_bp)
 
 # socketio.init_app(app, cors_allowed_origins="*")
-socketio.init_app(app)
+socketio.init_app(app, {transports: ['websocket']})
 
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(show_routes, url_prefix='/api/shows')
