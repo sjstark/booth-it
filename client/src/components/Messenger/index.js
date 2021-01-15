@@ -4,31 +4,66 @@ import { useSelector } from 'react-redux'
 
 import { format } from 'date-fns'
 
+import TextareaAutosize from 'react-textarea-autosize'
+
 import SocketContext from '../../utils/socket'
 
 import './Messenger.scss'
 
 // The python json-ify is adding leading and trailing quotes, just remove any for this.
 function parseJSONdatetime(datetime) {
+  if (typeof datetime !== "string") { return datetime }
   datetime = datetime.replace(/(^")|("$)/g, "")
   return new Date(datetime)
 }
 
 
+function MessageItem({ msgObj }) {
+  const user = useSelector(state => state.user)
+
+  const { user: sender, time, msg, type } = msgObj
+
+  const formattedTime = format(time, "K:mm aa")
+
+  if (type === 'message') {
+    return (
+      <div className={`messenger__list-item`}>
+        <img
+          src={sender.profilePicUrl}
+          className="messenger__list-item-pic"
+        />
+        <span className="messenger__list-item-details">
+          {[sender.firstName, sender.lastName[0], "at", formattedTime].join(' ')}
+        </span>
+        <div
+          className="messenger__list-item-bubble"
+        >
+          <div className="messenger__list-item-bubble-tip" />
+          <p className="messenger__list-item-content">
+            {msg}
+          </p>
+        </div>
+      </div>
+    )
+  }
+  return (
+    <>
+    </>
+  )
+}
+
 
 function MessagesList({ data }) {
+  //TODO: Implement some type of auto scroll function
+
   return (
     <div className="messenger__list">
       {data.length > 0 &&
         data.map((msgObj, idx) => (
-          <div key={`${msgObj.username} ${idx}`}>
-            <p>
-              <span>{msgObj.user.firstName} {msgObj.user.lastName[0]}</span>
-              <span>@ {format(msgObj.time, "K:mm aa")} :</span>
-              <span>{msgObj.msg}</span>
-            </p>
-            <br />
-          </div>
+          <MessageItem
+            key={`message${msgObj.msg}${idx}`}
+            msgObj={msgObj}
+          />
         ))
       }
     </div>
@@ -37,10 +72,20 @@ function MessagesList({ data }) {
 
 
 function MessageInput({ message, setMessage, sendMessage }) {
+  const [shiftDwn, setShiftDwn] = useState(false)
 
   const keyUp = ({ key }) => {
-    if (key === "Enter") {
+    if (key === "Enter" && !shiftDwn) {
       sendMessage()
+    }
+    else if (key === "Shift") {
+      setShiftDwn(false)
+    }
+  }
+
+  const keyDwn = ({ key }) => {
+    if (key === "Shift") {
+      setShiftDwn(true)
     }
   }
 
@@ -48,15 +93,17 @@ function MessageInput({ message, setMessage, sendMessage }) {
     <div
       className="messenger__input"
       onClick={sendMessage}
-      onKeyUp={keyUp}
     >
       <div className="messenger__input-text"
         onClick={(e) => e.stopPropagation()}
       >
-        <input
+        <TextareaAutosize
           className="messenger__input-text-field"
           value={message}
+          maxRows={4}
           onChange={({ target }) => setMessage(target.value)}
+          onKeyUp={keyUp}
+          onKeyDown={keyDwn}
         />
       </div>
       <i className="fas fa-paper-plane" />

@@ -10,15 +10,147 @@
   bottom: 20px;
 
   padding: 10px;
-  max-height: 60vh;
-  min-height: 40vh;
+  height: 50vh;
+  width: 500px;
+
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    font-weight: bold;
+    font-size: 20px;
+    > *{
+      margin: 5px;
+    }
+  }
 
   &__list {
     overflow-y: auto;
     position: relative;
     max-height:50vh;
-    border: 1px dashed red;
+    height: 85%;
+    margin: 10px 0;
+
+    &-item {
+      // border: 1px solid orange;
+      position: relative;
+
+
+      &-pic {
+        position: absolute;
+
+        bottom:-15px;
+        left: 0;
+
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid black;
+      }
+
+      &-details {
+        font-size: 12px;
+        position: absolute;
+        bottom: -15px;
+        left: 60px;
+      }
+
+      &-bubble {
+        position: relative;
+        max-width: 70%;
+        min-width: 75px;
+        width: fit-content;
+        padding: 10px;
+        background-color: whitesmoke;
+
+        margin: 30px 0 30px 50px;
+
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+
+        &-tip {
+          position:absolute;
+          bottom:0;
+          left: -10px;
+          width: 10px;
+          height: 0;
+          border-right:10px solid whitesmoke;
+          border-top:10px solid transparent;
+        }
+      }
+
+      &-content{
+        width: fit-content;
+      }
+    }
+
   }
 
+  &__input{
+    display: flex;
+    align-items: center;
+
+    position:absolute;
+    bottom:10px;
+
+    height: 32px;
+    width: calc(100% - 20px);
+
+    border: 1px solid grey;
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    background-color: var(--logo1);
+
+    &:hover {
+      background-color: #34f073;
+      border-color: black;
+    }
+
+    &-text{
+      width: 95%;
+      // min-height: 100%;
+
+      align-self: flex-end;
+
+      border: 1px solid grey;
+      border-radius: 15px;
+
+      transform: translate(-2px, 1px);
+
+      background-color: white;
+      padding: 5px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        border-color: black;
+
+
+
+      }
+
+      &-field{
+        width: 90%;
+
+        border: none;
+        outline: none;
+
+        resize: none;
+
+        font-family: var(--body-text);
+      }
+    }
+
+    i {
+      margin: auto;
+      transform: translatex(-3px);
+
+    }
+  }
 
 }
