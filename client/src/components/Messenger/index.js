@@ -9,6 +9,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 import SocketContext from '../../utils/socket'
 
 import './Messenger.scss'
+import HolderSVG from '../HolderSVG'
 
 // The python json-ify is adding leading and trailing quotes, just remove any for this.
 function parseJSONdatetime(datetime) {
@@ -27,11 +28,19 @@ function MessageItem({ msgObj }) {
 
   if (type === 'message') {
     return (
-      <div className={`messenger__list-item`}>
-        <img
-          src={sender.profilePicUrl}
-          className="messenger__list-item-pic"
-        />
+      <div className={`messenger__list-item${sender.id == user.id ? "--local" : ""}`}>
+        {
+          sender.profilePicUrl
+            ?
+            <img
+              src={sender.profilePicUrl}
+              className="messenger__list-item-pic"
+            />
+            :
+            <div className="messenger__list-item-pic">
+              <i className="fas fa-user" />
+            </div>
+        }
         <span className="messenger__list-item-details">
           {[sender.firstName, sender.lastName[0], "at", formattedTime].join(' ')}
         </span>
@@ -66,6 +75,7 @@ function MessageItem({ msgObj }) {
   }
   return (
     <>
+
     </>
   )
 }
@@ -128,7 +138,6 @@ function MessageInput({ message, setMessage, sendMessage }) {
     </div>
   )
 }
-
 
 
 export default function Messenger({ roomId }) {
