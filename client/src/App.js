@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom';
-import { useDispatch, connect, useSelector } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 
 import { restoreUser } from './store/session';
+
+import SocketContext, { socket } from './utils/socket'
 
 import SplashPage from "./components/SplashPage"
 import Loader from "./components/Loader"
@@ -31,7 +33,7 @@ function App({ user, modals }) {
   const loaderHeight = 100;
 
   return (
-    <>
+    <SocketContext.Provider value={socket}>
       {!isLoaded && (
         <div className="full-page flex-centered loader-wrapper logo-background__background-wrapper">
           <Loader duration={2500} style={{ width: `${loaderHeight * 0.86602543}px`, height: `${loaderHeight}px`, margin: "200px auto" }} />
@@ -57,7 +59,7 @@ function App({ user, modals }) {
       >
         <i className="fab fa-github"></i>
       </a>
-    </>
+    </SocketContext.Provider>
   )
 }
 

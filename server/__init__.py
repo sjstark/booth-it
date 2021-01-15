@@ -1,4 +1,5 @@
 import os
+
 from flask import Flask, render_template, request, session, redirect
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -14,7 +15,6 @@ from .seeds import seed_commands
 
 from .config import Config
 
-
 # Initialize Socket IO without app for import into blueprints
 socketio = SocketIO()
 
@@ -27,8 +27,7 @@ from .api.messenger import messenger_bp
 
 app = Flask(__name__)
 
-# # Set the app into debug mode to refresh on detected changes
-# app.debug = debug
+app.debug = False
 
 # Flask Login Manager Setup
 login = LoginManager(app)
