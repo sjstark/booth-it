@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-
 import { useSelector } from 'react-redux'
 
 import { format } from 'date-fns'
@@ -9,7 +8,6 @@ import TextareaAutosize from 'react-textarea-autosize'
 import SocketContext from '../../utils/socket'
 
 import './Messenger.scss'
-import HolderSVG from '../HolderSVG'
 
 // The python json-ify is adding leading and trailing quotes, just remove any for this.
 function parseJSONdatetime(datetime) {
@@ -172,7 +170,7 @@ function MessagesList({ data }) {
 }
 
 
-function MessageInput({ message, setMessage, sendMessage }) {
+function MessageInput({ message, setMessage, sendMessage, inputRef }) {
   const [shiftDwn, setShiftDwn] = useState(false)
 
   const keyUp = ({ key }) => {
@@ -205,6 +203,7 @@ function MessageInput({ message, setMessage, sendMessage }) {
           onChange={({ target }) => setMessage(target.value)}
           onKeyUp={keyUp}
           onKeyDown={keyDwn}
+          ref={inputRef}
         />
       </div>
       <i className="fas fa-paper-plane" />
@@ -217,11 +216,22 @@ export default function Messenger({ roomId }) {
 
   const socket = React.useContext(SocketContext)
 
+  const inputRef = useRef(null)
+
+  const [showMessenger, setShowMessenger] = useState(false)
+  const [missedMessages, setMissedMessages] = useState(0)
+
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
   const [roomName, setRoomName] = useState('Connecting...')
 
   const user = useSelector(state => state.user)
+
+  useEffect(() => {
+    if (!showMessenger) {
+      setMissedMessages(0)
+    }
+  }, [showMessenger])
 
   useEffect(() => {
 
@@ -235,7 +245,9 @@ export default function Messenger({ roomId }) {
     const messageHandler = (data) => {
       data.type = "message"
       data.time = parseJSONdatetime(data.time)
-      console.log(data)
+      if (!showMessenger) {
+        setMissedMessages(count => count + 1)
+      }
       setMessages(prevMsg => [...prevMsg, data])
     }
 
@@ -244,15 +256,12 @@ export default function Messenger({ roomId }) {
       data.time = parseJSONdatetime(data.time)
 
       setRoomName(data.roomName)
-      console.log(data)
-
       setMessages(prevMsg => [...prevMsg, data])
     }
 
     const disconnectHandler = (data) => {
       data.type = "disconnection"
       data.time = parseJSONdatetime(data.time)
-      console.log(data)
       setMessages(prevMsg => [...prevMsg, data])
     }
 
@@ -281,24 +290,56 @@ export default function Messenger({ roomId }) {
     }
   }
 
+  const openMessenger = (e) => {
+    e.stopPropagation();
+    if (!showMessenger) {
+      setShowMessenger(prev => !prev)
+      inputRef.current.focus()
+    }
+  }
+
   return (
-    <div className="messenger">
-      <h2 className="messenger__title">
-        <span>
-          Chat:
-        </span>
-        <span>
-          {roomName}
-        </span>
-      </h2>
-      <MessagesList
-        data={messages}
-      />
-      <MessageInput
-        message={message}
-        setMessage={setMessage}
-        sendMessage={sendMessage}
-      />
+    <div className='messenger__clipping-container'>
+      <div
+        className={`messenger ${showMessenger ? "" : "--hidden"}`}
+        onClick={openMessenger}
+      >
+        <h2 className="messenger__title">
+          <span>
+            Chat:
+          </span>
+          <span>
+            {roomName}
+          </span>
+          {
+            !showMessenger && missedMessages != 0 && (
+              <div className="messenger__missed-messages">
+                {missedMessages}
+              </div>
+            )}
+          <div
+            className="messenger__min"
+            onClick={(e) => { e.stopPropagation(); setShowMessenger(prev => { if (!prev) { inputRef.current.focus() }; return !prev }) }}
+          >
+            {
+              showMessenger
+                ?
+                <i className="fas fa-window-minimize" style={{ transform: "translateY(-.55em)" }} />
+                :
+                <i className="far fa-window-maximize" />
+            }
+          </div>
+        </h2>
+        <MessagesList
+          data={messages}
+        />
+        <MessageInput
+          message={message}
+          setMessage={setMessage}
+          sendMessage={sendMessage}
+          inputRef={inputRef}
+        />
+      </div>
     </div>
   )
 }
