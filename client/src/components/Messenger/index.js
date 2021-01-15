@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
 
@@ -27,6 +27,7 @@ function MessageItem({ msgObj }) {
   const formattedTime = format(time, "K:mm aa")
 
   if (type === 'message') {
+    let msgBody = msg.split('\n').filter(line => line !== '')
     return (
       <div className={`messenger__list-item${sender.id == user.id ? "--local" : ""}`}>
         {
@@ -49,7 +50,11 @@ function MessageItem({ msgObj }) {
         >
           <div className="messenger__list-item-bubble-tip" />
           <p className="messenger__list-item-content">
-            {msg}
+            {msgBody.map((line, idx) => {
+              return (
+                <span key={`${msg}${line}${idx}`}>{line}<br /></span>
+              )
+            })}
           </p>
         </div>
       </div>
@@ -82,10 +87,78 @@ function MessageItem({ msgObj }) {
 
 
 function MessagesList({ data }) {
-  //TODO: Implement some type of auto scroll function
+  const messageListRef = useRef({ current: { scrollTop: 0, offsetHeight: 0, scrollHeight: 0 } })
+
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false)
+
+  const [scrollDistFromTop, setScrollDistFromTop] = useState(0)
+  const [scrollableHeight, setScrollableHeight] = useState(0)
+  const [elementHeight, setElementHeight] = useState(0)
+
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [scrollTimeout, setScrollTimeout] = useState(null)
+
+  const scrollToBottom = () => {
+    let scrollableHeight = messageListRef.current.scrollHeight
+    messageListRef.current.scrollTo({ top: scrollableHeight, behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    if (messageListRef.current) {
+      setElementHeight(messageListRef.current.offsetHeight)
+      setScrollableHeight(messageListRef.current.scrollHeight)
+    }
+  },
+    [
+      messageListRef.current.offsetHeight,
+      messageListRef.current.scrollHeight
+    ]
+  )
+
+  useEffect(() => {
+    if (!isScrolled) {
+      scrollToBottom()
+    }
+  }, [data, isScrolled])
+
+  useEffect(() => {
+    if (elementHeight + scrollDistFromTop < scrollableHeight) {
+      setShowScrollToBottom(true)
+    } else {
+      setShowScrollToBottom(false)
+    }
+
+  },
+    [scrollDistFromTop,
+      scrollableHeight,
+      elementHeight
+    ]
+  )
+
+  const handleScroll = (e) => {
+    setScrollDistFromTop(messageListRef.current.scrollTop)
+    if (scrollTimeout) clearTimeout(scrollTimeout)
+    const timeout = setTimeout(() => {
+      scrollToBottom()
+      setIsScrolled(false)
+      setScrollTimeout(null)
+    }, 15000)
+    setScrollTimeout(timeout)
+  }
 
   return (
-    <div className="messenger__list">
+    <div
+      className="messenger__list" ref={messageListRef}
+      onScroll={handleScroll}
+    >
+      {showScrollToBottom && (
+        <div
+          className="messenger__list-jump"
+          onClick={(e) => { e.stopPropagation(); scrollToBottom() }}
+        >
+          Jump To Recent
+        </div>
+      )}
       {data.length > 0 &&
         data.map((msgObj, idx) => (
           <MessageItem
