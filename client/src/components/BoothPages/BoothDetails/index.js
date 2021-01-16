@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import Messenger from '../../Messenger'
 
 export default function BoothDetails() {
   const { SID, BID } = useParams()
@@ -15,12 +16,15 @@ export default function BoothDetails() {
 
   return (
     <div>
-      <div>
+      {/* <div>
         {SID}
       </div>
       <div>
         {BID}
-      </div>
+      </div> */}
+      <Messenger
+        roomId={BID}
+      />
     </div>
   )
 }

@@ -1,14 +1,13 @@
 import os
+
 from flask import Flask, render_template, request, session, redirect
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
+from flask_socketio import SocketIO, send
 
 from .models import *
-from .api.auth_routes import auth_routes
-from .api.show_routes import show_routes
-from .api.invite_routes import invite_routes
 
 from server.utils.auth import unauthorized
 
@@ -16,7 +15,19 @@ from .seeds import seed_commands
 
 from .config import Config
 
+# Initialize Socket IO without app for import into blueprints
+socketio = SocketIO()
+
+
+# def create_app(debug=False):
+from .api.auth_routes import auth_routes
+from .api.show_routes import show_routes
+from .api.invite_routes import invite_routes
+from .api.messenger import messenger_bp
+
 app = Flask(__name__)
+
+app.debug = False
 
 # Flask Login Manager Setup
 login = LoginManager(app)
@@ -41,6 +52,12 @@ app.config.from_object(Config)
 # Init db with app here
 db.init_app(app)
 Migrate(app, db)
+
+# Socket IO for messages
+app.register_blueprint(messenger_bp)
+
+# Need to allow cross origin for websockets (TODO: Update to be site's origin)
+socketio.init_app(app, cors_allowed_origins="*")
 
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(show_routes, url_prefix='/api/shows')

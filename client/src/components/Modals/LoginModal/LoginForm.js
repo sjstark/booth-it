@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, connect } from 'react-redux';
-import { animated, config, useTransition } from 'react-spring'
 
 import * as sessionActions from '../../../store/session'
 

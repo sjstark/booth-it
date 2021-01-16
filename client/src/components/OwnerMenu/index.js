@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import { useHistory } from 'react-router-dom'
 
@@ -10,15 +10,15 @@ import InviteModal from '../Modals/InviteModal'
 export default function OwnerMenu({ show, booth }) {
   const history = useHistory()
 
-  const [type, setType] = useState(booth ? "Booth" : "Show")
+  const [type] = useState(booth ? "Booth" : "Show")
   const [openInvite, setOpenInvite] = useState(false)
 
   const edit = (e) => {
     e.stopPropagation()
-    if (type == "Booth") {
+    if (type === "Booth") {
       history.push(`/shows/${booth.SID}/booths/${booth.BID}/edit`)
     }
-    else if (type == "Show") {
+    else if (type === "Show") {
       history.push(`/shows/${show.SID}/edit`)
     }
   }

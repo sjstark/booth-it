@@ -21,9 +21,11 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-spring": "^8.0.27",
+    "react-textarea-autosize": "^8.3.0",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "socket.io-client": "^3.0.5"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -9,7 +9,6 @@ import Button from '../../Button'
 import './InviteModal.scss'
 
 import { animated, useSpring } from 'react-spring'
-import { useLocation } from 'react-router-dom'
 import Loader from '../../Loader'
 
 
@@ -104,23 +103,14 @@ export default function InviteModal({ open, onClose, show, booth }) {
 
   const showCreateLink = async (e) => {
     e.stopPropagation()
-    let inviteLink = ''
     if (!booth) {
       // Post to '/api/shows/SID/invites'
       // This will create a new booth (this is an invite for a new company)
-      const res = await axios.post(`/api/shows/${show.SID}/invites/`)
-      inviteLink = res.data
+      await axios.post(`/api/shows/${show.SID}/invites/`)
     } else {
       // Post to '/api/shows/SID/booths/BID/invites
-      const res = await axios.post(`/api/shows/${show.SID}/booths/${booth.BID}/invites/`)
-      inviteLink = res.data
+      await axios.post(`/api/shows/${show.SID}/booths/${booth.BID}/invites/`)
     }
-
-    let urlArr = window.location.href.split('/')
-
-    let baseURL = urlArr.slice(0, 3).join('/')
-
-    inviteLink = baseURL + inviteLink
 
     setNewInvite(prev => !prev)
   }

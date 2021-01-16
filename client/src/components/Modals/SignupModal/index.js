@@ -15,12 +15,12 @@ function SignupModal({ handleClose }) {
 
   useEffect(() => {
     (async () => {
-      let res = await dispatch(modalsActions.setSignupModal(open, setOpen))
+      await dispatch(modalsActions.setSignupModal(open, setOpen))
     })()
     return async () => {
       await dispatch(modalsActions.removeSignupModal())
     }
-  }, [])
+  }, [dispatch, open])
 
   return (
     <Dialog
