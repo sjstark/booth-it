@@ -61,8 +61,6 @@ let initialState = {
 
 function modalsReducer(state = initialState, action) {
   let newState;
-  console.log({ action })
-
   switch (action.type) {
     case SET_LOGIN_MODAL:
       newState = { ...state, login: action.payload }

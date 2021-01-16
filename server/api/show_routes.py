@@ -275,9 +275,11 @@ def get_booth_info(SID, BID):
     if id:
         booth = Booth.query.get(id)
         if booth:
-            print(booth.to_dict_full())
-            return booth.to_dict_full()
-    return {'errors': ['The requested show does not exist']}, 404
+            booth_dict = booth.to_dict_full()
+            if current_user in booth.employees:
+                booth_dict['isAdmin'] = True
+            return booth_dict
+    return {'errors': ['The requested booth does not exist']}, 404
 
 
 @show_routes.route('/search/')

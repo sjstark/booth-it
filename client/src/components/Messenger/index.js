@@ -276,6 +276,7 @@ export default function Messenger({ roomId }) {
       socket.off('message', messageHandler)
       socket.on('user disconnected', disconnectHandler)
       socket.on('user connected', connectHandler)
+      setRoomName('Connecting...')
     })
   }, [roomId])
 
