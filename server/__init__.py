@@ -56,9 +56,8 @@ Migrate(app, db)
 # Socket IO for messages
 app.register_blueprint(messenger_bp)
 
-# socketio.init_app(app, cors_allowed_origins="*")
-
-socketio.init_app(app)
+# Need to allow cross origin for websockets (TODO: Update to be site's origin)
+socketio.init_app(app, cors_allowed_origins="*")
 
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(show_routes, url_prefix='/api/shows')

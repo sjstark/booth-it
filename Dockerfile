@@ -28,4 +28,6 @@ RUN pip install -r requirements.txt
 RUN pip install psycopg2
 
 # Run flask environment
-CMD gunicorn -k eventlet -w 1 server:app
+# worker-class and eventlet allow us to run some async threads of python for
+# websockets (Flask SocketsIO)
+CMD gunicorn --worker-class eventlet -w 1 server:app
