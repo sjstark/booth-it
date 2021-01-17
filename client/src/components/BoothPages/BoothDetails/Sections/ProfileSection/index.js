@@ -109,7 +109,14 @@ function TextSection({ content, setContent, editable, editting, setEditting, sub
 }
 
 
-export default function ProfileSection({ editable, section, saveSection, deleteSection, checkTitle }) {
+export default function ProfileSection({
+  editable,
+  section,
+  saveSection,
+  deleteSection,
+  checkTitle,
+  setEditting: parentSetEditting
+}) {
   const [type, setType] = useState(section.type)
   const [editting, setEditting] = useState(false)
   const [backgroundColor, setBackgroundColor] = useState(section.backgroundColor || "#ffffff")
@@ -119,11 +126,15 @@ export default function ProfileSection({ editable, section, saveSection, deleteS
   const [originalTitle, setOriginalTitle] = useState(section.title || 'Click here to edit the title')
   const [content, setContent] = useState(section.content || {})
 
+  useEffect(() => {
+    parentSetEditting(editting)
+  }, [editting])
 
   const submitEdit = () => {
     if (title !== originalTitle && checkTitle(title)) {
       alert('You already have a section with that title!')
       setEditting(true)
+
     }
     else {
       saveSection({ type, title, content, fontColor, backgroundColor })
@@ -179,7 +190,7 @@ export default function ProfileSection({ editable, section, saveSection, deleteS
         editting={editting}
         setEditting={setEditting}
         submitEdit={submitEdit}
-        deleteSection={deleteSection}
+        deleteSection={() => { parentSetEditting(false); deleteSection() }}
       />
       <ContentEditable
         className="section-text__header"

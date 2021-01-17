@@ -10,7 +10,7 @@ import { getTextColor } from '../../../../../utils/color'
 
 import './ProfileHeader.scss'
 
-export default function ProfileHeader({ booth, editable }) {
+export default function ProfileHeader({ booth, editable, setEditting: parentSetEditting }) {
   const [editting, setEditting] = useState(false)
   const [backgroundColor, setBackgroundColor] = useState(booth.secondaryColor)
   const [headerColor, setHeaderColor] = useState(booth.primaryColor)
@@ -31,6 +31,7 @@ export default function ProfileHeader({ booth, editable }) {
 
   const edit = (e) => {
     setEditting(true)
+    parentSetEditting(true)
   }
 
   const submitEdit = async (e) => {
@@ -58,6 +59,7 @@ export default function ProfileHeader({ booth, editable }) {
     const resJSON = await res.data
 
     setEditting(false)
+    parentSetEditting(false)
   }
 
   const handleTitle = (e) => {

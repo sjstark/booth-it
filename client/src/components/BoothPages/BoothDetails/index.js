@@ -22,6 +22,7 @@ export default function BoothDetails() {
   const [editable, setEditable] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
+  const [editting, setEditting] = useState(false)
 
   useEffect(() => {
     (async () => {
@@ -58,10 +59,6 @@ export default function BoothDetails() {
     setSections(updatedSections)
   }
 
-  useEffect(() => {
-    console.log(sections)
-  }, [sections])
-
   return (
     <>
       <div className="booth-profile__back"
@@ -88,6 +85,7 @@ export default function BoothDetails() {
             <ProfileHeader
               booth={boothInfo}
               editable={editable}
+              setEditting={setEditting}
             />
             {sections.length > 0 &&
               sections.map((section, idx) => (
@@ -105,15 +103,17 @@ export default function BoothDetails() {
                   }}
                   checkTitle={(title) => sections.map(section => section.title).includes(title)}
                   editable={editable}
+                  setEditting={setEditting}
                   key={`section${BID}${idx}${section.title}`}
                 />
               ))
             }
-            {editable && (
+            {editable && !editting && (
               <>
                 <AddSection
                   BID={BID}
                   add={setSections}
+                  setEditting={setEditting}
                 />
               </>
             )}
