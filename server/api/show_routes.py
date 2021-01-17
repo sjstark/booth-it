@@ -243,6 +243,7 @@ def create_new_booth(SID):
 
         newBooth.employees.append(current_user)
 
+
         db.session.add(newBooth)
         db.session.commit()
 
@@ -264,7 +265,7 @@ def get_booth_info(SID, BID):
         booth = Booth.query.get(id)
         if booth:
             booth_dict = booth.to_dict_full()
-            if current_user in booth.employees:
+            if current_user in booth.employees or current_user == booth.show.owner:
                 booth_dict['isAdmin'] = True
             return booth_dict
     return {'errors': ['The requested booth does not exist']}, 404
@@ -281,7 +282,7 @@ def patch_booth_info(SID, BID):
     if id:
         booth = Booth.query.get(id)
         if booth:
-            if current_user not in booth.employees:
+            if current_user not in booth.employees or current_user != booth.show.owner:
                 return {"errors": ["Unauthorized"]}, 401
 
             for key in form.data:
@@ -312,7 +313,7 @@ def delete_booth(SID, BID):
 
     booth = Booth.query.get(id)
 
-    if current_user not in booth.employees:
+    if current_user not in booth.employees or current_user != booth.show.owner:
                 return {"errors": ["Unauthorized"]}, 401
 
     db.session.delete(booth)

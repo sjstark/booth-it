@@ -45,19 +45,21 @@ export default function BoothDetails() {
       >
         <i className="fas fa-chevron-left" />
       </div>
-      <div
-        className="booth-profile__delete"
-      >
-        <Button
-          color="warning"
-          onClick={() => setOpenDelete(true)}
-        >
-          Delete
-        </Button>
-      </div>
       {isLoaded
         ?
         <>
+          {boothInfo.isAdmin && (
+            <div
+              className="booth-profile__delete"
+            >
+              <Button
+                color="warning"
+                onClick={() => setOpenDelete(true)}
+              >
+                Delete
+            </Button>
+            </div>
+          )}
           <div className="booth-profile">
             <ProfileHeader
               booth={boothInfo}
