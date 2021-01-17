@@ -22,7 +22,7 @@ export default function MainFlavor() {
 
   const riseUp = useSpring({
     from: {
-      transform: "translateY(100%)"
+      transform: "translateY(100vh)"
     },
     to: {
       transform: "translateY(0)"
