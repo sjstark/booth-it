@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, connect } from 'react-redux'
 
@@ -23,6 +23,13 @@ function App({ user, modals }) {
     dispatch(restoreUser())
       .then(() => setIsLoaded(true))
   }, [dispatch])
+
+  const socket = useContext(SocketContext)
+
+  useEffect(() => {
+    console.log('userUpdated')
+    // socket.socket.connect()
+  }, [user])
 
   const loaderHeight = 100;
 

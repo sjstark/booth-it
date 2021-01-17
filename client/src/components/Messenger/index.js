@@ -123,7 +123,7 @@ function MessagesList({ data, adminIds = [] }) {
     if (!isScrolled) {
       scrollToBottom()
     }
-    console.log()
+
   }, [data, isScrolled])
 
   useEffect(() => {
@@ -286,7 +286,7 @@ export default function Messenger({ roomId, adminIds = [] }) {
       socket.on('user connected', connectHandler)
       setRoomName('Connecting...')
     })
-  }, [roomId])
+  }, [roomId, user])
 
   const sendMessage = e => {
     if (message !== '') {
