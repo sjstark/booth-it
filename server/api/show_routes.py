@@ -219,12 +219,6 @@ def get_show_invites(SID):
     return jsonify([invite.to_dict()['url'] for invite in show.invites if invite.is_open])
 
 
-@show_routes.route('/<SID>/partners/<userId>/', methods=["DELETE"])
-@login_required
-def delete_show_partner(SID, userId):
-    pass
-
-
 @show_routes.route('/<SID>/booths/', methods=["POST"])
 @login_required
 def create_new_booth(SID):
@@ -309,6 +303,22 @@ def patch_booth_info(SID, BID):
             return booth.to_dict()
 
     return {'errors': ['The requested booth does not exist']}, 404
+
+
+@show_routes.route('/<SID>/booths/<BID>/', methods=["DELETE"])
+@login_required
+def delete_booth(SID, BID):
+    id = decodeBoothId(BID)
+
+    booth = Booth.query.get(id)
+
+    if current_user not in booth.employees:
+                return {"errors": ["Unauthorized"]}, 401
+
+    db.session.delete(booth)
+    db.session.commit()
+
+    return {'message': "Show successfully deleted"}, 200
 
 
 @show_routes.route('/search/')

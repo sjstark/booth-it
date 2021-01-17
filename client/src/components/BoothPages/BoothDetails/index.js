@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
+import axios from 'axios'
+
 import Messenger from '../../Messenger'
 import ProfileHeader from './Sections/ProfileHeader'
 import ProfileSection from './Sections/ProfileSection'
 import AddSection from './Sections/AddSection'
 import Loader from '../../Loader'
+import Button from '../../Button'
+
+import DeleteModal from '../../Modals/DeleteModal'
 
 import './BoothDetails.scss'
 
@@ -15,6 +20,7 @@ export default function BoothDetails() {
   const [boothInfo, setBoothInfo] = useState({})
   const [editable, setEditable] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
 
   useEffect(() => {
     (async () => {
@@ -27,12 +33,27 @@ export default function BoothDetails() {
     })()
   }, [])
 
+  const deleteBooth = async (e) => {
+    const res = await axios.delete(`/api/shows/${SID}/booths/${BID}/`)
+    history.replace(`/shows/${SID}`)
+  }
+
   return (
     <>
       <div className="booth-profile__back"
         onClick={() => { history.goBack() }}
       >
         <i className="fas fa-chevron-left" />
+      </div>
+      <div
+        className="booth-profile__delete"
+      >
+        <Button
+          color="warning"
+          onClick={() => setOpenDelete(true)}
+        >
+          Delete
+        </Button>
       </div>
       {isLoaded
         ?
@@ -76,6 +97,12 @@ export default function BoothDetails() {
           />
         </div>
       }
+      <DeleteModal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        deleteFn={deleteBooth}
+        message={`Are you sure you want to delete ${boothInfo.company}'s Booth?\nThere is no recovering this action.`}
+      />
     </>
   )
 }

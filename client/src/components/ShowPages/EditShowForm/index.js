@@ -152,7 +152,7 @@ export function ShowImagePreview({ show }) {
 }
 
 
-function EditShowForm({ deleteModal }) {
+function EditShowForm() {
   const history = useHistory()
   const { SID } = useParams()
 

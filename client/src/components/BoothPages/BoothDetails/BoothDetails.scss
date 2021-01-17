@@ -29,4 +29,14 @@
       box-shadow: 0 0 10px var(--shadow);
     }
   }
+
+  &__delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 40px;
+    z-index: 100;
+
+  }
 }
