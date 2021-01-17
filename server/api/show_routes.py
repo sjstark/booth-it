@@ -297,7 +297,8 @@ def patch_booth_info(SID, BID):
                 if key == "secondaryColor":
                     booth.secondary_color = form.data[key]
                 if key == "boothLogo":
-                    booth.upload_picture(request.files['boothLogo'])
+                    if request.files:
+                        booth.upload_picture(request.files['boothLogo'])
 
 
             db.session.commit()

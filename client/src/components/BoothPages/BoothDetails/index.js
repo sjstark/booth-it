@@ -105,7 +105,7 @@ export default function BoothDetails() {
                   }}
                   checkTitle={(title) => sections.map(section => section.title).includes(title)}
                   editable={editable}
-                  key={`section${BID}${section.title}`}
+                  key={`section${BID}${idx}${section.title}`}
                 />
               ))
             }

@@ -9,6 +9,7 @@ import { cacheImages } from '../../../utils/cacheImages'
 
 
 export function ShowImage({ show }) {
+  console.log(show)
   return (
     <>
       {

@@ -42,6 +42,7 @@ export default function ProfileHeader({ booth, editable }) {
     formData.append('primaryColor', headerColor)
     formData.append('secondaryColor', backgroundColor)
 
+    console.log(boothLogo)
     if (boothLogo) {
       console.log(boothLogo)
       formData.append('boothLogo', boothLogo)
