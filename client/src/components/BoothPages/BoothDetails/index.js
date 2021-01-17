@@ -18,6 +18,7 @@ export default function BoothDetails() {
   const history = useHistory()
   const { SID, BID } = useParams()
   const [boothInfo, setBoothInfo] = useState({})
+  const [sections, setSections] = useState([])
   const [editable, setEditable] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
@@ -27,10 +28,9 @@ export default function BoothDetails() {
       const res = await fetch(`/api/shows/${SID}/booths/${BID}/`)
       const resJSON = await res.json()
       setBoothInfo(resJSON)
+      setSections(resJSON.profile || [])
       setEditable(Boolean(resJSON.isAdmin))
-      console.log(resJSON)
       setIsLoaded(true)
-
     })()
   }, [])
 
@@ -38,6 +38,10 @@ export default function BoothDetails() {
     const res = await axios.delete(`/api/shows/${SID}/booths/${BID}/`)
     history.replace(`/shows/${SID}`)
   }
+
+  useEffect(() => {
+    console.log(sections)
+  }, [sections])
 
   return (
     <>
@@ -66,10 +70,16 @@ export default function BoothDetails() {
               booth={boothInfo}
               editable={editable}
             />
-            {boothInfo.profile &&
-              boothInfo.profile.sections.map((section, idx) => (
+            {sections.length > 0 &&
+              sections.map((section, idx) => (
                 <ProfileSection
-                  contents={section}
+                  section={section}
+                  saveSection={(section) => {
+                    setSections(prevSections => {
+                      prevSections[idx] = section
+                      return prevSections
+                    })
+                  }}
                   editable={editable}
                   key={`section${BID}${idx}`}
                 />
@@ -79,6 +89,7 @@ export default function BoothDetails() {
               <>
                 <AddSection
                   BID={BID}
+                  add={setSections}
                 />
               </>
             )}
