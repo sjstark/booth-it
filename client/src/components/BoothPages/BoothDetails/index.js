@@ -28,6 +28,7 @@ export default function BoothDetails() {
       const resJSON = await res.json()
       setBoothInfo(resJSON)
       setEditable(Boolean(resJSON.isAdmin))
+      console.log(resJSON)
       setIsLoaded(true)
 
     })()
@@ -85,6 +86,7 @@ export default function BoothDetails() {
 
           <Messenger
             roomId={BID}
+            adminIds={boothInfo.employees.map(employee => employee.id)}
           />
         </>
         :
