@@ -1,0 +1,29 @@
+.booth-section__header {
+  min-width: 70vw;
+  max-width: 90vw;
+  min-height: 30vh;
+  border-radius: 30px;
+  box-shadow: 0 0 10px var(--shadow);
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+
+  background-color: white;
+
+  &-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-title {
+    font-size: 32px;
+    font-family: var(--title-text);
+    margin: 1em 0
+  }
+
+  &-body {
+    font-family: var(--body-text);
+  }
+}
