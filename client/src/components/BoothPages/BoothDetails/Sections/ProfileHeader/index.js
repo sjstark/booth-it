@@ -1,13 +1,73 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
+
+import ContentEditable from 'react-contenteditable'
+import sanitizeHtml from 'sanitize-html'
+
+
+import { getTextColor } from '../../../../../utils/color'
 
 import './ProfileHeader.scss'
 
 export default function ProfileHeader({ booth, editable }) {
-  console.log(booth)
+  const [editting, setEditting] = useState(false)
+  const [backgroundColor, setBackgroundColor] = useState(booth.secondaryColor)
+  const [headerColor, setHeaderColor] = useState(booth.primaryColor)
+
+  const title = useRef(booth.company)
+  const description = useRef(booth.description)
+
+  const edit = (e) => {
+    setEditting(true)
+    console.log('editing!')
+  }
+
+  const submitEdit = (e) => {
+    setEditting(false)
+    console.log('complete editing')
+  }
+
+  const handleTitle = (e) => {
+    let value = e.target.value
+    if (value.length >= 4 && value.length <= 150) {
+      title.current = value
+    }
+  }
+
+  const handleDescription = (e) => {
+    let value = e.target.value
+    if (value.length >= 10 && value.length <= 500) {
+      description.current = value
+    }
+  }
+
   return (
-    <div className="booth-section__header">
+    <div className="section__header" style={{ backgroundColor }}>
+      {editable &&
+        (editting
+          ?
+          (
+            <>
+              <div
+                title={`Confirm Edits`}
+                onClick={submitEdit}
+                className="section__edit"
+              >
+                <i className="fas fa-check" />
+              </div>
+            </>
+          )
+          :
+          (<div
+            title={`Edit Section`}
+            onClick={edit}
+            className="section__edit"
+          >
+            <i className="fas fa-pencil-alt" />
+          </div>)
+        )
+      }
       { booth.boothLogoURL &&
-        <section className="booth-section__header-left">
+        <section className="section__header-left">
           <img
             onDragStart={(e) => e.preventDefault()}
             style={{ width: "100%" }}
@@ -16,13 +76,21 @@ export default function ProfileHeader({ booth, editable }) {
           />
         </section>
       }
-      <section className="booth-section__header-right">
-        <h1 className="booth-section__header-title">
-          {booth.company}
-        </h1>
-        <p className="booth-section__header-body">
-          {booth.description}
-        </p>
+      <section className="section__header-right">
+        <ContentEditable
+          className="section__header-title"
+          style={{ color: headerColor }}
+          disabled={!editting}
+          html={title.current}
+          onChange={handleTitle}
+        />
+        <ContentEditable
+          className="section__header-body"
+          style={{ color: getTextColor(backgroundColor) }}
+          disabled={!editting}
+          html={description.current}
+          onChange={handleDescription}
+        />
       </section>
     </div>
   )

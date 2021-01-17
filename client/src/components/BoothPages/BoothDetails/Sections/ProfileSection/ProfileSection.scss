@@ -1,0 +1,27 @@
+.section__edit{
+  position: absolute;
+  top: 1em;
+  right: 1em;
+
+  background-color: var(--neutral-grey);
+  padding: .5em;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--shadow);
+
+  opacity: 0.5;
+
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+
+  }
+}
+
+div[contenteditable=true] {
+  outline: 1px solid grey;
+  outline-offset: .2em;
+  &:focus {
+    outline: 2px solid grey;
+  }
+}

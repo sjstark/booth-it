@@ -22,6 +22,7 @@
     border-radius: 50%;
     color: white;
     cursor: pointer;
+    z-index: 100;
 
     &:hover {
       filter: saturate(120%) brightness(80%);
