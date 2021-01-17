@@ -111,7 +111,6 @@ export default function BoothDetails() {
             {editable && !editting && (
               <>
                 <AddSection
-                  BID={BID}
                   add={setSections}
                   setEditting={setEditting}
                 />

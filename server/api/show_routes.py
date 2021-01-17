@@ -342,6 +342,28 @@ def put_booth_profile(SID, BID):
     return booth.to_dict()
 
 
+@show_routes.route('/<SID>/booths/<BID>/content/', methods=["POST"])
+@login_required
+def upload_booth_content(SID, BID):
+    print('\n\n\n\n\n')
+    print(request.files['content'])
+
+    id = decodeBoothId(BID)
+
+    booth = Booth.query.get(id)
+
+
+    if current_user not in booth.employees or current_user != booth.show.owner:
+                return {"errors": ["Unauthorized"]}, 401
+
+    if request.files:
+        content_location = booth.upload_picture_to_content(request.files['content'])
+        return content_location
+    return {"errors": ["No Files Attached"]}, 400
+
+
+
+
 @show_routes.route('/search/')
 @login_required
 def search_shows():

@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import ReactPlayer from 'react-player'
 import ContentEditable from 'react-contenteditable'
-import sanitizeHtml from 'sanitize-html'
 
 import Button from '../../../../Button'
 import ColorPickerBox from "../../../../Color/ColorPicker";
+
+import TextSection from './TextSection'
+import VideoSection from './VideoSection'
+import ImageSection from './ImageSection'
 
 import './ProfileSection.scss'
 
@@ -75,83 +77,9 @@ function ColorEditor({ editting, setFontColor, setBackgroundColor, backgroundCol
 }
 
 
-function VideoSection({ content, setContent, editting }) {
-  const [videoUrl, setVideoUrl] = useState(content.videoUrl || "")
-
-  useEffect(() => {
-    setContent(prev => ({ ...prev, videoUrl }))
-  }, [videoUrl])
 
 
-  return (
-    <>
-      { editting && (
-        <div className="section-video__input">
-          <div className="section-video__instructions">
-            <p>
-              {"Please paste in the link to your video or live stream."}
-            </p>
-            <p >
-              {"Currently, we accept links from: YouTube, Facebook, SoundCloud, Streamable, Vimeo, Wistia, Twitch, DailyMotion, and Vidyard."}
-            </p>
-            <p >
-              {"If your video is hosted elsewhere, we also accept urls to filetypes taht use <video> or <audio> elements."}
-            </p>
-          </div>
-          <label className="section-video__input-label">
-            Video URL:
-          </label>
-          <input
-            className="section-video__input-field"
-            type="text"
-            placeholder="i.e. https://www.youtube.com/watch?v=ysz5S6PUM-U"
-            value={videoUrl}
-            onChange={({ target }) => setVideoUrl(target.value)}
-          />
-        </div>
-      )}
-      <ReactPlayer
-        width="100%"
-        url={videoUrl}
-      />
-    </>
-  )
-}
 
-
-function TextSection({ content, setContent, editting }) {
-  const [headerText, setHeaderText] = useState(content.header ? content.header : 'Click here to edit the header')
-  const [bodyText, setBodyText] = useState(content.body ? content.body : 'Click here to edit the body text!')
-
-  useEffect(() => {
-    setContent(prev => ({ ...prev, header: headerText, body: bodyText }))
-  }, [headerText, bodyText])
-
-  let sanitizeConf = {
-    allowedTags: ["b", "i", "em", "p",],
-    allowedAttributes: {
-      '*': []
-    },
-    allowedStyles: {
-      '*': {
-        'color': [/^ $/g]
-      }
-    }
-  };
-
-  return (
-    <>
-
-
-      <ContentEditable
-        className="section-text__body"
-        disabled={!editting}
-        html={bodyText}
-        onChange={({ target }) => setBodyText(sanitizeHtml(target.value, sanitizeConf))}
-      />
-    </>
-  )
-}
 
 
 export default function ProfileSection({
@@ -172,7 +100,9 @@ export default function ProfileSection({
   const [content, setContent] = useState(section.content || {})
 
   useEffect(() => {
-    parentSetEditting(editting)
+    if (type !== 'new') {
+      parentSetEditting(editting)
+    }
   }, [editting])
 
   const submitEdit = () => {
@@ -205,11 +135,16 @@ export default function ProfileSection({
         >
           Video Section
         </Button>
-        {/* <Button
-          onClick={() => console.log('image')}
+        <Button
+          onClick={() => { setType('image'); setEditting(true) }}
         >
           Image Section
-        </Button> */}
+        </Button>
+        <Button
+          onClick={() => { parentSetEditting(false); deleteSection() }}
+        >
+          Cancel
+        </Button>
       </div>
     )
   }
@@ -231,6 +166,18 @@ export default function ProfileSection({
   if (type === "video") {
     SectionBody = (
       <VideoSection
+        editable={editable}
+        editting={editting}
+        setEditting={setEditting}
+        submitEdit={submitEdit}
+        content={content}
+        setContent={setContent}
+      />
+    )
+  }
+  if (type === "image") {
+    SectionBody = (
+      <ImageSection
         editable={editable}
         editting={editting}
         setEditting={setEditting}
