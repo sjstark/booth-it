@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
 
+import axios from 'axios'
+
 import ContentEditable from 'react-contenteditable'
 import sanitizeHtml from 'sanitize-html'
 
@@ -18,12 +20,18 @@ export default function ProfileHeader({ booth, editable }) {
 
   const edit = (e) => {
     setEditting(true)
-    console.log('editing!')
   }
 
-  const submitEdit = (e) => {
+  const submitEdit = async (e) => {
     setEditting(false)
-    console.log('complete editing')
+    let edits = {
+      title: title.current,
+      description: description.current
+    }
+
+    const res = await axios.patch(`/api/shows/${booth.SID}/booths/${booth.BID}/`, { edits })
+    const resJSON = await res.data
+    console.log(resJSON)
   }
 
   const handleTitle = (e) => {

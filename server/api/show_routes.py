@@ -169,12 +169,6 @@ def complete_show_update(SID):
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 
-@show_routes.route('/<SID>/', methods=["PATCH"])
-@login_required
-def partial_show_update(SID):
-    pass
-
-
 @show_routes.route('/<SID>/', methods=["DELETE"])
 @login_required
 def delete_show(SID):
@@ -279,6 +273,31 @@ def get_booth_info(SID, BID):
             if current_user in booth.employees:
                 booth_dict['isAdmin'] = True
             return booth_dict
+    return {'errors': ['The requested booth does not exist']}, 404
+
+
+@show_routes.route('/<SID>/booths/<BID>/', methods=["PATCH"])
+@login_required
+def patch_booth_info(SID, BID):
+    id = decodeBoothId(BID)
+    if id:
+        booth = Booth.query.get(id)
+        if booth:
+            if current_user not in booth.employees:
+                return {"errors": ["Unauthorized"]}, 401
+
+            edits = request.json['edits']
+
+            for key in edits:
+                if key == "title":
+                    booth.title = edits[key]
+                if key == "description":
+                    booth.description = edits[key]
+
+
+            db.session.commit()
+            return booth.to_dict()
+
     return {'errors': ['The requested booth does not exist']}, 404
 
 
