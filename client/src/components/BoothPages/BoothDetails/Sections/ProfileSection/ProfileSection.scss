@@ -1,27 +1,59 @@
-.section__edit{
-  position: absolute;
-  top: 1em;
-  right: 1em;
-
-  background-color: var(--neutral-grey);
-  padding: .5em;
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--shadow);
-
-  opacity: 0.5;
-
-  cursor: pointer;
-
-  &:hover {
-    opacity: 1;
-
-  }
-}
-
 div[contenteditable=true] {
   outline: 1px solid grey;
   outline-offset: .2em;
   &:focus {
     outline: 2px solid grey;
+  }
+}
+
+.section{
+  position: relative;
+  z-index: 5;
+
+  &__edit,
+  &__edit-picture{
+    position: absolute;
+    top: 1em;
+    right: 1em;
+
+    background-color: var(--neutral-grey);
+    padding: .5em;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--shadow);
+
+    opacity: 0.5;
+
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+
+    }
+  }
+
+  &__edit-picture{
+    right: initial;
+    left: 1em;
+  }
+
+  &__color-tray{
+    position:absolute;
+    bottom: -50px;
+    right: 30px;
+
+    display: flex;
+    align-items: center;
+
+    background-color: white;
+    box-shadow: 0 0 10px var(--shadow);
+
+    padding: 10px;
+    border-radius: 10px;
+
+    z-index: 0;
+
+    > * {
+      padding: 0 1em;
+    }
   }
 }

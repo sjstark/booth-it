@@ -280,19 +280,29 @@ def get_booth_info(SID, BID):
 @login_required
 def patch_booth_info(SID, BID):
     id = decodeBoothId(BID)
+
+    form = BoothCreateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
     if id:
         booth = Booth.query.get(id)
         if booth:
             if current_user not in booth.employees:
                 return {"errors": ["Unauthorized"]}, 401
 
-            edits = request.json['edits']
-
-            for key in edits:
+            for key in form.data:
+                # print(key)
+                # print(form.data[key])
                 if key == "title":
-                    booth.title = edits[key]
+                    booth.title = form.data[key]
                 if key == "description":
-                    booth.description = edits[key]
+                    booth.description = form.data[key]
+                if key == "primaryColor":
+                    booth.primary_color = form.data[key]
+                if key == "secondaryColor":
+                    booth.secondary_color = form.data[key]
+                if key == "boothLogo":
+                    booth.upload_picture(request.files['boothLogo'])
 
 
             db.session.commit()

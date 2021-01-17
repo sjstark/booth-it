@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import axios from 'axios'
 
 import ContentEditable from 'react-contenteditable'
 import sanitizeHtml from 'sanitize-html'
 
-
+import ColorPickerBox from "../../../../Color/ColorPicker";
 import { getTextColor } from '../../../../../utils/color'
 
 import './ProfileHeader.scss'
@@ -15,23 +15,51 @@ export default function ProfileHeader({ booth, editable }) {
   const [backgroundColor, setBackgroundColor] = useState(booth.secondaryColor)
   const [headerColor, setHeaderColor] = useState(booth.primaryColor)
 
+  const [primaryColor, setPrimaryColor] = useState({ hex: booth.primaryColor })
+  const [secondaryColor, setSecondaryColor] = useState({ hex: booth.secondaryColor })
+
+  const [boothLogo, setBoothLogo] = useState(null)
+
+  useEffect(() => {
+    setHeaderColor(primaryColor.hex)
+    setBackgroundColor(secondaryColor.hex)
+  }, [primaryColor, secondaryColor])
+
   const title = useRef(booth.company)
   const description = useRef(booth.description)
+  const fileInput = useRef(null)
 
   const edit = (e) => {
     setEditting(true)
   }
 
   const submitEdit = async (e) => {
-    setEditting(false)
-    let edits = {
-      title: title.current,
-      description: description.current
+
+    let formData = new FormData()
+
+    formData.append('title', title.current)
+    formData.append('description', description.current)
+    formData.append('primaryColor', headerColor)
+    formData.append('secondaryColor', backgroundColor)
+
+    console.log(formData)
+
+    if (boothLogo) {
+      console.log(boothLogo)
+      formData.append('boothLogo', boothLogo)
     }
 
-    const res = await axios.patch(`/api/shows/${booth.SID}/booths/${booth.BID}/`, { edits })
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data"
+      }
+    }
+    console.log(formData)
+
+    const res = await axios.patch(`/api/shows/${booth.SID}/booths/${booth.BID}/`, formData, config)
     const resJSON = await res.data
-    console.log(resJSON)
+
+    setEditting(false)
   }
 
   const handleTitle = (e) => {
@@ -48,8 +76,14 @@ export default function ProfileHeader({ booth, editable }) {
     }
   }
 
+  const fileChange = ({ target }) => {
+    if (target.files && target.files.length > 0) {
+      setBoothLogo(target.files[0])
+    }
+  }
+
   return (
-    <div className="section__header" style={{ backgroundColor }}>
+    <div className="section section__header" style={{ backgroundColor }}>
       {editable &&
         (editting
           ?
@@ -62,6 +96,20 @@ export default function ProfileHeader({ booth, editable }) {
               >
                 <i className="fas fa-check" />
               </div>
+              <div
+                title={`Change Pic`}
+                onClick={() => fileInput.current.click()}
+                className="section__edit-picture"
+              >
+                <i className="fas fa-camera" />
+              </div>
+              <input
+                ref={fileInput}
+                type='file'
+                style={{ display: 'none' }}
+                onChange={fileChange}
+                accept={"image/*"}
+              />
             </>
           )
           :
@@ -74,12 +122,12 @@ export default function ProfileHeader({ booth, editable }) {
           </div>)
         )
       }
-      { booth.boothLogoURL &&
+      {booth.boothLogoURL &&
         <section className="section__header-left">
           <img
             onDragStart={(e) => e.preventDefault()}
             style={{ width: "100%" }}
-            src={booth.boothLogoURL}
+            src={boothLogo ? URL.createObjectURL(boothLogo) : booth.boothLogoURL}
             alt={booth.company}
           />
         </section>
@@ -100,6 +148,22 @@ export default function ProfileHeader({ booth, editable }) {
           onChange={handleDescription}
         />
       </section>
+      {
+        editting && (
+          <div className="section__color-tray">
+            <label>Logo Color:</label>
+            <ColorPickerBox
+              color={primaryColor}
+              onChangeComplete={(color) => { setPrimaryColor(color) }}
+            />
+            <label>Background Color:</label>
+            <ColorPickerBox
+              color={secondaryColor}
+              onChangeComplete={(color) => { setSecondaryColor(color) }}
+            />
+          </div>
+        )
+      }
     </div>
   )
 }
