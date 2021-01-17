@@ -8,7 +8,7 @@ import ColorPickerBox from "../../../../Color/ColorPicker";
 
 import './ProfileSection.scss'
 
-function SectionEditTools({ editable, editting, submitEdit, setEditting }) {
+function SectionEditTools({ editable, editting, submitEdit, setEditting, deleteSection }) {
   const edit = (e) => {
     setEditting(true)
   }
@@ -25,6 +25,13 @@ function SectionEditTools({ editable, editting, submitEdit, setEditting }) {
             className="section__edit"
           >
             <i className="fas fa-check" />
+          </div>
+          <div
+            title={`Delete Section`}
+            onClick={() => { setEditting(false); deleteSection() }}
+            className="section__edit section__edit-delete"
+          >
+            <i className="fas fa-trash" />
           </div>
         </>
       )
@@ -90,13 +97,7 @@ function TextSection({ content, setContent, editable, editting, setEditting, sub
   return (
     <>
 
-      <ContentEditable
-        className="section-text__header"
-        disabled={!editting}
-        html={headerText}
-        onChange={({ target }) => setHeaderText(target.value)}
 
-      />
       <ContentEditable
         className="section-text__body"
         disabled={!editting}
@@ -108,17 +109,26 @@ function TextSection({ content, setContent, editable, editting, setEditting, sub
 }
 
 
-export default function ProfileSection({ editable, section, saveSection }) {
+export default function ProfileSection({ editable, section, saveSection, deleteSection, checkTitle }) {
   const [type, setType] = useState(section.type)
   const [editting, setEditting] = useState(false)
   const [backgroundColor, setBackgroundColor] = useState(section.backgroundColor || "#ffffff")
   const [fontColor, setFontColor] = useState(section.fontColor || "#000000")
 
+  const [title, setTitle] = useState(section.title || 'Click here to edit the title')
+  const [originalTitle, setOriginalTitle] = useState(section.title || 'Click here to edit the title')
   const [content, setContent] = useState(section.content || {})
 
 
   const submitEdit = () => {
-    saveSection({ type, content, fontColor, backgroundColor })
+    if (title !== originalTitle && checkTitle(title)) {
+      alert('You already have a section with that title!')
+      setEditting(true)
+    }
+    else {
+      saveSection({ type, title, content, fontColor, backgroundColor })
+      setOriginalTitle(title)
+    }
   }
 
 
@@ -169,6 +179,13 @@ export default function ProfileSection({ editable, section, saveSection }) {
         editting={editting}
         setEditting={setEditting}
         submitEdit={submitEdit}
+        deleteSection={deleteSection}
+      />
+      <ContentEditable
+        className="section-text__header"
+        disabled={!editting}
+        html={title}
+        onChange={({ target }) => setTitle(target.value)}
       />
       {SectionBody}
       <ColorEditor

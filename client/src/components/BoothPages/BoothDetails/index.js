@@ -49,6 +49,15 @@ export default function BoothDetails() {
     await axios.put(`/api/shows/${SID}/booths/${BID}/profile/`, JSON.stringify(sections), config)
   }
 
+  const deleteSection = async (idx) => {
+    let prevSections = sections
+
+    let updatedSections = prevSections.slice(0, idx).concat(prevSections.slice(idx + 1))
+    postSections(updatedSections)
+
+    setSections(updatedSections)
+  }
+
   useEffect(() => {
     console.log(sections)
   }, [sections])
@@ -85,15 +94,18 @@ export default function BoothDetails() {
                 <ProfileSection
                   section={section}
                   saveSection={(section) => {
-                    console.log('Saving')
                     setSections(prevSections => {
                       prevSections[idx] = section
                       postSections(prevSections)
                       return prevSections
                     })
                   }}
+                  deleteSection={() => {
+                    deleteSection(idx)
+                  }}
+                  checkTitle={(title) => sections.map(section => section.title).includes(title)}
                   editable={editable}
-                  key={`section${BID}${idx}`}
+                  key={`section${BID}${section.title}`}
                 />
               ))
             }

@@ -43,6 +43,9 @@ div[contenteditable=true] {
     right: initial;
     left: 1em;
   }
+  &__edit-delete{
+    top: 3.5em
+  }
 
   &__color-tray{
     position:absolute;
@@ -67,17 +70,7 @@ div[contenteditable=true] {
 
 
   &-text{
-    b {
-      font-weight: bold;
-    }
 
-    i {
-      font-style: italic
-    }
-
-    u {
-      text-decoration: underline;
-    }
 
     &__header {
       font-size: 32px;
@@ -87,6 +80,18 @@ div[contenteditable=true] {
 
     &__body {
       font-family: var(--body-text);
+
+      b {
+        font-weight: bold;
+      }
+
+      i {
+        font-style: italic
+      }
+
+      u {
+        text-decoration: underline;
+      }
     }
   }
 }
