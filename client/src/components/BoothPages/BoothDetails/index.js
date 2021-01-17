@@ -62,7 +62,7 @@ export default function BoothDetails() {
   return (
     <>
       <div className="booth-profile__back"
-        onClick={() => { history.goBack() }}
+        onClick={() => { history.push(`/shows/${SID}`) }}
       >
         <i className="fas fa-chevron-left" />
       </div>
