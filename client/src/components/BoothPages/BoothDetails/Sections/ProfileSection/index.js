@@ -54,12 +54,12 @@ function ColorEditor({ editting, setFontColor, setBackgroundColor, backgroundCol
     <div className="section__color-tray">
       <label>Font Color:</label>
       <ColorPickerBox
-        color={fontColor}
+        color={fontColorObj}
         onChangeComplete={(color) => { setFontColorObj(color) }}
       />
       <label>Background Color:</label>
       <ColorPickerBox
-        color={backgroundColor}
+        color={backColorObj}
         onChangeComplete={(color) => { setBackColorObj(color) }}
       />
     </div>
@@ -111,14 +111,14 @@ function TextSection({ content, setContent, editable, editting, setEditting, sub
 export default function ProfileSection({ editable, section, saveSection }) {
   const [type, setType] = useState(section.type)
   const [editting, setEditting] = useState(false)
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff")
-  const [fontColor, setFontColor] = useState("#000000")
+  const [backgroundColor, setBackgroundColor] = useState(section.backgroundColor || "#ffffff")
+  const [fontColor, setFontColor] = useState(section.fontColor || "#000000")
 
-  const [content, setContent] = useState({})
+  const [content, setContent] = useState(section.content || {})
 
 
-  const submitEdit = (content) => {
-    saveSection({ type, content })
+  const submitEdit = () => {
+    saveSection({ type, content, fontColor, backgroundColor })
   }
 
 
@@ -163,7 +163,7 @@ export default function ProfileSection({ editable, section, saveSection }) {
     )
   }
   return (
-    <div className="section section-text">
+    <div className="section section-text" style={{ color: fontColor, backgroundColor: backgroundColor }}>
       <SectionEditTools
         editable={editable}
         editting={editting}

@@ -39,6 +39,16 @@ export default function BoothDetails() {
     history.replace(`/shows/${SID}`)
   }
 
+  const postSections = async (sections) => {
+    const config = {
+      headers: {
+        "content-type": "application/json"
+      }
+    }
+
+    await axios.put(`/api/shows/${SID}/booths/${BID}/profile/`, JSON.stringify(sections), config)
+  }
+
   useEffect(() => {
     console.log(sections)
   }, [sections])
@@ -75,8 +85,10 @@ export default function BoothDetails() {
                 <ProfileSection
                   section={section}
                   saveSection={(section) => {
+                    console.log('Saving')
                     setSections(prevSections => {
                       prevSections[idx] = section
+                      postSections(prevSections)
                       return prevSections
                     })
                   }}

@@ -322,6 +322,25 @@ def delete_booth(SID, BID):
     return {'message': "Show successfully deleted"}, 200
 
 
+@show_routes.route('/<SID>/booths/<BID>/profile/', methods=["PUT"])
+@login_required
+def put_booth_profile(SID, BID):
+    id = decodeBoothId(BID)
+
+    booth = Booth.query.get(id)
+
+    if current_user not in booth.employees or current_user != booth.show.owner:
+                return {"errors": ["Unauthorized"]}, 401
+
+    booth.profile = request.get_json()
+    print('\n\n\n\n')
+    print(booth.profile)
+    print('\n\n\n\n')
+    db.session.commit()
+
+    return booth.to_dict()
+
+
 @show_routes.route('/search/')
 @login_required
 def search_shows():

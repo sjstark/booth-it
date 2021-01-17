@@ -42,8 +42,6 @@ export default function ProfileHeader({ booth, editable }) {
     formData.append('primaryColor', headerColor)
     formData.append('secondaryColor', backgroundColor)
 
-    console.log(formData)
-
     if (boothLogo) {
       console.log(boothLogo)
       formData.append('boothLogo', boothLogo)
@@ -54,7 +52,6 @@ export default function ProfileHeader({ booth, editable }) {
         "content-type": "multipart/form-data"
       }
     }
-    console.log(formData)
 
     const res = await axios.patch(`/api/shows/${booth.SID}/booths/${booth.BID}/`, formData, config)
     const resJSON = await res.data
