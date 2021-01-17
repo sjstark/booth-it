@@ -85,6 +85,14 @@ export default function ShowDetails() {
 
   return (
     <div>
+      <div className="booth-profile__back"
+        onClick={() => { history.push(`/shows/`) }}
+      >
+        <i className="fas fa-chevron-left" />
+      </div>
+      <h1 style={{ fontSize: "30px", fontFamily: "'Bungee', sans-seriff", margin: "15px", marginBottom: "0", marginLeft: "60px" }}>
+        {isLoaded ? showInfo.title : "Loading..."}
+      </h1>
       {!isLoaded && (
         <>
           <div style={{ width: "100%", height: "100%" }}>

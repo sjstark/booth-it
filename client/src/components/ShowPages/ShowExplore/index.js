@@ -70,7 +70,7 @@ export default function ShowExplore() {
           />
         </div>
       )}
-      <h1 style={{ fontSize: "30px", fontFamily: "'Bungee', sans-seriff", margin: "30px", marginBottom: "0" }}>
+      <h1 style={{ fontSize: "30px", fontFamily: "'Bungee', sans-seriff", margin: "15px", marginBottom: "0", marginLeft: "60px" }}>
         Public Shows
       </h1>
       {isLoaded && (
