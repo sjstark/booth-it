@@ -45,7 +45,7 @@ class ColorPickerBox extends React.Component {
         },
         popover: {
           position: 'absolute',
-          zIndex: '2',
+          zIndex: '50',
         },
         cover: {
           position: 'fixed',

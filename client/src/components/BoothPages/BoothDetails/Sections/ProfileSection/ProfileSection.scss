@@ -9,8 +9,8 @@ div[contenteditable=true] {
 .section{
   position: relative;
 
-  min-width: 70vw;
-  max-width: 90vw;
+  width: 70vw;
+  max-width: 1000px;
   min-height: 30vh;
   border-radius: 30px;
   box-shadow: 0 0 10px var(--shadow);
@@ -49,16 +49,17 @@ div[contenteditable=true] {
 
   &__color-tray{
     position:absolute;
-    bottom: -50px;
+    top: -40px;
     right: 30px;
 
     display: flex;
     align-items: center;
 
+    color: black;
     background-color: white;
     box-shadow: 0 0 10px var(--shadow);
 
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 10px;
 
     z-index: 0;
@@ -70,8 +71,6 @@ div[contenteditable=true] {
 
 
   &-text{
-
-
     &__header {
       font-size: 32px;
       font-family: var(--title-text);
@@ -92,6 +91,33 @@ div[contenteditable=true] {
       u {
         text-decoration: underline;
       }
+    }
+  }
+
+  &-video{
+    &__input{
+      color: black;
+      background-color: white;
+      box-shadow: 0 0 10px var(--shadow);
+
+      border-radius: 10px;
+
+      padding: 20px;
+      margin-bottom: 10px;
+
+      &-label{
+        font-size: 18px;
+      }
+
+      &-field{
+        margin: 10px;
+        width: 300px;
+      }
+    }
+
+    &__instructions{
+      line-height: 1.5em;
+      font-size: 14px;
     }
   }
 }

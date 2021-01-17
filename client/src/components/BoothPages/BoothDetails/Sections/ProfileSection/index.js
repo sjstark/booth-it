@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 
+import ReactPlayer from 'react-player'
 import ContentEditable from 'react-contenteditable'
 import sanitizeHtml from 'sanitize-html'
 
@@ -74,7 +75,51 @@ function ColorEditor({ editting, setFontColor, setBackgroundColor, backgroundCol
 }
 
 
-function TextSection({ content, setContent, editable, editting, setEditting, submitEdit }) {
+function VideoSection({ content, setContent, editting }) {
+  const [videoUrl, setVideoUrl] = useState(content.videoUrl || "")
+
+  useEffect(() => {
+    setContent(prev => ({ ...prev, videoUrl }))
+  }, [videoUrl])
+
+
+  return (
+    <>
+      { editting && (
+        <div className="section-video__input">
+          <div className="section-video__instructions">
+            <p>
+              {"Please paste in the link to your video or live stream."}
+            </p>
+            <p >
+              {"Currently, we accept links from: YouTube, Facebook, SoundCloud, Streamable, Vimeo, Wistia, Twitch, DailyMotion, and Vidyard."}
+            </p>
+            <p >
+              {"If your video is hosted elsewhere, we also accept urls to filetypes taht use <video> or <audio> elements."}
+            </p>
+          </div>
+          <label className="section-video__input-label">
+            Video URL:
+          </label>
+          <input
+            className="section-video__input-field"
+            type="text"
+            placeholder="i.e. https://www.youtube.com/watch?v=ysz5S6PUM-U"
+            value={videoUrl}
+            onChange={({ target }) => setVideoUrl(target.value)}
+          />
+        </div>
+      )}
+      <ReactPlayer
+        width="100%"
+        url={videoUrl}
+      />
+    </>
+  )
+}
+
+
+function TextSection({ content, setContent, editting }) {
   const [headerText, setHeaderText] = useState(content.header ? content.header : 'Click here to edit the header')
   const [bodyText, setBodyText] = useState(content.body ? content.body : 'Click here to edit the body text!')
 
@@ -155,12 +200,12 @@ export default function ProfileSection({
         >
           Text Section
         </Button>
-        {/* <Button
-          onClick={() => console.log('video')}
+        <Button
+          onClick={() => { setType('video'); setEditting(true) }}
         >
           Video Section
         </Button>
-        <Button
+        {/* <Button
           onClick={() => console.log('image')}
         >
           Image Section
@@ -183,6 +228,20 @@ export default function ProfileSection({
       />
     )
   }
+  if (type === "video") {
+    SectionBody = (
+      <VideoSection
+        editable={editable}
+        editting={editting}
+        setEditting={setEditting}
+        submitEdit={submitEdit}
+        content={content}
+        setContent={setContent}
+      />
+    )
+  }
+
+
   return (
     <div className="section section-text" style={{ color: fontColor, backgroundColor: backgroundColor }}>
       <SectionEditTools
