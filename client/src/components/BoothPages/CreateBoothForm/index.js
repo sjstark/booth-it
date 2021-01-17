@@ -6,7 +6,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import Button from '../../Button'
 import FormInput from '../../FormFields/FormInput'
 import FormInputField from '../../FormFields/FormInputField'
-import FormBoolean from '../../FormFields/FormBoolean'
 import FormFile from '../../FormFields/FormFile'
 
 import ColorPickerBox from "../../Color/ColorPicker";

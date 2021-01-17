@@ -1,5 +1,5 @@
 export const cacheImages = async (srcArray, setImagesLoaded) => {
-  const promises = await srcArray.map((src) => {
+  const promises = await srcArray.filter(item => Boolean(item)).map((src) => {
     return new Promise(function (res, rej) {
       const img = new Image()
       img.src = src

@@ -29,6 +29,9 @@ export const login = ({ email, password }) => {
 
     if (!resJSON.errors) {
       dispatch(setUser(resJSON))
+      // I'm not happy about this, but this force reload allows for sockets to connect..
+      // TODO: Find an alternate way to get the socket to reconnect after auth.
+      window.location.reload()
     }
 
     return resJSON
@@ -39,7 +42,6 @@ export const restoreUser = () => {
   return async dispatch => {
     const res = await fetch('/api/auth/')
     const user = await res.json()
-    console.log({ hereyago: user })
     if (!user.errors) {
       dispatch(setUser(user))
     }
@@ -76,6 +78,9 @@ export const signup = (user) => {
 
     if (!resJSON.errors) {
       dispatch(setUser(resJSON))
+      // I'm not happy about this, but this force reload allows for sockets to connect..
+      // TODO: Find an alternate way to get the socket to reconnect after auth.
+      window.location.reload()
     }
 
     return resJSON

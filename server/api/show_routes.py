@@ -169,12 +169,6 @@ def complete_show_update(SID):
     return {'errors': validation_errors_to_error_messages(form.errors)}, 400
 
 
-@show_routes.route('/<SID>/', methods=["PATCH"])
-@login_required
-def partial_show_update(SID):
-    pass
-
-
 @show_routes.route('/<SID>/', methods=["DELETE"])
 @login_required
 def delete_show(SID):
@@ -225,12 +219,6 @@ def get_show_invites(SID):
     return jsonify([invite.to_dict()['url'] for invite in show.invites if invite.is_open])
 
 
-@show_routes.route('/<SID>/partners/<userId>/', methods=["DELETE"])
-@login_required
-def delete_show_partner(SID, userId):
-    pass
-
-
 @show_routes.route('/<SID>/booths/', methods=["POST"])
 @login_required
 def create_new_booth(SID):
@@ -255,6 +243,7 @@ def create_new_booth(SID):
 
         newBooth.employees.append(current_user)
 
+
         db.session.add(newBooth)
         db.session.commit()
 
@@ -275,9 +264,104 @@ def get_booth_info(SID, BID):
     if id:
         booth = Booth.query.get(id)
         if booth:
-            print(booth.to_dict_full())
-            return booth.to_dict_full()
-    return {'errors': ['The requested show does not exist']}, 404
+            booth_dict = booth.to_dict_full()
+            if current_user in booth.employees or current_user == booth.show.owner:
+                booth_dict['isAdmin'] = True
+            return booth_dict
+    return {'errors': ['The requested booth does not exist']}, 404
+
+
+@show_routes.route('/<SID>/booths/<BID>/', methods=["PATCH"])
+@login_required
+def patch_booth_info(SID, BID):
+    id = decodeBoothId(BID)
+
+    form = BoothCreateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    if id:
+        booth = Booth.query.get(id)
+        if booth:
+            if current_user not in booth.employees or current_user != booth.show.owner:
+                return {"errors": ["Unauthorized"]}, 401
+
+            for key in form.data:
+                # print(key)
+                # print(form.data[key])
+                if key == "title":
+                    booth.title = form.data[key]
+                if key == "description":
+                    booth.description = form.data[key]
+                if key == "primaryColor":
+                    booth.primary_color = form.data[key]
+                if key == "secondaryColor":
+                    booth.secondary_color = form.data[key]
+                if key == "boothLogo":
+                    if request.files:
+                        booth.upload_picture(request.files['boothLogo'])
+
+
+            db.session.commit()
+            return booth.to_dict()
+
+    return {'errors': ['The requested booth does not exist']}, 404
+
+
+@show_routes.route('/<SID>/booths/<BID>/', methods=["DELETE"])
+@login_required
+def delete_booth(SID, BID):
+    id = decodeBoothId(BID)
+
+    booth = Booth.query.get(id)
+
+    if current_user not in booth.employees or current_user != booth.show.owner:
+                return {"errors": ["Unauthorized"]}, 401
+
+    db.session.delete(booth)
+    db.session.commit()
+
+    return {'message': "Show successfully deleted"}, 200
+
+
+@show_routes.route('/<SID>/booths/<BID>/profile/', methods=["PUT"])
+@login_required
+def put_booth_profile(SID, BID):
+    id = decodeBoothId(BID)
+
+    booth = Booth.query.get(id)
+
+    if current_user not in booth.employees or current_user != booth.show.owner:
+                return {"errors": ["Unauthorized"]}, 401
+
+    booth.profile = request.get_json()
+    print('\n\n\n\n')
+    print(booth.profile)
+    print('\n\n\n\n')
+    db.session.commit()
+
+    return booth.to_dict()
+
+
+@show_routes.route('/<SID>/booths/<BID>/content/', methods=["POST"])
+@login_required
+def upload_booth_content(SID, BID):
+    print('\n\n\n\n\n')
+    print(request.files['content'])
+
+    id = decodeBoothId(BID)
+
+    booth = Booth.query.get(id)
+
+
+    if current_user not in booth.employees or current_user != booth.show.owner:
+                return {"errors": ["Unauthorized"]}, 401
+
+    if request.files:
+        content_location = booth.upload_picture_to_content(request.files['content'])
+        return content_location
+    return {"errors": ["No Files Attached"]}, 400
+
+
 
 
 @show_routes.route('/search/')

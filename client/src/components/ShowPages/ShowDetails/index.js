@@ -19,36 +19,42 @@ function BoothsList({ showInfo, SID }) {
   }
 
   return (
-    <HexGridLayout style={{ width: "90vw" }}>
-      {showInfo.booths.map(booth => {
-        let childProps = {
-          cardcolor: booth.secondaryColor,
-          buttoncolor: booth.primaryColor,
-          title: booth.company,
-          onClick: () => history.push(`/shows/${SID}/booths/${booth.BID}`)
-        }
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    }}>
+      <HexGridLayout style={{ width: "90vw" }}>
+        {showInfo.booths.map(booth => {
+          let childProps = {
+            cardcolor: booth.secondaryColor,
+            buttoncolor: booth.primaryColor,
+            title: booth.company,
+            onClick: () => history.push(`/shows/${SID}/booths/${booth.BID}`)
+          }
 
-        return (
-          <div key={booth.BID}  {...childProps} >
-            {
-              booth.boothLogoURL
-                ?
-                <img
-                  onDragStart={(e) => e.preventDefault()}
-                  style={{ width: "100%" }}
-                  src={booth.boothLogoURL}
-                  alt={booth.title}
-                />
-                :
-                <HolderSVG
-                  style={{ widht: "100%" }}
-                  color={booth.primaryColor}
-                />
-            }
-          </div>
-        )
-      })}
-    </HexGridLayout>
+          return (
+            <div key={booth.BID}  {...childProps} >
+              {
+                booth.boothLogoURL
+                  ?
+                  <img
+                    onDragStart={(e) => e.preventDefault()}
+                    style={{ width: "100%" }}
+                    src={booth.boothLogoURL}
+                    alt={booth.title}
+                  />
+                  :
+                  <HolderSVG
+                    style={{ width: "100%" }}
+                    color={booth.primaryColor}
+                  />
+              }
+            </div>
+          )
+        })}
+      </HexGridLayout>
+    </div>
   )
 }
 

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from .db import db
 
 from server.utils.awsS3 import *
@@ -77,6 +79,11 @@ class Booth(db.Model):
         self.has_picture = True
         db.session.commit()
         return
+
+    def upload_picture_to_content(self, file_buffer):
+        timestamp = datetime.timestamp(datetime.now())
+        upload_file_to_s3(file_buffer, f"shows/{self.show.SID}/booths/{self.BID}/content/${timestamp}")
+        return get_file_url(f"shows/{self.show.SID}/booths/{self.BID}/content/${timestamp}")
 
     def to_dict(self):
         return {

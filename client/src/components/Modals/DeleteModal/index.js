@@ -24,7 +24,7 @@ export default function DeleteModal({ open, onClose, deleteFn, message }) {
       <DialogContent>
         <div className="delete-modal">
           <p className="delete-modal__body">
-            {message.split('\n').map(str => (<p>{str}</p>))}
+            {message.split('\n').map(str => (<p key={str}>{str}</p>))}
           </p>
           <div className="delete-modal__buttons">
             <Button

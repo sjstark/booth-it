@@ -17,12 +17,17 @@ function parseJSONdatetime(datetime) {
 }
 
 
-function MessageItem({ msgObj }) {
+function MessageItem({ msgObj, adminIds = [] }) {
   const user = useSelector(state => state.user)
 
   const { user: sender, time, msg, type } = msgObj
 
   const formattedTime = format(time, "K:mm aa")
+
+  const senderEmployeeStatus = adminIds.includes(sender.id) ? '(Employee) ' : ''
+
+  const style = senderEmployeeStatus ? { color: "white", backgroundColor: "var(--logo3)" } : {}
+  const styleTip = senderEmployeeStatus ? { backgroundColor: "white", borderLeftColor: "var(--logo3)", borderRightColor: "var(--logo3)" } : {}
 
   if (type === 'message') {
     let msgBody = msg.split('\n').filter(line => line !== '')
@@ -41,12 +46,13 @@ function MessageItem({ msgObj }) {
             </div>
         }
         <span className="messenger__list-item-details">
-          {[sender.firstName, sender.lastName[0], "at", formattedTime].join(' ')}
+          {senderEmployeeStatus + [sender.firstName, sender.lastName[0], "at", formattedTime,].join(' ')}
         </span>
         <div
           className="messenger__list-item-bubble"
+          style={style}
         >
-          <div className="messenger__list-item-bubble-tip" />
+          <div className="messenger__list-item-bubble-tip" style={styleTip} />
           <p className="messenger__list-item-content">
             {msgBody.map((line, idx) => {
               return (
@@ -84,7 +90,7 @@ function MessageItem({ msgObj }) {
 }
 
 
-function MessagesList({ data }) {
+function MessagesList({ data, adminIds = [] }) {
   const messageListRef = useRef({ current: { scrollTop: 0, offsetHeight: 0, scrollHeight: 0 } })
 
   const [showScrollToBottom, setShowScrollToBottom] = useState(false)
@@ -117,6 +123,7 @@ function MessagesList({ data }) {
     if (!isScrolled) {
       scrollToBottom()
     }
+
   }, [data, isScrolled])
 
   useEffect(() => {
@@ -162,6 +169,7 @@ function MessagesList({ data }) {
           <MessageItem
             key={`message${msgObj.msg}${idx}`}
             msgObj={msgObj}
+            adminIds={adminIds}
           />
         ))
       }
@@ -212,7 +220,7 @@ function MessageInput({ message, setMessage, sendMessage, inputRef }) {
 }
 
 
-export default function Messenger({ roomId }) {
+export default function Messenger({ roomId, adminIds = [] }) {
 
   const socket = useContext(SocketContext)
 
@@ -276,8 +284,9 @@ export default function Messenger({ roomId }) {
       socket.off('message', messageHandler)
       socket.on('user disconnected', disconnectHandler)
       socket.on('user connected', connectHandler)
+      setRoomName('Connecting...')
     })
-  }, [roomId])
+  }, [roomId, user])
 
   const sendMessage = e => {
     if (message !== '') {
@@ -331,6 +340,7 @@ export default function Messenger({ roomId }) {
       </h2>
       <MessagesList
         data={messages}
+        adminIds={adminIds}
       />
       <MessageInput
         message={message}
