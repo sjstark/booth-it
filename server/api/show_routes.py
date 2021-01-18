@@ -265,7 +265,7 @@ def get_booth_info(SID, BID):
         booth = Booth.query.get(id)
         if booth:
             booth_dict = booth.to_dict_full()
-            if current_user in booth.employees or current_user == booth.show.owner:
+            if booth.is_admin(current_user):
                 booth_dict['isAdmin'] = True
             return booth_dict
     return {'errors': ['The requested booth does not exist']}, 404
@@ -282,12 +282,10 @@ def patch_booth_info(SID, BID):
     if id:
         booth = Booth.query.get(id)
         if booth:
-            if current_user not in booth.employees or current_user != booth.show.owner:
+            if not booth.is_admin(current_user):
                 return {"errors": ["Unauthorized"]}, 401
 
             for key in form.data:
-                # print(key)
-                # print(form.data[key])
                 if key == "title":
                     booth.title = form.data[key]
                 if key == "description":
@@ -314,8 +312,8 @@ def delete_booth(SID, BID):
 
     booth = Booth.query.get(id)
 
-    if current_user not in booth.employees or current_user != booth.show.owner:
-                return {"errors": ["Unauthorized"]}, 401
+    if not booth.is_admin(current_user):
+        return {"errors": ["Unauthorized"]}, 401
 
     db.session.delete(booth)
     db.session.commit()
@@ -330,8 +328,8 @@ def put_booth_profile(SID, BID):
 
     booth = Booth.query.get(id)
 
-    if current_user not in booth.employees or current_user != booth.show.owner:
-                return {"errors": ["Unauthorized"]}, 401
+    if not booth.is_admin(current_user):
+        return {"errors": ["Unauthorized"]}, 401
 
     booth.profile = request.get_json()
     print('\n\n\n\n')
@@ -352,9 +350,8 @@ def upload_booth_content(SID, BID):
 
     booth = Booth.query.get(id)
 
-
-    if current_user not in booth.employees or current_user != booth.show.owner:
-                return {"errors": ["Unauthorized"]}, 401
+    if not booth.is_admin(current_user):
+        return {"errors": ["Unauthorized"]}, 401
 
     if request.files:
         content_location = booth.upload_picture_to_content(request.files['content'])

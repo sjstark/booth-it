@@ -85,6 +85,13 @@ class Booth(db.Model):
         upload_file_to_s3(file_buffer, f"shows/{self.show.SID}/booths/{self.BID}/content/${timestamp}")
         return get_file_url(f"shows/{self.show.SID}/booths/{self.BID}/content/${timestamp}")
 
+    def is_admin(self, user):
+        if user in self.employees:
+            return True
+        if user == self.show.owner:
+            return True
+        return False
+
     def to_dict(self):
         return {
             "BID": self.BID,
