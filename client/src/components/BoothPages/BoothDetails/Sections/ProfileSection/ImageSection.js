@@ -33,8 +33,6 @@ export default function ImageSection({ content, setContent, editting }) {
       return result
     }
 
-    console.log(res)
-
   }
 
   const fileChange = async ({ target }) => {

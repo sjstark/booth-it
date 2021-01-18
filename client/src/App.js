@@ -13,7 +13,6 @@ import MainContent from './components/MainContent'
 
 function App({ user, modals }) {
   const location = useLocation()
-  const history = useHistory()
   const dispatch = useDispatch()
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -23,13 +22,6 @@ function App({ user, modals }) {
     dispatch(restoreUser())
       .then(() => setIsLoaded(true))
   }, [dispatch])
-
-  const socket = useContext(SocketContext)
-
-  useEffect(() => {
-    console.log('userUpdated')
-    // socket.socket.connect()
-  }, [user])
 
   const loaderHeight = 100;
 
