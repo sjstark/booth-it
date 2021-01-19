@@ -38,6 +38,7 @@ export default function VideoSection({ content, setContent, editting }) {
       )}
       <ReactPlayer
         width="100%"
+        height="fit-content"
         url={videoUrl}
       />
     </>
