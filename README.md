@@ -33,17 +33,17 @@ Check out a live demo here: [https://booth-it.herokuapp.com](https://booth-it.he
 
 ### Splash Screen
 
-<img src='./documentation/screenrecords/SplashScreen.gif' >
+<img src='./documentation/screenrecords/SplashScreen.gif' width="600px" >
 
 ### User Authentication
 
 #### Login
 
-<img src='./documentation/screenrecords/Login.gif' >
+<img src='./documentation/screenrecords/Login.gif' width="600px" >
 
 #### Signup
 
-<img src='./documentation/screenrecords/Signup.gif' >
+<img src='./documentation/screenrecords/Signup.gif' width="600px" >
 
 ### Application
 
@@ -51,54 +51,51 @@ Check out a live demo here: [https://booth-it.herokuapp.com](https://booth-it.he
 
 Shows and Booths are displayed in a hexagonal grid to prevent a "hierarchy" from developing in listings.
 
-<img src='./documentation/screenrecords/ListNavs.gif' >
+<img src='./documentation/screenrecords/ListNavs.gif' width="600px" >
 
 #### Host a Show
 
-<img src='./documentation/screenrecords/Host.gif' >
+Users are able to host shows for specific dates.
+
+<img src='./documentation/screenrecords/Host.gif' width="600px" >
 
 #### Invite Partners for a Show
 
 Dynamic server generated links allow for private invite links to be sent to partners.
 
-<img src='./documentation/screenrecords/Invite-Creation.gif' >
+<img src='./documentation/screenrecords/Invite-Creation.gif' width="600px" >
 
 #### Invite Acceptance
 
 Invite links inform players what show they are accepting a link to and who they're logged in as.
 
-<img src='./documentation/screenrecords/InviteAccept.gif' >
+<img src='./documentation/screenrecords/InviteAccept.gif' width="600px" >
 
 #### Create a Booth
 
-<img src='./documentation/screenrecords/Booth-Creation.gif' >
+Partners are able to create a booth in a similar manner to show creation.
+
+<img src='./documentation/screenrecords/Booth-Creation.gif' width="600px" >
 
 ### Booth Profile
 
 #### Booth Messenger
 
-<img src='./documentation/screenrecords/Booth-Chat.gif' >
+Attendees are able to "visit" a booth and chat with the booth's employees. Allowing for real time discussions of booth materials.
 
-#### Section Customization
+<img src='./documentation/screenrecords/Booth-Chat.gif' width="600px" >
 
-<img src='./documentation/screenrecords/SectionColorChange.gif' >
+#### Profile Customization
 
-#### Text Section
+Partners are able to customize sections on their booth profile, adding content such as text, video, and images. Additional brand customization is available in the form of color.
 
-<img src='./documentation/screenrecords/TextSection.gif' >
+<img src='./documentation/screenrecords/SectionColorChange.gif' width="600px" >
 
-#### Video Section
+<img src='./documentation/screenrecords/TextSection.gif' width="600px" >
 
-<img src='./documentation/screenrecords/Video-Section.gif' >
+<img src='./documentation/screenrecords/Video-Section.gif' width="600px" >
 
-#### Image Section
-
-<img src='./documentation/screenrecords/Image-Section.gif' >
-
-#### Booth Deletion
-
-<img src='./documentation/screenrecords/Booth-Deletion.gif' >
-
+<img src='./documentation/screenrecords/Image-Section.gif' width="600px" >
 
 
 ## Usage
