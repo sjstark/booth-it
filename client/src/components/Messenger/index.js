@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
+import useSound from 'use-sound'
+
+import chatSound from '../../media/notif_sound.mp3'
+
 import { format } from 'date-fns'
 
 import TextareaAutosize from 'react-textarea-autosize'
@@ -102,6 +106,8 @@ function MessagesList({ data, adminIds = [] }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [scrollTimeout, setScrollTimeout] = useState(null)
 
+  const user = useSelector(state => state.user)
+
   const scrollToBottom = () => {
     let scrollableHeight = messageListRef.current.scrollHeight
     messageListRef.current.scrollTo({ top: scrollableHeight, behavior: 'smooth' })
@@ -123,7 +129,6 @@ function MessagesList({ data, adminIds = [] }) {
     if (!isScrolled) {
       scrollToBottom()
     }
-
   }, [data, isScrolled])
 
   useEffect(() => {
@@ -221,7 +226,6 @@ function MessageInput({ message, setMessage, sendMessage, inputRef }) {
 
 
 export default function Messenger({ roomId, adminIds = [] }) {
-
   const socket = useContext(SocketContext)
 
   const inputRef = useRef(null)
@@ -233,7 +237,18 @@ export default function Messenger({ roomId, adminIds = [] }) {
   const [message, setMessage] = useState('')
   const [roomName, setRoomName] = useState('Connecting...')
 
+  const [notify] = useSound(chatSound)
+
   const user = useSelector(state => state.user)
+
+  useEffect(() => {
+    const foo = () => {
+      console.log('play')
+      notify()
+    }
+    const itm = setInterval(foo, 1000)
+    return () => clearInterval(itm)
+  }, [])
 
   useEffect(() => {
     if (!showMessenger) {
