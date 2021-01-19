@@ -95,6 +95,7 @@ div[contenteditable=true] {
   }
 
   &-video{
+    height: fit-content;
     &__input{
       color: black;
       background-color: white;
