@@ -55,6 +55,8 @@ Shows and Booths are displayed in a hexagonal grid to prevent a "hierarchy" from
 
 #### Host a Show
 
+Users are able to host shows for specific dates.
+
 <img src='./documentation/screenrecords/Host.gif' width="600px" >
 
 #### Invite Partners for a Show
@@ -71,34 +73,29 @@ Invite links inform players what show they are accepting a link to and who they'
 
 #### Create a Booth
 
+Partners are able to create a booth in a similar manner to show creation.
+
 <img src='./documentation/screenrecords/Booth-Creation.gif' width="600px" >
 
 ### Booth Profile
 
 #### Booth Messenger
 
+Attendees are able to "visit" a booth and chat with the booth's employees. Allowing for real time discussions of booth materials.
+
 <img src='./documentation/screenrecords/Booth-Chat.gif' width="600px" >
 
-#### Section Customization
+#### Profile Customization
+
+Partners are able to customize sections on their booth profile, adding content such as text, video, and images. Additional brand customization is available in the form of color.
 
 <img src='./documentation/screenrecords/SectionColorChange.gif' width="600px" >
 
-#### Text Section
-
 <img src='./documentation/screenrecords/TextSection.gif' width="600px" >
-
-#### Video Section
 
 <img src='./documentation/screenrecords/Video-Section.gif' width="600px" >
 
-#### Image Section
-
 <img src='./documentation/screenrecords/Image-Section.gif' width="600px" >
-
-#### Booth Deletion
-
-<img src='./documentation/screenrecords/Booth-Deletion.gif' width="600px">
-
 
 
 ## Usage
