@@ -5,7 +5,13 @@ import ReactPlayer from 'react-player'
 export default function VideoSection({ content, setContent, editting }) {
   const [videoUrl, setVideoUrl] = useState(content.videoUrl || "")
 
+  const [isFacebook, setIsFacebook] = useState(false)
+
   useEffect(() => {
+    if (videoUrl.search('facebook.com')) {
+      setIsFacebook(true)
+    }
+
     setContent(prev => ({ ...prev, videoUrl }))
   }, [videoUrl])
 
@@ -21,7 +27,10 @@ export default function VideoSection({ content, setContent, editting }) {
               {"Currently, we accept links from: YouTube, Facebook, SoundCloud, Streamable, Vimeo, Wistia, Twitch, DailyMotion, and Vidyard."}
             </p>
             <p >
-              {"If your video is hosted elsewhere, we also accept urls to filetypes taht use <video> or <audio> elements."}
+              {"We apologize, but at the moment, portrait videos from Facebook will not display properly."}
+            </p>
+            <p >
+              {"If your video is hosted elsewhere, we also accept urls to filetypes that use <video> or <audio> elements."}
             </p>
           </div>
           <label className="section-video__input-label">
@@ -36,11 +45,11 @@ export default function VideoSection({ content, setContent, editting }) {
           />
         </div>
       )}
-      <ReactPlayer
-        width="100%"
-        height="fit-content"
-        url={videoUrl}
-      />
+      <div className="section-video__player-container">
+        <ReactPlayer
+          url={videoUrl}
+        />
+      </div>
     </>
   )
 }

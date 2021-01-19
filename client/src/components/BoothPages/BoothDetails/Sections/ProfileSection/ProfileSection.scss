@@ -120,5 +120,10 @@ div[contenteditable=true] {
       line-height: 1.5em;
       font-size: 14px;
     }
+
+    &__player-container {
+      display: flex;
+      justify-content: center;
+    }
   }
 }
