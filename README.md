@@ -33,17 +33,17 @@ Check out a live demo here: [https://booth-it.herokuapp.com](https://booth-it.he
 
 ### Splash Screen
 
-<img src='./documentation/screenrecords/SplashScreen.gif' >
+<img src='./documentation/screenrecords/SplashScreen.gif' width="600px" >
 
 ### User Authentication
 
 #### Login
 
-<img src='./documentation/screenrecords/Login.gif' >
+<img src='./documentation/screenrecords/Login.gif' width="600px" >
 
 #### Signup
 
-<img src='./documentation/screenrecords/Signup.gif' >
+<img src='./documentation/screenrecords/Signup.gif' width="600px" >
 
 ### Application
 
@@ -51,53 +51,53 @@ Check out a live demo here: [https://booth-it.herokuapp.com](https://booth-it.he
 
 Shows and Booths are displayed in a hexagonal grid to prevent a "hierarchy" from developing in listings.
 
-<img src='./documentation/screenrecords/ListNavs.gif' >
+<img src='./documentation/screenrecords/ListNavs.gif' width="600px" >
 
 #### Host a Show
 
-<img src='./documentation/screenrecords/Host.gif' >
+<img src='./documentation/screenrecords/Host.gif' width="600px" >
 
 #### Invite Partners for a Show
 
 Dynamic server generated links allow for private invite links to be sent to partners.
 
-<img src='./documentation/screenrecords/Invite-Creation.gif' >
+<img src='./documentation/screenrecords/Invite-Creation.gif' width="600px" >
 
 #### Invite Acceptance
 
 Invite links inform players what show they are accepting a link to and who they're logged in as.
 
-<img src='./documentation/screenrecords/InviteAccept.gif' >
+<img src='./documentation/screenrecords/InviteAccept.gif' width="600px" >
 
 #### Create a Booth
 
-<img src='./documentation/screenrecords/Booth-Creation.gif' >
+<img src='./documentation/screenrecords/Booth-Creation.gif' width="600px" >
 
 ### Booth Profile
 
 #### Booth Messenger
 
-<img src='./documentation/screenrecords/Booth-Chat.gif' >
+<img src='./documentation/screenrecords/Booth-Chat.gif' width="600px" >
 
 #### Section Customization
 
-<img src='./documentation/screenrecords/SectionColorChange.gif' >
+<img src='./documentation/screenrecords/SectionColorChange.gif' width="600px" >
 
 #### Text Section
 
-<img src='./documentation/screenrecords/TextSection.gif' >
+<img src='./documentation/screenrecords/TextSection.gif' width="600px" >
 
 #### Video Section
 
-<img src='./documentation/screenrecords/Video-Section.gif' >
+<img src='./documentation/screenrecords/Video-Section.gif' width="600px" >
 
 #### Image Section
 
-<img src='./documentation/screenrecords/Image-Section.gif' >
+<img src='./documentation/screenrecords/Image-Section.gif' width="600px" >
 
 #### Booth Deletion
 
-<img src='./documentation/screenrecords/Booth-Deletion.gif' >
+<img src='./documentation/screenrecords/Booth-Deletion.gif' width="600px">
 
 
 
