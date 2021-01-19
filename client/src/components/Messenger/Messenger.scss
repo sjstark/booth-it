@@ -22,7 +22,7 @@
   transition: transform .5s cubic-bezier(.32,.87,.6,1.16);
 
   &.--hidden{
-    transform: translateY(92%);
+    transform: translateY(calc(50vh - 40px));
     transition: transform .4s;
     cursor: pointer;
     &:hover{
