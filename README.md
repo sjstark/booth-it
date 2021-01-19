@@ -1,7 +1,7 @@
 # Booth It
 
 
-<img src="./documentation/logos/logo-title.png" />
+<img src="./documentation/logos/logo-title.png" width="80%"/>
 <br>
 
 **Booth It** is a webapp for hosting conference and trade show events online with a heavy focus on individual customization for an individual's space.
