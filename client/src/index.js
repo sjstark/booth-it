@@ -40,7 +40,7 @@ ReactDOM.render(
         <meta property="og:title" content="BOOTH IT - The Premier Online Tradeshow Platform" />
         <meta property="og:description" content="Booth It is a web app for hosting conference events online. Events are split into individual 'booths' to
           encourage more meaningful conversations."/>
-        <meta property="og:image" content="./image/splashscreen-meta.gif" />
+        <meta property="og:image" content="./media/splashscreen-meta.gif" />
 
         {/* <!-- Twitter --> */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -48,7 +48,7 @@ ReactDOM.render(
         <meta property="twitter:title" content="BOOTH IT - The Premier Online Tradeshow Platform" />
         <meta property="twitter:description" content="Booth It is a web app for hosting conference events online. Events are split into individual 'booths' to
           encourage more meaningful conversations."/>
-        <meta property="twitter:image" content="./image/splashscreen-meta.gif" />
+        <meta property="twitter:image" content="./media/splashscreen-meta.gif" />
 
       </MetaTags>
       <Root />
