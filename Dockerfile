@@ -22,6 +22,7 @@ EXPOSE 8000
 WORKDIR /var/www
 COPY . .
 COPY --from=build-stage /client/build/* server/static/
+COPY /client/public/image/* server/static/image/
 
 # Install Python Dependencies
 RUN pip install -r requirements.txt

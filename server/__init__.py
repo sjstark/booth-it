@@ -100,4 +100,6 @@ def react_root(path):
     print("path", path)
     if path == "favicon.ico":
         return app.send_static_file("favicon.ico")
+    if path == "image/meta-image.png":
+        return app.send_static_file("image/meta-image.png")
     return app.send_static_file("index.html")
