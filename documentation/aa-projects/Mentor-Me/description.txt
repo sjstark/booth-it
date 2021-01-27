@@ -1,0 +1,1 @@
+Mentor Me is a website designed to privately connect Mentors with Mentees for purposes of having discussions and allowing Mentors to make goals and Mentees to achieve those goals for their growth."  Link is: https://mentor--me.herokuapp.com/

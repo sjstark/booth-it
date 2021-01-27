@@ -1,0 +1,1 @@
+Evidential is an app to help researchers analyze and rate the arguments made within texts for various claims those texts attempt to support." Link is: https://evidential.herokuapp.com/
