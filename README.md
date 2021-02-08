@@ -97,6 +97,11 @@ Partners are able to customize sections on their booth profile, adding content s
 
 <img src='./documentation/screenrecords/Image-Section.gif' width="600px" >
 
+### Loaders and Animations
+
+Animations are created using React-Spring, a simple loader is created by utilizing a 360 degree rotation accompanied by a transform on CSS polygons. The transform uses an interpolation of radians in order to achieve a cyclical motion.
+
+<img src='./documentation/images/messengerCodeBlock.png' width="600px" >
 
 ## Usage
 
